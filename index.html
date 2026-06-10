@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="description" content="何梓强（He Ziqiang）的个人网站——软件工程学生，研究 LLM Agent 的记忆、规划与人机协作，这里是我的研究笔记与思考档案。" />
+<title>何梓强 · He Ziqiang</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..500&family=Noto+Serif+SC:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="assets/style.css" />
+<link rel="icon" type="image/png" href="assets/avatar.png" />
+<script src="assets/site.js"></script>
+</head>
+<body data-mode="pro" data-section="pro" data-home data-screen-label="首页">
+<div class="page">
+
+  <div id="site-head"></div>
+
+  <main>
+    <!-- Professional -->
+    <section class="only-pro">
+      <p class="lede">我是一名软件工程专业的学生，目前的兴趣集中在 <em>Agent</em> 与人机协作。这个网站是我的研究笔记与思考档案。</p>
+
+      <div class="smallcaps section-label">目前 · Now</div>
+      <p class="now">在读软件工程本科。最近在研究 LLM Agent 的记忆与规划机制，动手写一个属于自己的任务规划器，同时维护一份关于「工具使用」的长期阅读笔记。</p>
+
+      <nav class="index-nav">
+        <a class="index-row" href="about.html"><span>关于我</span><span class="en">About</span></a>
+        <a class="index-row" href="projects.html"><span>项目</span><span class="en">Projects</span></a>
+        <a class="index-row" href="writing.html"><span>文章</span><span class="en">Writing</span></a>
+        <a class="index-row" href="cv.html"><span>简历</span><span class="en">CV</span></a>
+        <a class="index-row" href="about.html#contact"><span>联系</span><span class="en">Contact</span></a>
+      </nav>
+    </section>
+
+    <!-- Personal -->
+    <section class="only-personal">
+      <p class="lede">代码之外，我读书、散步、拍照，把想清楚的和没想清楚的，都慢慢写下来。</p>
+
+      <div class="smallcaps section-label">近况 · Lately</div>
+      <p class="now">在重读《禅与摩托车维修艺术》，练习把笔记写得慢一点。周末常去学校后山走路，带着相机，但拍得不多。</p>
+
+      <nav class="index-nav">
+        <a class="index-row" href="essays.html"><span>随笔与思考</span><span class="en">Essays</span></a>
+        <a class="index-row" href="reading.html"><span>阅读笔记</span><span class="en">Reading</span></a>
+        <a class="index-row" href="learning.html"><span>学习记录</span><span class="en">Learning Log</span></a>
+        <a class="index-row" href="photos.html"><span>摄影与观察</span><span class="en">Photographs</span></a>
+      </nav>
+    </section>
+  </main>
+
+  <div id="site-foot"></div>
+
+</div>
+
+<!-- Tweaks（纸面 / 强调色微调面板，仅供作者本人在浏览器里临时预览） -->
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script type="text/babel" src="assets/tweaks-panel.jsx"></script>
+<div id="tweaks-root"></div>
+<script type="text/babel">
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "accent": "#9C4226",
+  "paper": "#FBF9F3"
+}/*EDITMODE-END*/;
+
+function TweaksApp() {
+  const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
+
+  React.useEffect(() => {
+    const r = document.documentElement;
+    r.style.setProperty('--accent', t.accent);
+    r.style.setProperty('--paper', t.paper);
+    try { localStorage.setItem('hz-style-v2', JSON.stringify({ accent: t.accent, paper: t.paper })); } catch (e) {}
+  }, [t.accent, t.paper]);
+
+  return (
+    <TweaksPanel>
+      <TweakSection label="纸面" />
+      <TweakColor label="强调色" value={t.accent}
+                  options={['#9C4226', '#33506B', '#43603F']}
+                  onChange={(v) => setTweak('accent', v)} />
+      <TweakColor label="纸张" value={t.paper}
+                  options={['#FBF9F3', '#F4EDDC', '#FFFFFF']}
+                  onChange={(v) => setTweak('paper', v)} />
+    </TweaksPanel>
+  );
+}
+ReactDOM.createRoot(document.getElementById('tweaks-root')).render(<TweaksApp />);
+</script>
+</body>
+</html>

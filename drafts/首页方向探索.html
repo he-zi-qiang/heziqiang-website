@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>首页方向探索 · 何梓强个人网站</title>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Noto+Serif+SC:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --paper: #F8F4EB;
+    --ink: #2C2820;
+    --muted: #8A8174;
+    --faint: #B5AC9C;
+    --line: #E5DDCC;
+    --accent: #9C4226;
+    --serif: 'EB Garamond', 'Noto Serif SC', 'Songti SC', 'SimSun', serif;
+  }
+  .hz-page {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--serif);
+    width: 100%; height: 100%;
+    box-sizing: border-box;
+    -webkit-font-smoothing: antialiased;
+  }
+  .hz-page *, .hz-page *::before, .hz-page *::after { box-sizing: border-box; }
+  .hz-page a { color: inherit; text-decoration: none; }
+
+  .hz-avatar {
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+    filter: saturate(0.82);
+  }
+  .hz-smallcaps {
+    font-size: 12px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 500;
+  }
+  .hz-rule { border: 0; border-top: 1px solid var(--line); margin: 0; }
+
+  /* ---------- Direction A · 扉页 ---------- */
+  .da-wrap {
+    height: 100%;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    text-align: center;
+    padding: 64px;
+  }
+  .da-name {
+    font-size: 46px; font-weight: 600;
+    letter-spacing: 0.14em;
+    margin: 36px 0 10px;
+  }
+  .da-latin {
+    font-size: 15px; letter-spacing: 0.34em;
+    text-transform: uppercase; color: var(--muted);
+    margin-bottom: 44px;
+  }
+  .da-intro {
+    font-size: 19px; line-height: 2;
+    max-width: 30em; color: #4A443A;
+    text-wrap: pretty;
+  }
+  .da-orn {
+    color: var(--faint); font-size: 14px;
+    letter-spacing: 1em; padding-left: 1em;
+    margin: 48px 0;
+  }
+  .da-doors {
+    display: flex; gap: 88px;
+  }
+  .da-door { text-align: center; }
+  .da-door-title {
+    font-size: 17px; letter-spacing: 0.18em;
+    color: var(--accent); margin-bottom: 10px;
+  }
+  .da-door-desc { font-size: 14px; color: var(--muted); letter-spacing: 0.08em; }
+  .da-foot {
+    position: absolute; bottom: 36px; left: 0; right: 0;
+    text-align: center;
+    font-size: 12px; color: var(--faint); letter-spacing: 0.2em;
+  }
+
+  /* ---------- Direction B · 学者索引 ---------- */
+  .db-wrap {
+    height: 100%;
+    padding: 72px 0 64px;
+    display: flex; justify-content: center;
+  }
+  .db-col { width: 600px; display: flex; flex-direction: column; }
+  .db-top {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 96px;
+  }
+  .db-id { display: flex; align-items: center; gap: 16px; }
+  .db-id-name { font-size: 17px; font-weight: 600; letter-spacing: 0.12em; }
+  .db-toggle {
+    display: flex; gap: 28px;
+    font-size: 13px; letter-spacing: 0.16em; text-transform: uppercase;
+  }
+  .db-toggle span { color: var(--faint); padding-bottom: 4px; }
+  .db-toggle span.on {
+    color: var(--ink);
+    border-bottom: 1px solid var(--accent);
+  }
+  .db-lede {
+    font-size: 26px; line-height: 1.9; font-weight: 400;
+    color: var(--ink); text-wrap: pretty;
+    margin: 0 0 72px;
+  }
+  .db-lede em { font-style: normal; color: var(--accent); }
+  .db-now-label { margin-bottom: 18px; }
+  .db-now {
+    font-size: 16.5px; line-height: 2; color: #55503F;
+    margin: 0 0 72px; text-wrap: pretty;
+  }
+  .db-index { display: flex; flex-direction: column; }
+  .db-row {
+    display: flex; align-items: baseline; justify-content: space-between;
+    padding: 17px 2px;
+    border-top: 1px solid var(--line);
+    font-size: 16px;
+  }
+  .db-row:last-child { border-bottom: 1px solid var(--line); }
+  .db-row .en {
+    font-size: 12.5px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* ---------- Direction C · 笔记 ---------- */
+  .dc3-wrap {
+    height: 100%;
+    padding: 60px 0;
+    display: flex; justify-content: center;
+  }
+  .dc3-col { width: 660px; }
+  .dc3-top {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 80px;
+  }
+  .dc3-intro { display: flex; gap: 24px; align-items: flex-start; margin-bottom: 84px; }
+  .dc3-name { font-size: 30px; font-weight: 600; letter-spacing: 0.1em; margin: 0 0 14px; }
+  .dc3-bio {
+    font-size: 16.5px; line-height: 2; color: #55503F; margin: 0;
+    max-width: 32em; text-wrap: pretty;
+  }
+  .dc3-sec-label {
+    display: flex; align-items: baseline; gap: 14px; margin-bottom: 8px;
+  }
+  .dc3-entry {
+    display: grid; grid-template-columns: 110px 1fr; gap: 28px;
+    padding: 26px 0;
+    border-top: 1px solid var(--line);
+  }
+  .dc3-date {
+    font-size: 13px; color: var(--faint); letter-spacing: 0.06em;
+    padding-top: 4px; font-variant-numeric: tabular-nums;
+  }
+  .dc3-e-title { font-size: 18px; font-weight: 500; margin: 0 0 8px; }
+  .dc3-e-title .tag {
+    font-size: 11.5px; color: var(--accent); letter-spacing: 0.18em;
+    margin-left: 12px; font-weight: 400;
+  }
+  .dc3-e-x { font-size: 14.5px; line-height: 1.9; color: var(--muted); margin: 0; max-width: 36em; }
+  .dc3-more {
+    border-top: 1px solid var(--line);
+    padding: 24px 0 0;
+    font-size: 14px; letter-spacing: 0.12em; color: var(--accent);
+  }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel" src="design-canvas.jsx"></script>
+<script type="text/babel">
+const AVATAR = 'assets/avatar.png';
+
+function DirA() {
+  return (
+    <div className="hz-page" style={{ position: 'relative' }}>
+      <div className="da-wrap">
+        <img className="hz-avatar" src={AVATAAR_SAFE()} width="76" height="76" alt="何梓强" />
+        <h1 className="da-name">何梓强</h1>
+        <div className="da-latin">He Ziqiang</div>
+        <p className="da-intro">
+          软件工程专业学生，对 Agent 与人机协作感兴趣。<br />
+          这里是我长期维护的研究笔记、数字花园与个人档案。
+        </p>
+        <div className="da-orn">❡</div>
+        <div className="da-doors">
+          <a className="da-door" href="#">
+            <div className="da-door-title">Professional →</div>
+            <div className="da-door-desc">项目 · 研究 · 文章 · 简历</div>
+          </a>
+          <a className="da-door" href="#">
+            <div className="da-door-title">Personal →</div>
+            <div className="da-door-desc">随笔 · 阅读 · 学习 · 观察</div>
+          </a>
+        </div>
+      </div>
+      <div className="da-foot">持续更新 · 始于 2024</div>
+    </div>
+  );
+}
+
+// guard so a missing avatar never crashes the canvas
+function AVATAAR_SAFE() { return AVATAR; }
+
+function DirB() {
+  return (
+    <div className="hz-page">
+      <div className="db-wrap">
+        <div className="db-col">
+          <div className="db-top">
+            <div className="db-id">
+              <img className="hz-avatar" src={AVATAR} width="40" height="40" alt="" />
+              <span className="db-id-name">何梓强 · He Ziqiang</span>
+            </div>
+            <div className="db-toggle">
+              <span className="on">Professional</span>
+              <span>Personal</span>
+            </div>
+          </div>
+          <p className="db-lede">
+            我是一名软件工程专业的学生，<br />
+            目前的兴趣集中在 <em>Agent</em> 与人机协作。<br />
+            这个网站是我的研究笔记与思考档案。
+          </p>
+          <div className="db-now-label hz-smallcaps">目前 · Now</div>
+          <p className="db-now">
+            在读软件工程本科。最近在研究 LLM Agent 的记忆与规划机制，
+            同时维护一份关于「工具使用」的长期阅读笔记。
+          </p>
+          <nav className="db-index">
+            <a className="db-row" href="#"><span>关于我</span><span className="en">About</span></a>
+            <a className="db-row" href="#"><span>项目</span><span className="en">Projects</span></a>
+            <a className="db-row" href="#"><span>文章</span><span className="en">Writing</span></a>
+            <a className="db-row" href="#"><span>简历</span><span className="en">CV</span></a>
+            <a className="db-row" href="#"><span>联系</span><span className="en">Contact</span></a>
+          </nav>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function DirC() {
+  return (
+    <div className="hz-page">
+      <div className="dc3-wrap">
+        <div className="dc3-col">
+          <div className="dc3-top">
+            <span className="hz-smallcaps" style={{ color: 'var(--ink)' }}>何梓强的笔记</span>
+            <div className="db-toggle">
+              <span className="on">Professional</span>
+              <span>Personal</span>
+            </div>
+          </div>
+          <div className="dc3-intro">
+            <img className="hz-avatar" src={AVATAR} width="64" height="64" alt="何梓强" />
+            <div>
+              <h1 className="dc3-name">何梓强</h1>
+              <p className="dc3-bio">
+                软件工程专业学生，对 Agent 感兴趣。
+                我在这里记录研究、项目背后的思考，以及阅读与学习的痕迹。
+              </p>
+            </div>
+          </div>
+          <div className="dc3-sec-label">
+            <span className="hz-smallcaps">最近 · Recently</span>
+          </div>
+          <div>
+            <a className="dc3-entry" href="#">
+              <div className="dc3-date">2026 · 5 月</div>
+              <div>
+                <h3 className="dc3-e-title">Agent 需要怎样的记忆？<span className="tag">文章</span></h3>
+                <p className="dc3-e-x">从一次失败的多轮任务实验出发，重新理解上下文、检索与遗忘之间的取舍。</p>
+              </div>
+            </a>
+            <a className="dc3-entry" href="#">
+              <div className="dc3-date">2026 · 4 月</div>
+              <div>
+                <h3 className="dc3-e-title">读《禅与摩托车维修艺术》<span className="tag">阅读</span></h3>
+                <p className="dc3-e-x">「良质」这个概念，意外地解释了我为什么总对粗糙的代码感到不安。</p>
+              </div>
+            </a>
+            <a className="dc3-entry" href="#">
+              <div className="dc3-date">2026 · 4 月</div>
+              <div>
+                <h3 className="dc3-e-title">为自己写一个任务规划器<span className="tag">项目</span></h3>
+                <p className="dc3-e-x">不是为了发布，而是为了搞清楚：规划到底难在哪里。</p>
+              </div>
+            </a>
+            <div className="dc3-more">查看全部 · All entries →</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function App() {
+  return (
+    <DesignCanvas>
+      <DCSection
+        id="home-dirs"
+        title="首页方向 · 三个气质"
+        subtitle="同一套纸面色调与宋体/Garamond 字系，差别在于「进入网站的方式」"
+      >
+        <DCArtboard id="dir-a" label="A · 扉页 — 像翻开一本书的第一页" width={1280} height={800}>
+          <DirA />
+        </DCArtboard>
+        <DCArtboard id="dir-b" label="B · 学者索引 — 一段自述 + 一份目录" width={1280} height={910}>
+          <DirB />
+        </DCArtboard>
+        <DCArtboard id="dir-c" label="C · 笔记台 — 最近在想什么，直接可读" width={1280} height={860}>
+          <DirC />
+        </DCArtboard>
+      </DCSection>
+    </DesignCanvas>
+  );
+}
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>

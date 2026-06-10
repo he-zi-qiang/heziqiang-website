@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="description" content="项目记录《任务规划器》——一个用来研究 Agent 规划机制的最小实验工具。" />
+<title>任务规划器 · 项目记录 · 何梓强</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..500&family=Noto+Serif+SC:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="assets/style.css" />
+<link rel="icon" type="image/png" href="assets/avatar.png" />
+<script src="assets/site.js"></script>
+</head>
+<body data-screen-label="项目内页 · 任务规划器" data-section="pro">
+<div class="page">
+
+  <div id="site-head"></div>
+
+  <main>
+    <div class="crumb"><a href="projects.html">← 项目 · Projects</a></div>
+
+    <h1 class="page-title">任务规划器</h1>
+    <p class="article-meta">2026 年 1 月至今<span class="sep">·</span>进行中<span class="sep">·</span>实验项目，第三次重写</p>
+
+    <div class="article-body">
+      <h2 style="margin-top: 0;">缘起</h2>
+      <p>去年读了不少关于 Agent 规划的论文，发现自己处于一种危险的状态：每个概念都「看懂了」，但没有一个真正属于我。判断的办法只有一个——亲手把它做出来。于是这个项目的目标从一开始就不是发布，而是搞清楚：规划到底难在哪里。</p>
+
+      <h2>问题</h2>
+      <p>给定一个多步骤任务（比如「整理本学期的课程笔记并生成索引」），规划器需要把它分解成可执行的步骤、在执行中发现计划的错误、并决定何时修订计划。听起来是工程问题，做起来全是认知问题：什么算「一步」？计划错了多少才值得推翻？</p>
+
+      <h2>尝试与失败</h2>
+      <p>第一版把计划做成静态的树，执行器严格按树行事。它在演示用例上工作得很好，在真实任务上活不过三步——现实世界的反馈会立刻让树过时。第二版走向另一个极端：完全没有显式计划，每一步都重新决策。它灵活，但会绕圈子，且无法向我解释它打算做什么。</p>
+      <blockquote>「两次失败夹出了真正的问题：计划的价值不在于被执行，而在于让偏离变得可以察觉。」</blockquote>
+      <p>这是我目前最重要的收获，它来自代码，而不是论文。</p>
+
+      <h2>目前的设计</h2>
+      <p>第三版把计划当作一份「会过期的备忘录」：执行器每一步都对照备忘录检查偏离程度，小偏离就地修正，大偏离触发重新规划。重新规划的频率成了一个可观测的指标——它意外地比成功率更能反映任务的真实难度。</p>
+
+      <h2>还没想清楚的</h2>
+      <p>如何让规划器对「自己不知道的事」保持诚实。目前它在信息不足时倾向于编造一个步骤，而不是承认需要先去查证。这大概会是下一篇笔记的主题。</p>
+    </div>
+
+    <div class="article-end">❡</div>
+
+    <nav class="article-next">
+      <a href="projects.html">← 返回项目</a>
+      <a href="writing-agent-memory.html">相关文章：Agent 需要怎样的记忆？→</a>
+    </nav>
+  </main>
+
+  <div id="site-foot"></div>
+
+</div>
+</body>
+</html>

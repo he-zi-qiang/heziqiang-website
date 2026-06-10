@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="description" content="何梓强的摄影与观察：拍得不多，只在确实「在看」的那一刻按下快门。" />
+<title>摄影与观察 · 何梓强</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..500&family=Noto+Serif+SC:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="assets/style.css" />
+<link rel="icon" type="image/png" href="assets/avatar.png" />
+<script src="assets/site.js"></script>
+<script src="assets/image-slot.js"></script>
+<style>
+  .photo-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px 36px;
+  }
+  .photo-item { display: flex; flex-direction: column; gap: 14px; }
+  .photo-item image-slot { width: 100%; height: 300px; }
+  .photo-cap {
+    font-size: 13.5px;
+    line-height: 1.9;
+    color: var(--muted);
+  }
+  .photo-cap .when { color: var(--faint); margin-right: 10px; font-size: 12.5px; }
+  @media (max-width: 560px) {
+    .photo-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body data-screen-label="摄影与观察" data-section="personal">
+<div class="page">
+
+  <div id="site-head"></div>
+
+  <main>
+    <div class="crumb"><a href="index.html?mode=personal">← 索引 · Index</a></div>
+
+    <h1 class="page-title">摄影与观察</h1>
+    <p class="page-sub">拍得不多，也不追求技术。这里的标准只有一个：按下快门时，我确实在看。</p>
+
+    <div class="photo-grid">
+      <figure class="photo-item" style="margin: 0;">
+        <image-slot id="photo-1" shape="rect" placeholder="拖入一张照片"></image-slot>
+        <figcaption class="photo-cap"><span class="when">2026 · 5</span>后山的傍晚。光线只在这条路上停留十分钟。</figcaption>
+      </figure>
+      <figure class="photo-item" style="margin: 0;">
+        <image-slot id="photo-2" shape="rect" placeholder="拖入一张照片"></image-slot>
+        <figcaption class="photo-cap"><span class="when">2026 · 4</span>自习室凌晨一点。每盏还亮着的灯下面都有一个故事。</figcaption>
+      </figure>
+      <figure class="photo-item" style="margin: 0;">
+        <image-slot id="photo-3" shape="rect" placeholder="拖入一张照片"></image-slot>
+        <figcaption class="photo-cap"><span class="when">2025 · 11</span>梧桐叶落在键盘上。秋天对程序员的唯一打扰。</figcaption>
+      </figure>
+      <figure class="photo-item" style="margin: 0;">
+        <image-slot id="photo-4" shape="rect" placeholder="拖入一张照片"></image-slot>
+        <figcaption class="photo-cap"><span class="when">2025 · 9</span>开学第一周的旧书摊。</figcaption>
+      </figure>
+    </div>
+  </main>
+
+  <div id="site-foot"></div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="description" content="研究笔记《Agent 需要怎样的记忆？》——从一次失败的多轮任务实验谈起。" />
+<title>Agent 需要怎样的记忆？ · 何梓强</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..500&family=Noto+Serif+SC:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="assets/style.css" />
+<link rel="icon" type="image/png" href="assets/avatar.png" />
+<script src="assets/site.js"></script>
+</head>
+<body data-screen-label="文章内页 · Agent 需要怎样的记忆" data-section="pro">
+<div class="page">
+
+  <div id="site-head"></div>
+
+  <main>
+    <div class="crumb"><a href="writing.html">← 文章 · Writing</a></div>
+
+    <h1 class="page-title">Agent 需要怎样的记忆？</h1>
+    <p class="article-meta">2026 年 5 月<span class="sep">·</span>研究笔记<span class="sep">·</span>约 1,800 字</p>
+
+    <div class="article-body">
+      <p>四月底，我做了一个小实验：让一个 Agent 替我完成跨越三天的任务——整理一门课的全部笔记，找出概念之间的依赖关系，再生成一份复习路径。第一天它表现得近乎完美。第二天恢复会话后，它把前一天已经否决过的方案又提了一遍，语气里甚至带着初次发现的兴奋。</p>
+      <p>这次失败比任何论文都更直接地把问题摆在我面前：我们说一个 Agent「有记忆」的时候，到底在说什么？</p>
+
+      <h2>上下文不是记忆</h2>
+      <p>最直接的回答是：把所有历史都塞进上下文窗口。窗口在变大，这件事看起来迟早会被硬件解决。但实验里我很快发现，问题不在「装不装得下」，而在「找不找得到」。当三天的对话全部在场时，模型并没有变得更清醒，反而更容易被无关的细节带偏——它记得一切，等于它不知道什么重要。</p>
+      <p>人类的工作记忆只有可怜的几个槽位，但我们极少因此觉得自己「没有记忆」。因为记忆的本质不是保存，而是在正确的时刻让正确的经验浮现。</p>
+
+      <h2>检索的代价</h2>
+      <p>第二种方案是外置记忆加检索：把历史写进数据库，需要时查。我的版本工作得不算坏，但它引入了一个我此前从未认真想过的问题——检索是有立场的。</p>
+      <blockquote>「用什么查询去检索，本身就是一次对『当下什么重要』的判断。这个判断错了，检索回来的记忆越准确，行为就偏得越远。」</blockquote>
+      <p>实验里最典型的失败是：Agent 用任务的字面描述去查记忆，捞回了三天前一段字面相似、实质无关的讨论，然后非常自信地沿着错误方向走了七步。</p>
+
+      <h2>遗忘是设计，不是缺陷</h2>
+      <p>真正让实验好转的改动，是我开始主动丢弃信息：每个阶段结束时，让 Agent 写一段不超过两百字的「交接备忘」，只有备忘进入下一阶段，原始记录全部封存。效果出乎意料——它不再重提被否决的方案，因为备忘里写着「方案 A 已否决，原因是成本」，而不是那场冗长讨论本身。</p>
+      <p>这让我重新理解了遗忘。遗忘不是记忆系统的失败模式，而是它的压缩算法：决定什么值得带往未来，本身就是认知工作中最重的那部分。</p>
+
+      <div class="aside-note">这篇笔记基于课程项目中的小规模实验，样本很小，结论随时可能被推翻。把它发出来，是想逼自己把含糊的直觉写成可以被反驳的句子。</div>
+
+      <p>所以，Agent 需要怎样的记忆？此刻我的答案是：需要的不是更大的仓库，而是一位诚实的史官——记录时克制，引用时谨慎，并且敢于把大部分过去留在过去。</p>
+    </div>
+
+    <div class="article-end">❡</div>
+
+    <nav class="article-next">
+      <a href="writing.html">← 返回文章</a>
+      <a href="project-task-planner.html">相关项目：任务规划器 →</a>
+    </nav>
+  </main>
+
+  <div id="site-foot"></div>
+
+</div>
+</body>
+</html>

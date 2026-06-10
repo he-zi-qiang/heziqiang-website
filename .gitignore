@@ -1,0 +1,20 @@
+# macOS
+.DS_Store
+._*
+
+# 编辑器
+.vscode/
+.idea/
+*.swp
+*~
+
+# 日志 / 临时
+*.log
+node_modules/
+
+# 本地预览配置（Claude Code）
+.claude/
+
+# image-slot 拖拽预览生成的本地状态边车文件（非站点内容）
+*.image-slots.state.json
+.image-slots.state.json
