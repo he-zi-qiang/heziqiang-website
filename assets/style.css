@@ -342,6 +342,18 @@ a.entry:hover .e-title { color: var(--accent); }
   border-bottom: 1px solid var(--line);
 }
 
+.article-body strong { font-weight: 600; color: var(--ink); }
+
+.article-body code {
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 0.86em;
+  background: var(--paper-deep);
+  color: var(--accent);
+  padding: 0.12em 0.4em;
+  border-radius: 4px;
+  word-break: break-word;
+}
+
 .article-end {
   margin: 80px 0 0;
   color: var(--faint);

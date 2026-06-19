@@ -11,6 +11,9 @@
 ├── projects.html               项目列表 ──┐
 │   └── project-task-planner.html          项目内页：任务规划器
 ├── writing.html                文章列表 ──┐
+│   ├── instruction-drift.html             文章内页：指令漂移前沿调研
+│   ├── claude-code-remote-ssh-debug.html  文章内页：远程连接服务器排错记
+│   ├── chaoxing-restricted-pdf-download.html  文章内页：学习通受限下载与访问控制
 │   └── writing-agent-memory.html          文章内页：Agent 的记忆
 ├── cv.html                     简历（支持打印 / 存 PDF）
 ├── essays.html                 随笔列表 ──┐
@@ -74,5 +77,4 @@ python3 -m http.server 8000
 
 ## 待办（占位内容）
 
-- `about.html` 里的联系方式仍是占位：邮箱 `hello@example.com`、GitHub 链接为 `#`，上线前请替换为真实信息。
 - `photos.html` 的照片为拖拽占位（`image-slot`），尚未填入正式图片。

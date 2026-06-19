@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="description" content="给 LLM 在开头下一次约束，对话越长它越会系统性地偏离——我把这条文献谱系梳了一遍，也把自己的小基准放了进去。" />
+<title>指令漂移：当大模型聊着聊着就忘了规矩 · 何梓强</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..500&family=Noto+Serif+SC:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="assets/style.css" />
+<link rel="icon" type="image/png" href="assets/avatar.png" />
+<script src="assets/site.js"></script>
+</head>
+<body data-screen-label="文章内页 · 指令漂移" data-section="pro">
+<div class="page">
+
+  <div id="site-head"></div>
+
+  <main>
+    <div class="crumb"><a href="writing.html">← 文章 · Writing</a></div>
+
+    <h1 class="page-title">指令漂移：当大模型聊着聊着就忘了规矩</h1>
+    <p class="article-meta">2026 年 6 月<span class="sep">·</span>研究笔记<span class="sep">·</span>约 1,800 字</p>
+
+    <div class="article-body">
+<p>给大模型或 agent 在对话开头一次性下达一组约束，随着对话变长，它会系统性地"忘记"或偏离这些约束。文献里把这件事叫做 instruction drift、persona drift 或 goal drift——指令漂移。这篇笔记是我为大数据课程做的一轮前沿调研，目的是把相关论文的度量范式、分析逻辑和缓解方法整合到一起，并把我自己的项目 <code>instruction-drift-bench</code> 放进这条谱系里看它的位置。</p>
+
+<blockquote>「在开头一次性下达约束，随对话变长它会系统性地偏离——这就是指令漂移。」</blockquote>
+
+<h2>奠基与关键实证</h2>
+
+<p>有几篇论文几乎定义了这个问题的形状。<strong>Measuring and Controlling Instruction (In)Stability</strong>（Li et al., 2024）让两个被赋予 system prompt 的 bot 互相聊天，发现大约 8 轮之内就出现显著漂移，并把原因归到注意力随距离衰减上，提出了 split-softmax 的修法。这篇几乎就是我项目的学术版本。</p>
+
+<p><strong>LLMs Get Lost In Multi-Turn Conversation</strong>（Laban et al., 2025）给出一个很直观的数字：多轮相比单轮平均掉 39%，并把它拆成"能力小幅下降 + 不可靠性大幅上升"两部分。<strong>DriftBench</strong>（2026）则揭示了一个更扎心的现象——模型其实能准确复述它正在违反的那条约束（"知道却违反"的比率在 8% 到 99% 之间），而且用 LLM 当裁判时会低估违规。</p>
+
+<p>另外两篇提供了反向的、让人稍微乐观的视角。Adobe 的 <strong>Drift No More?</strong>（2025）把漂移定义为逐轮的 KL 散度，发现它会收敛到一个平衡态，而不是无限恶化，而且简单的提醒就能把它压低。<strong>Examining Identity Drift</strong>（2024）则给出反直觉的结论：越大的模型漂移反而越多，显式给定人设也未必更稳。</p>
+
+<h2>把"不听话"变成数字：四类度量范式</h2>
+
+<p>调研里我把度量方式归成四类。第一类是<strong>可程序化验证的指令</strong>：只下达那些能用规则判 0/1 的约束（IFEval 是代表），好处是确定、零成本、可复现。第二类是<strong>维度分解逐项判</strong>，把复杂指令拆成原子要求逐条核对（InFoBench、FollowBench、ComplexBench）。第三类是<strong>分布层的 KL 漂移</strong>，测当前模型相对目标参考模型的逐轮 KL。第四类是 <strong>LLM-as-judge 评分</strong>，让强模型当裁判（MT-Bench-101），但裁判本身有偏差、会漏判违规。</p>
+
+<div class="aside-note">我自己选的是第一类——程序化 checker。DriftBench 已经实证了 LLM 裁判会系统性漏判违规，让遵从率虚高。用确定性规则当"尺子"，尺子本身才不会抖。这既是我对"工程化约束能力"的理解，也是一个在答辩时可以站得住脚的工程取舍。</div>
+
+<h2>主流基准与通用分析骨架</h2>
+
+<p>和多轮相关的基准里：IFEval（2023）确立了 verifiable instruction 这一范式；Multi-IF（2024）把它扩展到多轮多语言，发现遵从率随轮次下降、非英语更差；MT-Bench-101（2024）做了多轮能力的细粒度分类；MultiChallenge（2025）显示即便前沿模型在"跨轮保持"上仍然失分；SysBench（2024）专测对 system 消息的遵从，发现它随轮次和冲突而下降；LIFBench（2024）则在长上下文里显式区分了"性能"与"稳定性"两件事。</p>
+
+<p>把这些工作的做法抽象出来，其实共享一条分析骨架，这也是我项目的骨架：先提出可量化的因变量，再构造受控数据让唯一变量是轮次/长度，然后量化衰减（画轮次 vs 遵从率曲线并给置信区间），接着做归因（注意力衰减、位置偏置、知道却违反），最后用干预去验证——看缓解机制能不能把曲线压平。</p>
+
+<h2>缓解方法图谱</h2>
+
+<p>缓解手段可以放进一个成本—效果—可落地的三角里看。<strong>重注入/提醒</strong>（Drift No More?）最便宜，周期性刷新一下近因记忆。<strong>结构化输出闸门与验证</strong>最有效——有工作把角色失守率从 70% 压到 9%，DriftBench 的 checkpointing 也是这个思路。<strong>自我修正与多 Agent 验证</strong>（Self-Refine、Reflexion、CRITIC、Multiagent Debate、Constitutional AI）对应"一个构建、一个验证"的双 agent 结构。<strong>注意力层干预</strong>（split-softmax、Found in the Middle）最治本，但要改模型。</p>
+
+<h2>我的项目在哪</h2>
+
+<p>我的 <code>instruction-drift-bench</code> 大致是这样一个组合：IFEval 的可验证范式 + Li et al. 的多轮漂移测量 + builder/verifier 双 Agent 缓解，拼成一个小而完整、可复现的迷你基准。</p>
+
+<p>度量上用 5 条确定性约束（结尾标记、禁用词、长度、轮次标签、纯文本），全部程序化判定。设计上约束只在开头给一次，用无关探针推进对话，测"轮次 vs 遵从率"，并跑多次 rollout 求置信区间——这套设计对齐 Li et al.。缓解上用周期性重注入（呼应 Drift No More?）加双 Agent 验证（呼应 Multiagent Debate 与那篇把失守率打下来的工作），实测下来 verifier 几乎能把曲线压平。</p>
+
+<h2>还没被填上的坑</h2>
+
+<p>调研到最后，我列了几个可以延伸的研究空白，也是我考虑的保研选题方向。状态型约束（需要自我计数的，比如轮次标签）为什么漂移得最快，能不能系统刻画"状态型 vs 记忆型"的差异？如何真正闭合"知道却违反"那道鸿沟？程序化 verifier 和 LLM verifier 之间的成本/效果帕累托前沿长什么样？漂移的平衡点究竟由什么决定（约束数量、模型规模、提醒频率）？以及——中文乃至多语言的长程遵从基准，目前还很稀缺。</p>
+
+<blockquote>「模型能准确复述它正在违反的那条约束——它不是不知道，是没守住。」</blockquote>
+    </div>
+
+    <div class="article-end">❡</div>
+
+    <nav class="article-next">
+      <a href="writing.html">← 返回文章</a>
+      <a href="writing-agent-memory.html">相关：Agent 需要怎样的记忆？ →</a>
+    </nav>
+  </main>
+
+  <div id="site-foot"></div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="description" content="「正在开启 session」一直卡住，最后查出来是四个独立故障叠在一起。一次把弯路抽象成方法论的排错训练。" />
+<title>Claude Code 远程连接服务器排错记：四个叠在一起的问题 · 何梓强</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..500&family=Noto+Serif+SC:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="assets/style.css" />
+<link rel="icon" type="image/png" href="assets/avatar.png" />
+<script src="assets/site.js"></script>
+</head>
+<body data-screen-label="文章内页 · 远程排错记" data-section="pro">
+<div class="page">
+
+  <div id="site-head"></div>
+
+  <main>
+    <div class="crumb"><a href="writing.html">← 文章 · Writing</a></div>
+
+    <h1 class="page-title">Claude Code 远程连接服务器排错记：四个叠在一起的问题</h1>
+    <p class="article-meta">2026 年 6 月<span class="sep">·</span>运维排错笔记<span class="sep">·</span>约 2,200 字</p>
+
+    <div class="article-body">
+<p>现象很简单：用 Claude Code 远程连接我的云服务器，一直卡在「正在开启 session」。但查到最后才发现，这一个现象背后其实是<strong>四个独立的问题叠在一起</strong>——方向理解错了、服务器内存被打满、本地代理全局模式劫持了路由、私钥又带着 passphrase。逐层拆解之后，最终落到了一个干净的架构：让 Claude 跑在 Mac 上，用 SSH 密钥免密远程操作服务器。</p>
+
+<blockquote>「正在开启 session」只是表象。一个现象背后可能藏着多个独立故障，别只找到一个原因就收手。</blockquote>
+
+<h2>背景</h2>
+
+<p>服务器是一台阿里云北京节点的小机器，Ubuntu 22.04，配置只有 2 核 2 GiB，用 root 登录。本机是一台 Mac，挂着本地代理监听 127.0.0.1:1082。一开始我的误解是：以为整套是「VS Code Remote-SSH + Claude 插件在 Mac 上」运行。这个误解，恰恰是后面一连串判断被带偏的起点。</p>
+
+<h2>四个叠加的问题</h2>
+
+<p><strong>问题一：方向搞反了。</strong>在 Remote-SSH 下，Claude 插件其实是 workspace 扩展，它跑在<strong>服务器端</strong>，不是 Mac。它去连 api.anthropic.com 用的是服务器的网络，于是在大陆境内直连不上 Anthropic——卡住。解决方式是干脆改用「Claude 跑 Mac」的方案。</p>
+
+<p><strong>问题二：服务器过载。</strong>登进去一看，<code>free</code> 显示 1.3G 已用、Swap 是 0B；top 里全是 vscode-server 的两个 extensionHost，各吃约 500MB。内存满了又没有 swap，系统连 fork 一个新 sshd 都做不到，于是 SSH 报 banner exchange timeout。解决：杀进程，再加 2G swap。</p>
+
+<p><strong>问题三：代理劫持路由。</strong><code>route -n get</code> 显示到服务器的流量走的是 utun6（代理隧道），默认路由也走它——说明代理开的是<strong>全局模式</strong>，把本该直连的北京服务器流量绕去了国外节点（而我人还在手机热点上）。更骗人的是 ping 显示 0.48ms，那根本不是真实延迟，是隧道在本地替服务器答话的假数据。解决：代理切回规则模式，让国内 IP 直连。</p>
+
+<p><strong>问题四：密钥连不上。</strong><code>ssh -v</code> 显示 Server accepts key，却仍然 Permission denied。权限全对（700/700/600）之后，真相是私钥带了 passphrase，而 BatchMode 非交互模式下签不了名。解决：用 <code>ssh-add</code> 把 passphrase 存进 macOS 钥匙串，开机自动加载。</p>
+
+<h2>最终架构：让 Claude 跑在 Mac 上</h2>
+
+<p>结论是一个很朴素的架构：Claude Code 在 Mac 上跑，重活都在本地；通过 SSH 密钥免密登进服务器，只让服务器执行命令、几乎零负担；联网访问 Anthropic 也走 Mac 的本地代理。需要时还可以配一条反向隧道，临时把本机代理借给服务器用。</p>
+
+<div class="aside-note">为什么 2 核 2G 这种小机器必须选这个方案？内存上，vscode-server 加上 node 轻松吃掉 1GB+，小机器扛不住，而这个方案下服务器几乎零负担；联网上，Claude 在 Mac 联网，服务器根本不需要能访问 Anthropic，直接绕开了被墙的问题。选型口诀：先看约束（2G 内存）再定架构，而不是反过来。</div>
+
+<p>关键配置上，我在 <code>~/.ssh/config</code> 里给这台主机指定了私钥路径，并打开 IdentitiesOnly、AddKeysToAgent、UseKeychain，再加一条可选的 RemoteForward 把本机代理借给服务器。把带 passphrase 的私钥用 <code>ssh-add --apple-use-keychain</code> 解锁一次存进钥匙串，之后开机自动加载。服务器端则用 fallocate / mkswap / swapon 加了一个 2G swapfile 并写进 fstab——对这台 2G 无 swap 而被打满卡死的机器来说，这一步是关键。</p>
+
+<h2>一个反直觉的实测</h2>
+
+<p>后来我才意识到，自己一直用的其实是 Claude 桌面端的「SSH 运行 Claude Code」功能，根本不是 VS Code。它和「在本地会话里让 Claude 帮我 SSH 操作服务器」是两套完全不同的机制：前者是 Claude 跑在 Mac 上、用 SSH 登进去跑命令，环节少、几乎不会失败；后者是 Claude Desktop 在<strong>服务器上</strong>安装并运行整个 Agent，于是会卡在 Remote Control initialization failed——远程 Agent 根本没起来。</p>
+
+<div class="aside-note">还有个低级但常见的坑：桌面端弹窗里的「Identity File (Private Key)」要填私钥<strong>文件路径</strong>，或者留空（留空就用 ssh/config 的配置）。我一开始把 root 的<strong>密码</strong>填进了那个框，必然「请求失败」。那个框要的是钥匙文件，不是密码。</div>
+
+<p>最颠覆的是：整套思路的出发点是「北京服务器连不上 Anthropic」，可我真去实测，服务器直连 api.anthropic.com <strong>连测 6 次全成功</strong>，每次约 0.6 秒（返回 HTTP 403 是正常响应）。于是两个结论同时翻盘：远程会话失败不是网络问题，是 Remote Control Agent 在服务器上初始化失败；而我最初设想的「反向隧道让服务器连 Anthropic」其实非必需——这台机器本来就能直连。</p>
+
+<blockquote>根本不用那个「SSH 运行 Claude Code」功能。开个普通本地会话，让 Claude 自己 SSH 进去就行——又稳又简单。</blockquote>
+
+<h2>沉淀下来的知识点</h2>
+
+<p>SSH 排错要分层、从下往上一层层定位：先看 TCP 层，<code>nc -zv</code> 测端口通不通；再看握手 / banner 层，Connection closed 或 banner exchange timeout 多半是服务器侧过载（fork 不出进程）或 MaxStartups 限流；最后看认证层，<code>ssh -v</code> 里盯 Offering / Server accepts key / Permission denied。</p>
+
+<p>「Server accepts key 却被拒」只有两种可能：一是 StrictModes 权限问题，home、.ssh、authorized_keys 都不能被组或其他人写；二是私钥带 passphrase 且非交互——递公钥匹配不需要密码（所以显示 accepts），但私钥签名需要解锁，修法是 <code>ssh-add</code> 进 agent 或钥匙串。想测私钥有没有 passphrase，用 <code>ssh-keygen -y -P "" -f</code> 能否读出公钥来判断。</p>
+
+<p>其它几个要点：Remote-SSH 里 UI 扩展跑本地、workspace 扩展跑远程，VS Code 装在 Mac 不等于扩展跑在 Mac；代理全局模式会把国内 IP 也塞进隧道绕一圈国外，又慢又不稳，国内服务器从国内访问应直连；手动 <code>route add</code> 不持久，重启就失效，要在代理软件里设规则模式；小内存机器（≤2G）默认就该加 swap，给 OOM 兜底，免得连 sshd 都 fork 不出来。</p>
+
+<h2>实战：顺手修了一个 502 Bad Gateway</h2>
+
+<p>用上面「本地会话 + SSH」的方式，我实际修了个线上问题——我的网站某个子路径返回 502 Bad Gateway。排查链是这样的：先 <code>nginx -T</code> 看真实生效的合并配置，发现这个路径被 proxy_pass 转发给了 Tomcat:8080；错误日志被一堆 SSL 扫描噪音淹没（机器人在刷漏洞），过滤后抓到真凶 connect() failed (111: Connection refused)；<code>ss -tlnp</code> 一看 8080 根本没监听，Tomcat 没在跑；再 <code>ls</code> 那个目录，里面其实全是<strong>静态 HTML</strong>，压根不是 Java 应用。</p>
+
+<p>根因清楚了：nginx 把一个静态目录错配成了「转发 Tomcat」，而 Tomcat 没跑——就算启动 Tomcat 也没用，里面压根没这个应用。修复就是把那段 location 从 proxy_pass 改成静态服务（index + try_files），服务器的 root 本来就指对了。</p>
+
+<div class="aside-note">改生产配置三件套：备份 → nginx -t 语法校验 → 失败自动回滚 → systemctl reload，心里才有底。</div>
+
+<p>这里也踩了几个坑：location 优先级上，正则 <code>location ~</code> 高于前缀 <code>location /</code>，想让前缀稳赢且不再走正则用 <code>^~</code>；reload 有瞬时竞态，旧 worker 还在优雅退出，刚 reload 完立刻测可能仍是旧的 502，稍等重测就对了，差点被它误导以为没修好；静态目录返回 403 是正常的（没 index 页 + nginx 默认不列目录），里面被引用的具体文件照常加载。</p>
+
+<h2>方法论反思</h2>
+
+<p>把这次的弯路抽象出来，比记住命令更值钱。<strong>现象不等于病因，且病因可能不止一个</strong>——「正在开启 session」连环套了四层，每修好一层才暴露下一层，得耐心一层层剥。<strong>当所有测量都「异常地好」，要怀疑测量本身被污染</strong>——ping 0.48ms 不是网络好，是代理在本地替服务器答话，先拿到干净的观测再下结论。<strong>控制变量加分层</strong>——SSH 卡住，先分清是 TCP、握手还是认证，认证再分客户端递没递钥匙、服务器收没收。</p>
+
+<p><strong>选型先看约束</strong>——2 核 2G 这个硬约束，直接决定了 Claude 别跑服务器上；需求之前，先问环境给不给得起。<strong>「能直连吗」别假设，要实测、还要测多次</strong>——最初一长串思路都建立在「大陆连不上 Anthropic」这个没验证的前提上，实测却是 6/6 通，一个错误前提能把后面一串判断全带偏。<strong>工具越「智能」、环节越多越容易坏</strong>——「Claude 跑 Mac + SSH」比「在服务器上跑整个 Agent」可靠得多，能简单别复杂。还有，<strong>填错框也是常见坑</strong>——把密码填进 Identity File、把「VS Code 在哪」当成「Claude 在哪」，很多「请求失败」其实只是把东西放错了位置。</p>
+
+<blockquote>很少一次就成功，因为影响因素很多。如何识别影响因素？如何控制变量确定它？如何解决它？把每一次「卡住」当成一次拆解训练——严谨、敏锐、耐心，最后都会变成你的直觉。</blockquote>
+    </div>
+
+    <div class="article-end">❡</div>
+
+    <nav class="article-next">
+      <a href="writing.html">← 返回文章</a>
+      <a href="chaoxing-restricted-pdf-download.html">学习通「禁止下载」的 PDF →</a>
+    </nav>
+  </main>
+
+  <div id="site-foot"></div>
+
+</div>
+</body>
+</html>
