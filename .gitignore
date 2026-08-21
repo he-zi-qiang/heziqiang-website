@@ -11,6 +11,7 @@
 # 依赖与构建产物
 node_modules/
 dist/
+.vite/
 *.log
 
 # 本地预览配置（Claude Code）
