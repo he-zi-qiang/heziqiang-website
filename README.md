@@ -90,13 +90,19 @@ npm run dev
 |---|---|
 | `Entry` | 列表型内容。`kind` 分栏目：`writing` 文章 / `project` 项目 / `essay` 随笔 / `reading` 阅读 / `learning` 学习记录 |
 | `Photo` | 摄影页的每一格 |
-| `SiteDoc` | 不属于任何栏目的固定文案，一个 key 一份 JSON：`site` `home` `about` `cv` `sections` |
+| `SiteDoc` | 不属于任何栏目的固定文案，一个 key 一份 JSON：`site` `home` `about` `cv` `sections` `nav` `ui` |
 | `User` | 管理员账号（通常就一个） |
 
 两个刻意的设计：
 
 **正文留空 = 没有内页。** 旧站里有些条目可以点进去，有些只是列表上的一行字。这个区别现在由
 「`bodyMd` 是不是空的」决定，不需要额外的开关。
+
+**站点上没有写死的文字。** 从首页引言到页眉的 Professional/Personal、面包屑、
+「打印 / 存为 PDF」、照片占位、加载与出错提示、404 页——凡是访客能看到的固定文案，
+都在 `SiteDoc` 里，后台「单页」那几个标签页可改。生产模式下连 `index.html` 的
+`<title>` 和 `description` 都会按「站点信息」重写一遍，所以爬虫拿到的也是后台里那份。
+代码里保留的少量默认值只在接口取不到时兜底，不是文案的来源。
 
 **Markdown 在写入时就渲染成 HTML 存下来。** 读者请求页面时后端直接吐 `bodyHtml`，不重复解析；
 前端的公开页面因此完全不需要打包 Markdown 解析器（它只出现在后台编辑器那个懒加载分块里）。
@@ -110,7 +116,7 @@ npm run dev
 
 | 方法 | 路径 | 说明 |
 |---|---|---|
-| GET | `/api/bootstrap` | 页眉页脚 + 首页文案 + 栏目标题，进站取一次 |
+| GET | `/api/bootstrap` | 页眉页脚 + 首页文案 + 栏目名称 + 导航 + 界面文案，进站取一次 |
 | GET | `/api/docs/:key` | 单页内容，Markdown 已渲染 |
 | GET | `/api/entries?kind=` | 栏目列表，已按分组小标题分好组 |
 | GET | `/api/entries/:slug` | 内页，含上一篇／下一篇 |

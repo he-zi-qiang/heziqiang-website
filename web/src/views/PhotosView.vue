@@ -2,31 +2,33 @@
 import { computed } from 'vue'
 import { api } from '@/api/client'
 import { useAsyncData } from '@/composables/useAsyncData'
-import { useSite } from '@/composables/useSite'
+import { useUi } from '@/composables/useUi'
 import { useHead } from '@/composables/useHead'
+import SiteCrumb from '@/components/SiteCrumb.vue'
 import StateNote from '@/components/StateNote.vue'
 
-const { bootstrap } = useSite()
+const { ui, sectionOf } = useUi()
 const { data, error, loading } = useAsyncData(() => api.photos())
-const meta = computed(() => bootstrap.value?.sections?.photos ?? null)
+const meta = computed(() => sectionOf('photos'))
 
-useHead(() => ({ title: meta.value?.title, description: meta.value?.subtitle }))
+useHead(() => ({ title: meta.value.title, description: meta.value.subtitle }))
 </script>
 
 <template>
-  <div class="crumb"><RouterLink :to="{ path: '/', query: { mode: 'personal' } }">← 索引 · Index</RouterLink></div>
+  <SiteCrumb mode="personal" />
 
-  <h1 class="page-title">{{ meta?.title ?? ' ' }}</h1>
-  <p class="page-sub">{{ meta?.subtitle }}</p>
+  <h1 class="page-title">{{ meta.title || ' ' }}</h1>
+  <p class="page-sub">{{ meta.subtitle }}</p>
 
   <StateNote :loading="loading" :error="error"
-             :empty="!loading && !error && data?.items.length === 0" empty-text="还没有照片。" />
+             :empty="!loading && !error && data?.items.length === 0"
+             :empty-text="ui.states.emptyPhotos" />
 
   <div v-if="data && data.items.length" class="photo-grid">
     <figure v-for="photo in data.items" :key="photo.id" class="photo-item">
       <div class="photo-frame">
         <img v-if="photo.url" :src="photo.url" :alt="photo.alt" loading="lazy" />
-        <span v-else class="empty">待补图</span>
+        <span v-else class="empty">{{ ui.photos.emptySlot }}</span>
       </div>
       <figcaption class="photo-cap">
         <span v-if="photo.whenLabel" class="when">{{ photo.whenLabel }}</span>{{ photo.caption }}

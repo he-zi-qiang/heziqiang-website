@@ -25,7 +25,9 @@ async function request<T>(path: string, init: RequestInit = {}): Promise<T> {
   try {
     res = await fetch(`/api${path}`, { credentials: 'same-origin', ...init, headers })
   } catch {
-    throw new ApiError(0, '连不上服务器，请确认后端已启动')
+    // status 0 = 根本没连上。给访客看什么由 useAsyncData 按「界面文案」决定，
+    // 这里只留一句给开发者看的。
+    throw new ApiError(0, 'network unreachable')
   }
 
   if (res.status === 204) return undefined as T

@@ -98,27 +98,146 @@
   "sections": {
     "writing": {
       "title": "文章",
-      "subtitle": "技术写作与研究笔记。写下来，是为了检验自己是否真的想清楚了。"
+      "subtitle": "技术写作与研究笔记。写下来，是为了检验自己是否真的想清楚了。",
+      "label": "文章",
+      "en": "Writing"
     },
     "project": {
       "title": "项目",
-      "subtitle": "这里记录的不是成品，而是问题、过程与教训。每个项目都试图回答三件事：我为什么做它，我解决了什么，我从中学到了什么。"
+      "subtitle": "这里记录的不是成品，而是问题、过程与教训。每个项目都试图回答三件事：我为什么做它，我解决了什么，我从中学到了什么。",
+      "label": "项目",
+      "en": "Projects"
     },
     "essay": {
       "title": "随笔与思考",
-      "subtitle": "想清楚的和没想清楚的，都在这里。后者居多。"
+      "subtitle": "想清楚的和没想清楚的，都在这里。后者居多。",
+      "label": "随笔",
+      "en": "Essays"
     },
     "reading": {
       "title": "阅读笔记",
-      "subtitle": "每本书只留一句话——逼自己说出它真正改变了我什么。"
+      "subtitle": "每本书只留一句话——逼自己说出它真正改变了我什么。",
+      "label": "阅读笔记",
+      "en": "Reading"
     },
     "learning": {
       "title": "学习记录",
-      "subtitle": "一份给自己看的流水账。它的价值在于回头看时，能看到来路。"
+      "subtitle": "一份给自己看的流水账。它的价值在于回头看时，能看到来路。",
+      "label": "学习记录",
+      "en": "Learning Log"
     },
     "photos": {
       "title": "摄影与观察",
-      "subtitle": "拍得不多，也不追求技术。这里的标准只有一个：按下快门时，我确实在看。"
+      "subtitle": "拍得不多，也不追求技术。这里的标准只有一个：按下快门时，我确实在看。",
+      "label": "摄影与观察",
+      "en": "Photographs"
+    }
+  },
+  "nav": {
+    "pro": [
+      {
+        "zh": "关于我",
+        "en": "About",
+        "to": "/about"
+      },
+      {
+        "zh": "项目",
+        "en": "Projects",
+        "to": "/projects"
+      },
+      {
+        "zh": "文章",
+        "en": "Writing",
+        "to": "/writing"
+      },
+      {
+        "zh": "简历",
+        "en": "CV",
+        "to": "/cv"
+      },
+      {
+        "zh": "联系",
+        "en": "Contact",
+        "to": "/about#contact"
+      }
+    ],
+    "personal": [
+      {
+        "zh": "随笔与思考",
+        "en": "Essays",
+        "to": "/essays"
+      },
+      {
+        "zh": "阅读笔记",
+        "en": "Reading",
+        "to": "/reading"
+      },
+      {
+        "zh": "学习记录",
+        "en": "Learning Log",
+        "to": "/learning"
+      },
+      {
+        "zh": "摄影与观察",
+        "en": "Photographs",
+        "to": "/photos"
+      }
+    ]
+  },
+  "ui": {
+    "header": {
+      "proLabel": "Professional",
+      "personalLabel": "Personal",
+      "switchAria": "身份切换",
+      "themeAria": "切换深浅色",
+      "toLight": "切换到明亮 · Light",
+      "toDark": "切换到暗色 · Dark"
+    },
+    "crumb": {
+      "index": "← 索引 · Index",
+      "backPrefix": "←"
+    },
+    "article": {
+      "endMark": "❡",
+      "backLabel": "← 返回",
+      "nextPrefix": "下一篇：",
+      "prevPrefix": "上一篇：",
+      "linkSuffix": "→"
+    },
+    "cv": {
+      "printLabel": "打印 / 存为 PDF"
+    },
+    "photos": {
+      "emptySlot": "待补图"
+    },
+    "states": {
+      "loading": "正在取内容…",
+      "loadFailed": "加载失败",
+      "offline": "连不上服务器，请稍后再试。",
+      "emptyList": "这个栏目还没有内容。",
+      "emptyPhotos": "还没有照片。",
+      "notFoundContent": "找不到这篇内容。"
+    },
+    "notFound": {
+      "title": "404",
+      "subtitle": "这个地址下没有内容。也许是链接旧了，也许是我把它挪走了。",
+      "links": [
+        {
+          "zh": "回到首页",
+          "en": "Index",
+          "to": "/"
+        },
+        {
+          "zh": "看看文章",
+          "en": "Writing",
+          "to": "/writing"
+        },
+        {
+          "zh": "看看随笔",
+          "en": "Essays",
+          "to": "/essays"
+        }
+      ]
     }
   },
   "entries": [

@@ -1,15 +1,20 @@
 <script setup lang="ts">
+import { useUi } from '@/composables/useUi'
 import { useHead } from '@/composables/useHead'
-useHead(() => ({ title: '页面不存在', description: '这个地址下没有内容。' }))
+import SiteCrumb from '@/components/SiteCrumb.vue'
+
+const { ui } = useUi()
+
+useHead(() => ({ title: ui.value.notFound.title, description: ui.value.notFound.subtitle }))
 </script>
 
 <template>
-  <div class="crumb"><RouterLink to="/">← 索引 · Index</RouterLink></div>
-  <h1 class="page-title">404</h1>
-  <p class="page-sub">这个地址下没有内容。也许是链接旧了，也许是我把它挪走了。</p>
+  <SiteCrumb mode="pro" />
+  <h1 class="page-title">{{ ui.notFound.title }}</h1>
+  <p class="page-sub">{{ ui.notFound.subtitle }}</p>
   <nav class="index-nav">
-    <RouterLink class="index-row" to="/"><span>回到首页</span><span class="en">Index</span></RouterLink>
-    <RouterLink class="index-row" to="/writing"><span>看看文章</span><span class="en">Writing</span></RouterLink>
-    <RouterLink class="index-row" to="/essays"><span>看看随笔</span><span class="en">Essays</span></RouterLink>
+    <RouterLink v-for="row in ui.notFound.links" :key="row.to" class="index-row" :to="row.to">
+      <span>{{ row.zh }}</span><span class="en">{{ row.en }}</span>
+    </RouterLink>
   </nav>
 </template>

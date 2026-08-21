@@ -1,11 +1,12 @@
 import fs from 'node:fs'
 import path from 'node:path'
-import Fastify from 'fastify'
+import Fastify, { type FastifyReply } from 'fastify'
 import cors from '@fastify/cors'
 import multipart from '@fastify/multipart'
 import rateLimit from '@fastify/rate-limit'
 import fastifyStatic from '@fastify/static'
 import { env, serverRoot } from './env.js'
+import { getIndexHtml } from './lib/index-html.js'
 import authPlugin from './plugins/auth.js'
 import publicRoutes from './routes/public.js'
 import authRoutes from './routes/auth.js'
@@ -48,19 +49,27 @@ export async function buildApp() {
 
   // 生产模式：伺服前端构建产物，并对未知路径回落到 index.html（SPA 路由）
   if (fs.existsSync(WEB_DIST)) {
+    const indexFile = path.join(WEB_DIST, 'index.html')
+
+    // index.html 不走静态中间件：它要按「站点信息」文档补上标题与描述
     await app.register(fastifyStatic, {
       root: WEB_DIST,
       prefix: '/',
       decorateReply: false,
-      index: ['index.html'],
+      index: false,
       wildcard: false,
       maxAge: '1h',
     })
-    app.setNotFoundHandler((req, reply) => {
+
+    const sendIndex = async (reply: FastifyReply) =>
+      reply.type('text/html; charset=utf-8').send(await getIndexHtml(indexFile))
+
+    app.get('/', async (_req, reply) => sendIndex(reply))
+    app.setNotFoundHandler(async (req, reply) => {
       if (req.url.startsWith('/api/') || req.url.startsWith('/uploads/')) {
         return reply.code(404).send({ error: '接口不存在' })
       }
-      return reply.type('text/html').send(fs.createReadStream(path.join(WEB_DIST, 'index.html')))
+      return sendIndex(reply)
     })
     app.log.info(`前端产物已挂载：${WEB_DIST}`)
   } else {

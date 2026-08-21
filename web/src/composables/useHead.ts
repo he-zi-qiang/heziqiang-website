@@ -1,6 +1,5 @@
 import { watchEffect } from 'vue'
-
-const DEFAULT_TITLE = '何梓强 · He Ziqiang'
+import { useSite } from './useSite'
 
 function setMeta(name: string, content: string) {
   let el = document.querySelector<HTMLMetaElement>(`meta[name="${name}"]`)
@@ -15,15 +14,18 @@ function setMeta(name: string, content: string) {
 /**
  * 单页应用没有服务端渲染，标题和描述得自己维护。
  * 传 getter 而不是值，数据到达后会自动更新。
+ * 站名与默认描述都取自后台的「站点信息」。
  */
 export function useHead(get: () => { title?: string | null; description?: string | null }) {
-  watchEffect(() => {
-    const { title, description } = get()
-    document.title = title ? `${title} · 何梓强` : DEFAULT_TITLE
-    if (description) setMeta('description', description)
-  })
-}
+  const { bootstrap } = useSite()
 
-export function resetHead() {
-  document.title = DEFAULT_TITLE
+  watchEffect(() => {
+    const site = bootstrap.value?.site
+    const siteTitle = site ? [site.siteName, site.siteNameEn].filter(Boolean).join(' · ') : ''
+    const { title, description } = get()
+
+    document.title = title ? [title, site?.siteName].filter(Boolean).join(' · ') : siteTitle
+    const desc = description || site?.description
+    if (desc) setMeta('description', desc)
+  })
 }

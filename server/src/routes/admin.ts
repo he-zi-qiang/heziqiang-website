@@ -7,6 +7,7 @@ import type { FastifyPluginAsync } from 'fastify'
 import { prisma } from '../db.js'
 import { env } from '../env.js'
 import { readDoc, writeDoc } from '../lib/docs.js'
+import { resetIndexHtml } from '../lib/index-html.js'
 import { ENTRY_KINDS } from '../lib/kinds.js'
 import { renderMarkdown } from '../lib/markdown.js'
 import { fallbackSlug, slugify } from '../lib/slug.js'
@@ -151,7 +152,10 @@ const adminRoutes: FastifyPluginAsync = async (app) => {
     const { key } = req.params as { key: string }
     if (!isDocKey(key)) return reply.code(404).send({ error: `未知文档：${key}` })
     try {
-      return await writeDoc(key, req.body)
+      const saved = await writeDoc(key, req.body)
+      // 站名和描述会被写进 index.html，缓存要作废
+      if (key === 'site') resetIndexHtml()
+      return saved
     } catch (err) {
       const e = err as Error & { issues?: unknown }
       return reply.code(400).send({ error: e.message, issues: e.issues })

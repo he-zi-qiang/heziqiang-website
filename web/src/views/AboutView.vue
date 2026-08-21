@@ -3,6 +3,7 @@ import { api } from '@/api/client'
 import { useAsyncData } from '@/composables/useAsyncData'
 import { useHead } from '@/composables/useHead'
 import DefList from '@/components/DefList.vue'
+import SiteCrumb from '@/components/SiteCrumb.vue'
 import StateNote from '@/components/StateNote.vue'
 
 const { data, error, loading } = useAsyncData(() => api.doc.about())
@@ -11,7 +12,7 @@ useHead(() => ({ title: data.value?.title, description: data.value?.body?.slice(
 </script>
 
 <template>
-  <div class="crumb"><RouterLink :to="{ path: '/', query: { mode: 'pro' } }">← 索引 · Index</RouterLink></div>
+  <SiteCrumb mode="pro" />
 
   <StateNote :loading="loading" :error="error" />
 

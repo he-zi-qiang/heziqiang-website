@@ -10,15 +10,19 @@ import { renderAboutDoc, renderCvDoc, renderHomeDoc } from '../lib/render-docs.j
 const publicRoutes: FastifyPluginAsync = async (app) => {
   /** 一次性拿到页眉页脚 + 首页需要的全部文案，前端启动时只请求一次 */
   app.get('/bootstrap', async () => {
-    const [site, home, sections] = await Promise.all([
+    const [site, home, sections, nav, ui] = await Promise.all([
       readDoc('site'),
       readDoc('home'),
       readDoc('sections'),
+      readDoc('nav'),
+      readDoc('ui'),
     ])
     return {
       site,
       home: home ? renderHomeDoc(home) : null,
       sections,
+      nav,
+      ui,
       kinds: ENTRY_KINDS,
     }
   })

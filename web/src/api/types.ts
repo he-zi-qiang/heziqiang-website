@@ -135,13 +135,61 @@ export interface CvDocSource {
 export interface SectionMeta {
   title: string
   subtitle: string
+  /** 短名称，用在面包屑与内页 meta；留空则回退到 title */
+  label: string
+  /** 英文短名 */
+  en: string
 }
 export type SectionsDoc = Record<EntryKind | 'photos', SectionMeta>
+
+export interface NavRow {
+  zh: string
+  en: string
+  to: string
+}
+
+export interface NavDoc {
+  pro: NavRow[]
+  personal: NavRow[]
+}
+
+/** 界面上所有写死文案的可编辑版本 */
+export interface UiDoc {
+  header: {
+    proLabel: string
+    personalLabel: string
+    switchAria: string
+    themeAria: string
+    toLight: string
+    toDark: string
+  }
+  crumb: { index: string; backPrefix: string }
+  article: {
+    endMark: string
+    backLabel: string
+    nextPrefix: string
+    prevPrefix: string
+    linkSuffix: string
+  }
+  cv: { printLabel: string }
+  photos: { emptySlot: string }
+  states: {
+    loading: string
+    loadFailed: string
+    offline: string
+    emptyList: string
+    emptyPhotos: string
+    notFoundContent: string
+  }
+  notFound: { title: string; subtitle: string; links: NavRow[] }
+}
 
 export interface Bootstrap {
   site: SiteDoc | null
   home: HomeDoc | null
   sections: SectionsDoc | null
+  nav: NavDoc | null
+  ui: UiDoc | null
   kinds: Record<EntryKind, KindConfig>
 }
 

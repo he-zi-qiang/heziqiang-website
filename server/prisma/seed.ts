@@ -23,6 +23,8 @@ type SeedFile = {
   about: unknown
   cv: unknown
   sections: unknown
+  nav: unknown
+  ui: unknown
   entries: {
     kind: string
     slug: string
@@ -62,7 +64,7 @@ async function main() {
   }
 
   /* —— 2. 单页内容 —— */
-  for (const key of ['site', 'home', 'about', 'cv', 'sections'] as DocKey[]) {
+  for (const key of ['site', 'home', 'about', 'cv', 'sections', 'nav', 'ui'] as DocKey[]) {
     const parsed = DOC_SCHEMAS[key].safeParse(data[key])
     if (!parsed.success) {
       console.error(`✗ 文档 ${key} 不符合 schema：`, parsed.error.issues)
@@ -75,7 +77,7 @@ async function main() {
       update: { data: payload },
     })
   }
-  console.log('✔ 已写入单页内容：site / home / about / cv / sections')
+  console.log('✔ 已写入单页内容：site / home / about / cv / sections / nav / ui')
 
   /* —— 3. 条目 —— */
   for (const e of data.entries) {
