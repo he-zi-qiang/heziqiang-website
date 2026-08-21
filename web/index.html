@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="description" content="何梓强（He Ziqiang）的个人网站——软件工程学生，研究 LLM Agent 的记忆、规划与人机协作，这里是我的研究笔记与思考档案。" />
+<title>何梓强 · He Ziqiang</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..500&family=Noto+Serif+SC:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="icon" type="image/png" href="/avatar.png" />
+<script>
+  /* 首屏之前恢复深浅色与个性化配色，避免白底闪一下再变暗 */
+  (function () {
+    try {
+      var s = JSON.parse(localStorage.getItem('hz-style-v2') || '{}');
+      if (s.accent) document.documentElement.style.setProperty('--accent', s.accent);
+      if (s.paper) document.documentElement.style.setProperty('--paper', s.paper);
+    } catch (e) {}
+    try {
+      var t = localStorage.getItem('hz-theme');
+      var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (t === 'dark' || (!t && prefersDark)) document.documentElement.setAttribute('data-theme', 'dark');
+    } catch (e) {}
+  })();
+</script>
+</head>
+<body>
+<div id="app"></div>
+<script type="module" src="/src/main.ts"></script>
+</body>
+</html>

@@ -1,0 +1,80 @@
+// ============================================================
+//  何梓强 · 个人网站 — 数据模型
+//  SQLite 单文件数据库，够用、够快、部署零依赖
+// ============================================================
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+/// 管理员账号（通常只有一个：站长本人）
+model User {
+  id           Int      @id @default(autoincrement())
+  username     String   @unique
+  passwordHash String
+  displayName  String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+/// 列表型内容的统一模型。
+/// kind 区分栏目：writing 文章 / essay 随笔 / project 项目 / reading 阅读 / learning 学习记录。
+/// 正文 bodyMd 为空 = 只在列表里出现、没有内页（对应旧站里不可点击的条目）。
+model Entry {
+  id          Int       @id @default(autoincrement())
+  kind        String
+  slug        String    @unique
+  title       String
+  /// 标题后的小标签：「进行中」「已完成」「波西格」
+  tag         String?
+  /// 列表左栏的日期文字：「6 月」「2026 · 5 月」「2026 至今」「重读」
+  dateLabel   String
+  /// 内页 meta 里的完整日期：「2026 年 5 月」。留空则回退到 dateLabel
+  dateFull    String?
+  /// 列表里的分组小标题（year-mark）：「2026」「在读」。留空则不分组
+  groupLabel  String?
+  /// 列表摘要（e-note）
+  summary     String    @default("")
+  /// 正文（Markdown 源码，唯一事实来源）
+  bodyMd      String    @default("")
+  /// 正文渲染结果（写入时生成，读取时直接吐出）
+  bodyHtml    String    @default("")
+  status      String    @default("published") // draft | published
+  /// 组内排序，数字越小越靠前
+  sortIndex   Int       @default(0)
+  publishedAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([kind, status])
+}
+
+/// 摄影页的照片
+model Photo {
+  id         Int      @id @default(autoincrement())
+  /// 图片地址，通常是 /uploads/xxx.jpg
+  url        String
+  caption    String   @default("")
+  /// 说明前的时间：「2026 · 5」
+  whenLabel  String   @default("")
+  alt        String   @default("")
+  sortIndex  Int      @default(0)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+/// 单页内容与站点设置。data 为一段 JSON，形状由 key 决定：
+///   site     站名、页脚、默认 SEO 描述
+///   home     首页 pro / personal 两侧的引言与近况
+///   about    关于我：正文、近况、联系方式
+///   cv       简历：若干 section，每个 section 若干 k/v 行
+model SiteDoc {
+  key       String   @id
+  data      String
+  updatedAt DateTime @updatedAt
+}

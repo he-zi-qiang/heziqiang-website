@@ -8,13 +8,19 @@
 *.swp
 *~
 
-# 日志 / 临时
-*.log
+# 依赖与构建产物
 node_modules/
+dist/
+*.log
 
 # 本地预览配置（Claude Code）
 .claude/
 
-# image-slot 拖拽预览生成的本地状态边车文件（非站点内容）
-*.image-slots.state.json
-.image-slots.state.json
+# 后端运行时数据
+server/.env
+# SQLite 文件是派生物，内容以 prisma/seed-data.json 版本化
+server/data/
+
+# 注意 server/uploads/ 是故意「不」忽略的：
+# 照片和 prisma/seed-data.json 一样属于站点内容，
+# 两者一起进版本库，clone + npm run setup 就能完整还原整个站。
