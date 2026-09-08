@@ -2,81 +2,87 @@
   "site": {
     "siteName": "何梓强",
     "siteNameEn": "He Ziqiang",
-    "description": "何梓强（He Ziqiang）的个人网站——软件工程学生，研究 LLM Agent 的记忆、规划与人机协作，这里是我的研究笔记与思考档案。",
+    "description": "何梓强（He Ziqiang）的个人网站——大连交通大学软件工程本科在读，关注 AI Agent 的执行框架、记忆与工具使用；这里是我的研究笔记与思考档案。",
     "footerLeft": "© 2024–2026 何梓强",
     "footerRight": "始于 2024 · 长期维护",
     "avatar": "/avatar.png"
   },
   "home": {
     "pro": {
-      "lede": "我是一名软件工程专业的学生，目前的兴趣集中在 *Agent* 与人机协作。这个网站是我的研究笔记与思考档案。",
+      "lede": "我是何梓强，大连交通大学软件工程专业本科在读，兴趣集中在 *AI Agent* 的执行框架与工具使用。这里是我的研究笔记与思考档案。",
       "nowLabel": "目前 · Now",
-      "now": "在读软件工程本科。最近在研究 LLM Agent 的记忆与规划机制，动手写一个属于自己的任务规划器，同时维护一份关于「工具使用」的长期阅读笔记。"
+      "now": "软件工程大四在读，正在申请 2027 届推免，意向方向是人工智能与软件工程。2026 年 7 月起独立开发 Agent Workbench——一个可审计、可恢复的 AI Agent 执行平台；也维护着 obsidian-pdf-export、chaoxing-pdf-dl 两个小工具。"
     },
     "personal": {
-      "lede": "代码之外，我读书、散步、拍照，把想清楚的和没想清楚的，都慢慢写下来。",
+      "lede": "try something new",
       "nowLabel": "近况 · Lately",
-      "now": "在重读《禅与摩托车维修艺术》，练习把笔记写得慢一点。周末常去学校后山走路，带着相机，但拍得不多。"
+      "now": "有些nervous，但是也知道会有些结果"
     }
   },
   "about": {
     "title": "关于我",
     "subtitle": "About",
-    "body": "我是何梓强，软件工程专业本科在读。比起「写代码的人」，我更愿意把自己描述为一个对「人如何借助机器思考」感兴趣的学生。\n\n我对 Agent 的兴趣，始于一次很普通的体验：我让一个语言模型替我完成一项多步骤的任务，它在第三步忘记了第一步的约定。那一刻我意识到，「聪明」和「可靠」是两件完全不同的事，而后者远没有被解决。从那以后，记忆、规划、工具使用，成了我反复回到的三个问题。\n\n维护这个网站，是因为我相信学习的痕迹值得被保留。这里没有成品展示，更多的是问题、过程和教训——它更像一间向访客开放的书房，而不是一个橱窗。",
+    "body": "我是何梓强，大连交通大学轨道智能工程学院软件工程专业 2023 级本科生，正在申请 2027 届推免。比起「写代码的人」，我更愿意把自己描述为一个对「人如何借助机器思考」感兴趣的学生。\n\n我对 Agent 的兴趣，始于一次很普通的体验：我让一个语言模型替我完成一项多步骤的任务，它在第三步忘记了第一步的约定。那一刻我意识到，「聪明」和「可靠」是两件完全不同的事，而后者远没有被解决。2026 年夏天，我开始独立开发 Agent Workbench，把「调模型、执行工具、交回结果」做成一个可审计、可恢复的执行循环：任务进度写入检查点，程序崩溃后能从上一次提交的地方继续；工具调用先过权限检查，全程记入事件流。它是我回答「可靠」这个问题的第一次尝试。\n\n另一段让我受益的经历来自一门课。在《大数据分析方法》的学期项目里，我分析 Steam 游戏的好评率受哪些因素影响，中途发现评论情绪这类特征与标签同源，直接用会让模型指标虚高。那次消融实验教给我的比任何一个分数都多：分析结论是否可信，首先取决于问题定义和数据处理是否严谨。\n\n开发时我也借助 Claude Code、Codex 这类 AI 编程工具。我的用法是先自己梳理思路，再让它去找可能的问题；自己还判断不了对错的部分，先弄懂，再放心用。工具让想法更容易实现，也让理解原理、判断结果、对自己的工作负责这几件事变得更重要。\n\n维护这个网站，是因为我相信学习的痕迹值得被保留。这里没有成品展示，更多的是问题、过程和教训——它更像一间向访客开放的书房，而不是一个橱窗。",
     "nowLabel": "目前 · Now",
-    "now": "在读软件工程本科。最近在研究 LLM Agent 的记忆与规划机制，动手写一个属于自己的任务规划器，同时维护一份关于「工具使用」的长期阅读笔记。",
+    "now": "软件工程大四在读，正在申请 2027 届推免，意向方向是人工智能与软件工程。2026 年 7 月起独立开发 Agent Workbench——一个可审计、可恢复的 AI Agent 执行平台；也维护着 obsidian-pdf-export、chaoxing-pdf-dl 两个小工具。",
     "contactLabel": "联系 · Contact",
     "contacts": [
       {
-        "k": "邮箱 Email",
-        "v": "<a href=\"mailto:hziqiang8@gmail.com\">hziqiang8@gmail.com</a><span class=\"light\"><br>或 <a href=\"mailto:3240275837@qq.com\">3240275837@qq.com</a> · <a href=\"mailto:15141546783@163.com\">15141546783@163.com</a></span>"
-      },
-      {
-        "k": "GitHub",
-        "v": "<a href=\"https://github.com/he-zi-qiang\" target=\"_blank\" rel=\"noopener\">github.com/he-zi-qiang</a>"
-      },
-      {
         "k": "回信习惯",
         "v": "认真的邮件都会回，通常在一周以内。<span class=\"light\">（欢迎聊 Agent、笔记方法，或任何你正在想的问题。）</span>"
+      },
+      {
+        "k": "qq邮箱",
+        "v": "3240275837@qq.com"
+      },
+      {
+        "k": "gmail邮箱",
+        "v": "hziqiang8@gmail.com"
       }
     ]
   },
   "cv": {
     "title": "简历",
     "subtitle": "Curriculum Vitae",
+    "intro": "**何梓强** · 大连交通大学 轨道智能工程学院 · 软件工程 2023 级<br><span class=\"light\">推免申请 · 意向方向：人工智能、软件工程等相关方向</span>",
+    "portrait": "/uploads/portrait-heziqiang.jpg",
     "sections": [
       {
         "label": "教育 · Education",
         "rows": [
           {
             "k": "2023 – 2027",
-            "v": "某大学 · 软件工程 · 本科在读<br><span class=\"light\">方向兴趣：智能体系统、人机协作。</span>"
+            "v": "大连交通大学 · 轨道智能工程学院 · 软件工程 · 工学学士<span class=\"light\">（2023.09 入学，预计 2027.06 毕业）</span><br><span class=\"light\">前六学期首次考试必修课平均学分绩 89.53 / 100，专业排名 10 / 215（前 4.65%）；CET-6 432。</span>"
+          },
+          {
+            "k": "主要课程",
+            "v": "离散结构 97 · 数据库原理 96 · 数据结构与算法 95 · 操作系统 94 · 概率统计 94 · 高等数学 93<br><span class=\"light\">另有 C++ 96、Java 95、计算机组成 95、大数据分析方法 90、线性代数 89。</span>"
           }
         ]
       },
       {
-        "label": "经历 · Experience",
+        "label": "项目 · Projects",
         "rows": [
           {
-            "k": "2025 夏",
-            "v": "某实验室 · 研究助理（本科生）<br><span class=\"light\">参与 LLM Agent 评测基准的数据整理与失败案例分析，负责其中工具调用部分的标注规范。</span>"
+            "k": "2026.07 至今",
+            "v": "[Agent Workbench](https://github.com/he-zi-qiang/agent-workbench) · 可审计、可恢复的 AI Agent 执行平台<span class=\"light\">（个人独立项目，GitHub 公开）</span><br><span class=\"light\">Python · FastAPI · LangGraph · PostgreSQL · Qdrant · Docker</span>\n<ul>\n<li><strong>自研 Agent 执行循环</strong>：把「调模型 → 请求工具 → 执行工具 → 交回结果」做成统一循环，每轮先查预算、超时与重复调用；只读工具并发执行并按原序交回，每次调用有且只有一个结果。</li>\n<li><strong>记忆、工具、沙箱与子代理</strong>：对话历史存入 PostgreSQL，过长时摘要压缩；内置、MCP 与子代理工具统一注册并过权限检查；文件工具限定在项目目录，模型写的 Python 在一次性 Docker 容器里断网、只读、限时限内存运行。</li>\n<li><strong>长任务断点续跑</strong>：每步状态写入 PostgreSQL 检查点，Worker 崩溃后可换进程从最近一次已提交的检查点继续；写入前校验租约，避免旧进度覆盖新进度。</li>\n<li><strong>工具权限与审计</strong>：调用前依次查注册、参数与策略，默认拒绝；高风险操作挂起等待审批，提议、决定、执行与结果全程记入事件流。</li>\n<li><strong>知识库检索与架构守卫</strong>：文档切块后做语义向量与关键词两路检索、按倒数排名融合，并写 recall@k / MRR 脚本对比方案；53 条架构守卫测试自动检查分层依赖方向，作为 CI 门禁。</li>\n</ul>"
           },
           {
-            "k": "2024 – 2025",
-            "v": "校内技术社团 · 讲师<br><span class=\"light\">为低年级同学开设 Git 与工程实践入门工作坊，累计六期。</span>"
+            "k": "2026 春",
+            "v": "Steam 游戏口碑影响因素分析 · 《大数据分析方法》课程学期项目<span class=\"light\">（独立完成）</span><br><span class=\"light\">Python · pandas · scikit-learn · XGBoost · SHAP · VADER</span>\n<ul>\n<li><strong>识别数据泄漏并做消融实验</strong>：评论情绪、推荐比例与「好评率」标签同源，主模型只保留价格、类型、年龄等游戏自身属性；加入同源特征后 XGBoost 的 ROC-AUC 从 0.716 虚高到 0.911，证实是泄漏而非模型改进。</li>\n<li><strong>多源数据采集与特征构建</strong>：自写脚本经 Steam 公开接口采集 400 款游戏元数据与约 4 万条评论，清洗后构造好评率、游戏年龄、类型 One-Hot 等特征，并用 VADER 给每条评论打分、按游戏聚合成情绪特征。</li>\n<li><strong>模型对比、SHAP 解释与聚类</strong>：分层划分对比 Logistic 回归、随机森林与 XGBoost（ROC-AUC 0.72–0.74），SHAP 显示独立游戏类型与游戏年龄最重要；K-Means 按轮廓系数选 4 簇并生成各簇画像标签。</li>\n</ul>"
           }
         ]
       },
       {
-        "label": "项目精选 · Selected Projects",
+        "label": "开源工具 · Open Source",
         "rows": [
           {
-            "k": "2026 至今",
-            "v": "<a href=\"/projects/project-task-planner\">任务规划器</a><br><span class=\"light\">用于研究 Agent 规划机制的实验工具，含完整的过程记录。</span>"
+            "k": "Obsidian",
+            "v": "[obsidian-pdf-export](https://github.com/he-zi-qiang/obsidian-pdf-export)<br><span class=\"light\">借 Obsidian 自带的渲染器把笔记导出为 PDF（macOS），支持单篇、批量与合并导出。</span>"
           },
           {
-            "k": "2025",
-            "v": "课程笔记静态站生成器<br><span class=\"light\">关注中文排版细节的极简生成器，驱动本网站。</span>"
+            "k": "学习通",
+            "v": "[chaoxing-pdf-dl](https://github.com/he-zi-qiang/chaoxing-pdf-dl)<br><span class=\"light\">把没有下载按钮的学习通课程文档完整导出为 PDF，零依赖的 Python 脚本。</span>"
           }
         ]
       },
@@ -84,12 +90,59 @@
         "label": "技能 · Skills",
         "rows": [
           {
-            "k": "常用",
-            "v": "Python、TypeScript；读得多写得少的还有 Rust。习惯写测试和文档，相信代码首先是写给人看的。"
+            "k": "语言与 AI",
+            "v": "Python、Java，熟悉 C/C++；LangGraph、大模型工具调用与流式输出、断点续跑、RAG 检索。"
           },
           {
-            "k": "语言",
-            "v": "中文（母语）、英文（可流畅阅读论文与技术写作）。"
+            "k": "数据与机器学习",
+            "v": "pandas、scikit-learn、XGBoost、SHAP；关联规则、回归、决策树、聚类、离群点检测。"
+          },
+          {
+            "k": "后端与工程",
+            "v": "FastAPI、Spring Boot；MySQL、PostgreSQL、Redis、Qdrant；Git、Linux、Docker Compose、GitHub Actions，习惯写单元测试与静态检查。<span class=\"light\">也用 Claude Code、Codex 等 AI 编程工具辅助开发。</span>"
+          },
+          {
+            "k": "英语",
+            "v": "CET-6 432；可顺畅阅读英文论文与技术文档。"
+          }
+        ]
+      },
+      {
+        "label": "荣誉 · Honors",
+        "rows": [
+          {
+            "k": "奖学金",
+            "v": "大连交通大学校级二等优秀学生综合奖学金<span class=\"light\">（2023–2024、2024–2025 学年）</span>"
+          },
+          {
+            "k": "荣誉与竞赛",
+            "v": "轨道智能工程学院「优等生」称号；院第四届「操作系统设计大赛」三等奖。"
+          }
+        ]
+      },
+      {
+        "label": "实践 · Activities",
+        "rows": [
+          {
+            "k": "志愿服务",
+            "v": "大连北站铁路青年志愿服务<span class=\"light\">（沈铁青年志愿服务）</span><br><span class=\"light\">累计参与 4 次、服务 32 小时以上，承担旅客引导、咨询解答与现场秩序维护；2024 年国庆假期客流高峰连续上岗，获评「日服务明星」。</span>"
+          }
+        ]
+      },
+      {
+        "label": "联系 · Contact",
+        "rows": [
+          {
+            "k": "邮箱",
+            "v": "[hziqiang8@gmail.com](mailto:hziqiang8@gmail.com)"
+          },
+          {
+            "k": "GitHub",
+            "v": "[github.com/he-zi-qiang](https://github.com/he-zi-qiang)"
+          },
+          {
+            "k": "网站",
+            "v": "[heziqiang.com](https://heziqiang.com)"
           }
         ]
       }
@@ -281,58 +334,6 @@
       "sortIndex": 2
     },
     {
-      "kind": "learning",
-      "slug": "learning-2026-5-月",
-      "title": "2026 · 5 月",
-      "tag": null,
-      "dateLabel": "2026 · 5 月",
-      "dateFull": null,
-      "groupLabel": null,
-      "summary": "在啃 CMU 15-445 的存储与索引部分。B+ 树以前「会考」，现在才算「会用」——亲手实现缓冲池之后，很多论文里的设计决定突然有了体感。",
-      "bodyMd": "",
-      "status": "published",
-      "sortIndex": 0
-    },
-    {
-      "kind": "learning",
-      "slug": "learning-2026-4-月",
-      "title": "2026 · 4 月",
-      "tag": null,
-      "dateLabel": "2026 · 4 月",
-      "dateFull": null,
-      "groupLabel": null,
-      "summary": "把线性代数重新过了一遍，这次带着「为什么注意力机制要这样算」的问题去读。带着问题的复习和为了考试的复习，完全是两门课。",
-      "bodyMd": "",
-      "status": "published",
-      "sortIndex": 1
-    },
-    {
-      "kind": "learning",
-      "slug": "learning-2026-2-月",
-      "title": "2026 · 2 月",
-      "tag": null,
-      "dateLabel": "2026 · 2 月",
-      "dateFull": null,
-      "groupLabel": null,
-      "summary": "读完《Designing Data-Intensive Applications》前四章。决定放慢速度，每章写一页纸的复述，写不出来就重读。",
-      "bodyMd": "",
-      "status": "published",
-      "sortIndex": 2
-    },
-    {
-      "kind": "learning",
-      "slug": "learning-2025-11-月",
-      "title": "2025 · 11 月",
-      "tag": null,
-      "dateLabel": "2025 · 11 月",
-      "dateFull": null,
-      "groupLabel": null,
-      "summary": "开始系统补编译原理。起因是给笔记生成器写解析器时，意识到自己一直在凭直觉发明轮子，而且发明得不圆。",
-      "bodyMd": "",
-      "status": "published",
-      "sortIndex": 3
-    },
-    {
       "kind": "project",
       "slug": "project-task-planner",
       "title": "任务规划器",
@@ -370,149 +371,6 @@
       "bodyMd": "",
       "status": "published",
       "sortIndex": 2
-    },
-    {
-      "kind": "reading",
-      "slug": "reading-禅与摩托车维修艺术",
-      "title": "禅与摩托车维修艺术",
-      "tag": "波西格",
-      "dateLabel": "重读",
-      "dateFull": null,
-      "groupLabel": "在读",
-      "summary": "「良质」这个概念，意外地解释了我为什么总对粗糙的代码感到不安。",
-      "bodyMd": "",
-      "status": "published",
-      "sortIndex": 0
-    },
-    {
-      "kind": "reading",
-      "slug": "reading-人月神话",
-      "title": "人月神话",
-      "tag": "布鲁克斯",
-      "dateLabel": "3 月",
-      "dateFull": null,
-      "groupLabel": "2026",
-      "summary": "五十年前的书，写中了我上学期小组项目翻车的每一个细节。概念完整性比人手重要。",
-      "bodyMd": "",
-      "status": "published",
-      "sortIndex": 1
-    },
-    {
-      "kind": "reading",
-      "slug": "reading-如何阅读一本书",
-      "title": "如何阅读一本书",
-      "tag": "艾德勒",
-      "dateLabel": "12 月",
-      "dateFull": null,
-      "groupLabel": "2025",
-      "summary": "读完才承认：我此前的「读完」，大多只是「翻完」。",
-      "bodyMd": "",
-      "status": "published",
-      "sortIndex": 2
-    },
-    {
-      "kind": "reading",
-      "slug": "reading-设计中的设计",
-      "title": "设计中的设计",
-      "tag": "原研哉",
-      "dateLabel": "8 月",
-      "dateFull": null,
-      "groupLabel": "2025",
-      "summary": "「空」不是没有，而是容纳的可能。这本书最终影响的是我写代码的方式。",
-      "bodyMd": "",
-      "status": "published",
-      "sortIndex": 3
-    },
-    {
-      "kind": "writing",
-      "slug": "instruction-drift",
-      "title": "指令漂移：当大模型聊着聊着就忘了规矩",
-      "tag": null,
-      "dateLabel": "6 月",
-      "dateFull": "2026 年 6 月 · 研究笔记 · 约 1,800 字",
-      "groupLabel": "2026",
-      "summary": "给 LLM 在开头下一次约束，对话越长它越会系统性地偏离——我把这条文献谱系梳了一遍，也把自己的小基准放了进去。",
-      "bodyMd": "给大模型或 agent 在对话开头一次性下达一组约束，随着对话变长，它会系统性地\"忘记\"或偏离这些约束。文献里把这件事叫做 instruction drift、persona drift 或 goal drift——指令漂移。这篇笔记是我为大数据课程做的一轮前沿调研，目的是把相关论文的度量范式、分析逻辑和缓解方法整合到一起，并把我自己的项目 `instruction-drift-bench` 放进这条谱系里看它的位置。\n\n> 「在开头一次性下达约束，随对话变长它会系统性地偏离——这就是指令漂移。」\n\n## 奠基与关键实证\n\n有几篇论文几乎定义了这个问题的形状。**Measuring and Controlling Instruction (In)Stability**（Li et al., 2024）让两个被赋予 system prompt 的 bot 互相聊天，发现大约 8 轮之内就出现显著漂移，并把原因归到注意力随距离衰减上，提出了 split-softmax 的修法。这篇几乎就是我项目的学术版本。\n\n**LLMs Get Lost In Multi-Turn Conversation**（Laban et al., 2025）给出一个很直观的数字：多轮相比单轮平均掉 39%，并把它拆成\"能力小幅下降 + 不可靠性大幅上升\"两部分。**DriftBench**（2026）则揭示了一个更扎心的现象——模型其实能准确复述它正在违反的那条约束（\"知道却违反\"的比率在 8% 到 99% 之间），而且用 LLM 当裁判时会低估违规。\n\n另外两篇提供了反向的、让人稍微乐观的视角。Adobe 的 **Drift No More?**（2025）把漂移定义为逐轮的 KL 散度，发现它会收敛到一个平衡态，而不是无限恶化，而且简单的提醒就能把它压低。**Examining Identity Drift**（2024）则给出反直觉的结论：越大的模型漂移反而越多，显式给定人设也未必更稳。\n\n## 把\"不听话\"变成数字：四类度量范式\n\n调研里我把度量方式归成四类。第一类是**可程序化验证的指令**：只下达那些能用规则判 0/1 的约束（IFEval 是代表），好处是确定、零成本、可复现。第二类是**维度分解逐项判**，把复杂指令拆成原子要求逐条核对（InFoBench、FollowBench、ComplexBench）。第三类是**分布层的 KL 漂移**，测当前模型相对目标参考模型的逐轮 KL。第四类是 **LLM-as-judge 评分**，让强模型当裁判（MT-Bench-101），但裁判本身有偏差、会漏判违规。\n\n<div class=\"aside-note\">我自己选的是第一类——程序化 checker。DriftBench 已经实证了 LLM 裁判会系统性漏判违规，让遵从率虚高。用确定性规则当\"尺子\"，尺子本身才不会抖。这既是我对\"工程化约束能力\"的理解，也是一个在答辩时可以站得住脚的工程取舍。</div>\n\n## 主流基准与通用分析骨架\n\n和多轮相关的基准里：IFEval（2023）确立了 verifiable instruction 这一范式；Multi-IF（2024）把它扩展到多轮多语言，发现遵从率随轮次下降、非英语更差；MT-Bench-101（2024）做了多轮能力的细粒度分类；MultiChallenge（2025）显示即便前沿模型在\"跨轮保持\"上仍然失分；SysBench（2024）专测对 system 消息的遵从，发现它随轮次和冲突而下降；LIFBench（2024）则在长上下文里显式区分了\"性能\"与\"稳定性\"两件事。\n\n把这些工作的做法抽象出来，其实共享一条分析骨架，这也是我项目的骨架：先提出可量化的因变量，再构造受控数据让唯一变量是轮次/长度，然后量化衰减（画轮次 vs 遵从率曲线并给置信区间），接着做归因（注意力衰减、位置偏置、知道却违反），最后用干预去验证——看缓解机制能不能把曲线压平。\n\n## 缓解方法图谱\n\n缓解手段可以放进一个成本—效果—可落地的三角里看。**重注入/提醒**（Drift No More?）最便宜，周期性刷新一下近因记忆。**结构化输出闸门与验证**最有效——有工作把角色失守率从 70% 压到 9%，DriftBench 的 checkpointing 也是这个思路。**自我修正与多 Agent 验证**（Self-Refine、Reflexion、CRITIC、Multiagent Debate、Constitutional AI）对应\"一个构建、一个验证\"的双 agent 结构。**注意力层干预**（split-softmax、Found in the Middle）最治本，但要改模型。\n\n## 我的项目在哪\n\n我的 `instruction-drift-bench` 大致是这样一个组合：IFEval 的可验证范式 + Li et al. 的多轮漂移测量 + builder/verifier 双 Agent 缓解，拼成一个小而完整、可复现的迷你基准。\n\n度量上用 5 条确定性约束（结尾标记、禁用词、长度、轮次标签、纯文本），全部程序化判定。设计上约束只在开头给一次，用无关探针推进对话，测\"轮次 vs 遵从率\"，并跑多次 rollout 求置信区间——这套设计对齐 Li et al.。缓解上用周期性重注入（呼应 Drift No More?）加双 Agent 验证（呼应 Multiagent Debate 与那篇把失守率打下来的工作），实测下来 verifier 几乎能把曲线压平。\n\n## 还没被填上的坑\n\n调研到最后，我列了几个可以延伸的研究空白，也是我考虑的保研选题方向。状态型约束（需要自我计数的，比如轮次标签）为什么漂移得最快，能不能系统刻画\"状态型 vs 记忆型\"的差异？如何真正闭合\"知道却违反\"那道鸿沟？程序化 verifier 和 LLM verifier 之间的成本/效果帕累托前沿长什么样？漂移的平衡点究竟由什么决定（约束数量、模型规模、提醒频率）？以及——中文乃至多语言的长程遵从基准，目前还很稀缺。\n\n> 「模型能准确复述它正在违反的那条约束——它不是不知道，是没守住。」",
-      "status": "published",
-      "sortIndex": 0
-    },
-    {
-      "kind": "writing",
-      "slug": "claude-code-remote-ssh-debug",
-      "title": "Claude Code 远程连接服务器排错记：四个叠在一起的问题",
-      "tag": null,
-      "dateLabel": "6 月",
-      "dateFull": "2026 年 6 月 · 运维排错笔记 · 约 2,200 字",
-      "groupLabel": "2026",
-      "summary": "「正在开启 session」一直卡住，最后查出来是四个独立故障叠在一起。一次把弯路抽象成方法论的排错训练。",
-      "bodyMd": "现象很简单：用 Claude Code 远程连接我的云服务器，一直卡在「正在开启 session」。但查到最后才发现，这一个现象背后其实是**四个独立的问题叠在一起**——方向理解错了、服务器内存被打满、本地代理全局模式劫持了路由、私钥又带着 passphrase。逐层拆解之后，最终落到了一个干净的架构：让 Claude 跑在 Mac 上，用 SSH 密钥免密远程操作服务器。\n\n> 「正在开启 session」只是表象。一个现象背后可能藏着多个独立故障，别只找到一个原因就收手。\n\n## 背景\n\n服务器是一台阿里云北京节点的小机器，Ubuntu 22.04，配置只有 2 核 2 GiB，用 root 登录。本机是一台 Mac，挂着本地代理监听 127.0.0.1:1082。一开始我的误解是：以为整套是「VS Code Remote-SSH + Claude 插件在 Mac 上」运行。这个误解，恰恰是后面一连串判断被带偏的起点。\n\n## 四个叠加的问题\n\n**问题一：方向搞反了。**在 Remote-SSH 下，Claude 插件其实是 workspace 扩展，它跑在**服务器端**，不是 Mac。它去连 api.anthropic.com 用的是服务器的网络，于是在大陆境内直连不上 Anthropic——卡住。解决方式是干脆改用「Claude 跑 Mac」的方案。\n\n**问题二：服务器过载。**登进去一看，`free` 显示 1.3G 已用、Swap 是 0B；top 里全是 vscode-server 的两个 extensionHost，各吃约 500MB。内存满了又没有 swap，系统连 fork 一个新 sshd 都做不到，于是 SSH 报 banner exchange timeout。解决：杀进程，再加 2G swap。\n\n**问题三：代理劫持路由。**`route -n get` 显示到服务器的流量走的是 utun6（代理隧道），默认路由也走它——说明代理开的是**全局模式**，把本该直连的北京服务器流量绕去了国外节点（而我人还在手机热点上）。更骗人的是 ping 显示 0.48ms，那根本不是真实延迟，是隧道在本地替服务器答话的假数据。解决：代理切回规则模式，让国内 IP 直连。\n\n**问题四：密钥连不上。**`ssh -v` 显示 Server accepts key，却仍然 Permission denied。权限全对（700/700/600）之后，真相是私钥带了 passphrase，而 BatchMode 非交互模式下签不了名。解决：用 `ssh-add` 把 passphrase 存进 macOS 钥匙串，开机自动加载。\n\n## 最终架构：让 Claude 跑在 Mac 上\n\n结论是一个很朴素的架构：Claude Code 在 Mac 上跑，重活都在本地；通过 SSH 密钥免密登进服务器，只让服务器执行命令、几乎零负担；联网访问 Anthropic 也走 Mac 的本地代理。需要时还可以配一条反向隧道，临时把本机代理借给服务器用。\n\n<div class=\"aside-note\">为什么 2 核 2G 这种小机器必须选这个方案？内存上，vscode-server 加上 node 轻松吃掉 1GB+，小机器扛不住，而这个方案下服务器几乎零负担；联网上，Claude 在 Mac 联网，服务器根本不需要能访问 Anthropic，直接绕开了被墙的问题。选型口诀：先看约束（2G 内存）再定架构，而不是反过来。</div>\n\n关键配置上，我在 `~/.ssh/config` 里给这台主机指定了私钥路径，并打开 IdentitiesOnly、AddKeysToAgent、UseKeychain，再加一条可选的 RemoteForward 把本机代理借给服务器。把带 passphrase 的私钥用 `ssh-add --apple-use-keychain` 解锁一次存进钥匙串，之后开机自动加载。服务器端则用 fallocate / mkswap / swapon 加了一个 2G swapfile 并写进 fstab——对这台 2G 无 swap 而被打满卡死的机器来说，这一步是关键。\n\n## 一个反直觉的实测\n\n后来我才意识到，自己一直用的其实是 Claude 桌面端的「SSH 运行 Claude Code」功能，根本不是 VS Code。它和「在本地会话里让 Claude 帮我 SSH 操作服务器」是两套完全不同的机制：前者是 Claude 跑在 Mac 上、用 SSH 登进去跑命令，环节少、几乎不会失败；后者是 Claude Desktop 在**服务器上**安装并运行整个 Agent，于是会卡在 Remote Control initialization failed——远程 Agent 根本没起来。\n\n<div class=\"aside-note\">还有个低级但常见的坑：桌面端弹窗里的「Identity File (Private Key)」要填私钥<strong>文件路径</strong>，或者留空（留空就用 ssh/config 的配置）。我一开始把 root 的<strong>密码</strong>填进了那个框，必然「请求失败」。那个框要的是钥匙文件，不是密码。</div>\n\n最颠覆的是：整套思路的出发点是「北京服务器连不上 Anthropic」，可我真去实测，服务器直连 api.anthropic.com **连测 6 次全成功**，每次约 0.6 秒（返回 HTTP 403 是正常响应）。于是两个结论同时翻盘：远程会话失败不是网络问题，是 Remote Control Agent 在服务器上初始化失败；而我最初设想的「反向隧道让服务器连 Anthropic」其实非必需——这台机器本来就能直连。\n\n> 根本不用那个「SSH 运行 Claude Code」功能。开个普通本地会话，让 Claude 自己 SSH 进去就行——又稳又简单。\n\n## 沉淀下来的知识点\n\nSSH 排错要分层、从下往上一层层定位：先看 TCP 层，`nc -zv` 测端口通不通；再看握手 / banner 层，Connection closed 或 banner exchange timeout 多半是服务器侧过载（fork 不出进程）或 MaxStartups 限流；最后看认证层，`ssh -v` 里盯 Offering / Server accepts key / Permission denied。\n\n「Server accepts key 却被拒」只有两种可能：一是 StrictModes 权限问题，home、.ssh、authorized_keys 都不能被组或其他人写；二是私钥带 passphrase 且非交互——递公钥匹配不需要密码（所以显示 accepts），但私钥签名需要解锁，修法是 `ssh-add` 进 agent 或钥匙串。想测私钥有没有 passphrase，用 `ssh-keygen -y -P \"\" -f` 能否读出公钥来判断。\n\n其它几个要点：Remote-SSH 里 UI 扩展跑本地、workspace 扩展跑远程，VS Code 装在 Mac 不等于扩展跑在 Mac；代理全局模式会把国内 IP 也塞进隧道绕一圈国外，又慢又不稳，国内服务器从国内访问应直连；手动 `route add` 不持久，重启就失效，要在代理软件里设规则模式；小内存机器（≤2G）默认就该加 swap，给 OOM 兜底，免得连 sshd 都 fork 不出来。\n\n## 实战：顺手修了一个 502 Bad Gateway\n\n用上面「本地会话 + SSH」的方式，我实际修了个线上问题——我的网站某个子路径返回 502 Bad Gateway。排查链是这样的：先 `nginx -T` 看真实生效的合并配置，发现这个路径被 proxy_pass 转发给了 Tomcat:8080；错误日志被一堆 SSL 扫描噪音淹没（机器人在刷漏洞），过滤后抓到真凶 connect() failed (111: Connection refused)；`ss -tlnp` 一看 8080 根本没监听，Tomcat 没在跑；再 `ls` 那个目录，里面其实全是**静态 HTML**，压根不是 Java 应用。\n\n根因清楚了：nginx 把一个静态目录错配成了「转发 Tomcat」，而 Tomcat 没跑——就算启动 Tomcat 也没用，里面压根没这个应用。修复就是把那段 location 从 proxy_pass 改成静态服务（index + try_files），服务器的 root 本来就指对了。\n\n<div class=\"aside-note\">改生产配置三件套：备份 → nginx -t 语法校验 → 失败自动回滚 → systemctl reload，心里才有底。</div>\n\n这里也踩了几个坑：location 优先级上，正则 `location ~` 高于前缀 `location /`，想让前缀稳赢且不再走正则用 `^~`；reload 有瞬时竞态，旧 worker 还在优雅退出，刚 reload 完立刻测可能仍是旧的 502，稍等重测就对了，差点被它误导以为没修好；静态目录返回 403 是正常的（没 index 页 + nginx 默认不列目录），里面被引用的具体文件照常加载。\n\n## 方法论反思\n\n把这次的弯路抽象出来，比记住命令更值钱。**现象不等于病因，且病因可能不止一个**——「正在开启 session」连环套了四层，每修好一层才暴露下一层，得耐心一层层剥。**当所有测量都「异常地好」，要怀疑测量本身被污染**——ping 0.48ms 不是网络好，是代理在本地替服务器答话，先拿到干净的观测再下结论。**控制变量加分层**——SSH 卡住，先分清是 TCP、握手还是认证，认证再分客户端递没递钥匙、服务器收没收。\n\n**选型先看约束**——2 核 2G 这个硬约束，直接决定了 Claude 别跑服务器上；需求之前，先问环境给不给得起。**「能直连吗」别假设，要实测、还要测多次**——最初一长串思路都建立在「大陆连不上 Anthropic」这个没验证的前提上，实测却是 6/6 通，一个错误前提能把后面一串判断全带偏。**工具越「智能」、环节越多越容易坏**——「Claude 跑 Mac + SSH」比「在服务器上跑整个 Agent」可靠得多，能简单别复杂。还有，**填错框也是常见坑**——把密码填进 Identity File、把「VS Code 在哪」当成「Claude 在哪」，很多「请求失败」其实只是把东西放错了位置。\n\n> 很少一次就成功，因为影响因素很多。如何识别影响因素？如何控制变量确定它？如何解决它？把每一次「卡住」当成一次拆解训练——严谨、敏锐、耐心，最后都会变成你的直觉。",
-      "status": "published",
-      "sortIndex": 1
-    },
-    {
-      "kind": "writing",
-      "slug": "chaoxing-restricted-pdf-download",
-      "title": "学习通“禁止下载”的 PDF，其实门没上锁",
-      "tag": null,
-      "dateLabel": "6 月",
-      "dateFull": "2026 年 6 月 · 技术笔记 · 约 2,200 字",
-      "groupLabel": "2026",
-      "summary": "学习通很多“禁止下载”的课件，原件一直躺在公网可访问的地址上——预览图换个路径就能拿到。从一个下载小技巧，讲到它背后的访问控制漏洞。",
-      "bodyMd": "学习通/超星上很多课件标着\"禁止下载\"，只能在线预览。但这些 PDF、PPT 其实大多是**图片预览模式**——页面把文档逐页切成图片喂给你看，而完整的原文件，往往就躺在同一个目录下，公开可读。\n\n预览图的地址形如 `…/{objectid}/thumb/1.png`，把结尾的 `/thumb/1.png` 换成 `/pdf/{objectid}.pdf`，就能直接拿到完整原文件。我已经验证过，确实奏效。\n\n<div class=\"aside-note\">仅用于下载自己有权访问的课程资料、自用学习。下面更想聊的，其实是这个技巧为什么成立。</div>\n\n## 核心原理：预览图和原件是同一窝的兄弟文件\n\n预览页里那一张张图片，和完整 PDF 放在**同一个对象目录**下。服务端把上传的 Word/PDF 切成 `thumb/1.png、2.png…` 做预览，但完整 PDF（`pdf/{objectid}.pdf`）作为转码副产物通常照样存着，而且没单独做访问控制，直接能取。\n\n两者的地址只差最后一段：预览图是 `…/doc/b2/38/19/{objectid}/thumb/1.png`，完整 PDF 是 `…/doc/b2/38/19/{objectid}/pdf/{objectid}.pdf`。其中 `{objectid}` 是 URL 里那段 32 位十六进制，预览图和 PDF 用的是同一个。\n\n## 操作流程\n\n打开 PDF 预览页面（带 iframe 那个），按 F12 打开开发者工具的 Network（网络）面板，刷新页面让 PDF 重新加载。在过滤框里输入 `thumb` 或 `1.png`，就能找到预览图链接。复制它，把 `/thumb/1.png` 替换成 `/pdf/{objectid}.pdf`，在新标签页打开替换后的链接，右键\"另存为\"即可。\n\n如果链接打不开，有三个兜底可以挨个试：把域名 `s3.cldisk.com` 换成 `s3.ananas.chaoxing.com`；把 `https` 换成 `http`；objectid 取不到时，去页面源码或 URL 里翻那段 32 位十六进制。\n\n## 这不是破解，是绕过形同虚设的权限\n\n得先把性质说清楚：所谓\"禁止下载\"，**没对文件本身做任何加密或鉴权**，只是前端把下载按钮藏起来、用图片代替原文件展示。原件一直躺在公网可访问的地址上——你做的不是解密，是直接敲那扇本就没上锁的门。\n\n> 「预览图能加载，本身就证明这个桶是公开可读的。预览功能亲手泄露了'这里没上锁'。」\n\n为什么地址能猜得出来？因为 `s3.cldisk.com` / `s3.ananas.chaoxing.com` 是超星的对象存储 / CDN。对象存储本质上是\"扁平的 key → 文件映射\"，URL 路径就是 key。路径里 `doc/b2/38/19` 是按哈希前缀打散海量文件的分桶目录（注意它并不等于 objectid 的前缀，是另算的一层哈希）；`{objectid}` 是文档唯一 id，前端渲染预览时必然暴露在页面里；`thumb/` 和 `pdf/` 则是同一文档不同衍生物的命名约定。\n\n拿到 objectid，再知道这套命名约定，就能拼出原件的 key。整条路径是**可预测、可枚举**的。\n\n## 它的学名：Broken Access Control / IDOR\n\n放到安全的语境里，这正是 OWASP Top 10 排第一名（A01）的 **Broken Access Control（失效的访问控制）**。病根在于：权限校验做在了 UI 层（藏按钮），而没做在资源层（文件本身）。配合它的是 **IDOR（不安全的直接对象引用）**——靠构造或猜测对象地址，拿到本不该给你的资源。\n\n那三个兜底各有各的道理：换域名有效，是因为同一对象常挂在多个 CDN/域名后面（容灾、历史迁移），换域名等于换个入口绕过某条线路的限制；把 https 换成 http 有效，是因为没强制 HTTPS 跳转、没上 HSTS 时，http 入口也能取到同一资源；去源码里找 objectid 有效，是因为前端要渲染预览，就必然把它写进 DOM、JS 或请求里，藏不住。\n\n## 泛化：任何\"只让看不让下\"的系统\n\n> 「预览 ≠ 没有原件。去 Network 看它到底加载了什么，原件常在某个可猜的兄弟路径上。」\n\n这套心法可以套到很多场景。通用四步是：抓包看真实资源 URL → 找命名规律 → 改路径试原件 → 换域名/协议/去缩略参数重试。\n\n比如 OSS 图片常带 `?x-oss-process=image/resize,…` 的缩略处理参数，删掉问号后面的部分就能拿原图；命名式缩略图（`xxx_thumb.jpg`、`_small`）去掉后缀即可；视频是 m3u8 加 ts 切片，可以找同目录的 mp4，或用 ffmpeg 合并 ts；付费音频、字体则去 Network 里翻真实的 .mp3 / .woff 地址。\n\n## 什么时候会失效——也就是正确的防护长什么样\n\n反过来看，遇到下面这些情况基本就拼不出来了，它们恰好是判断一个系统\"防得对不对\"的标尺。\n\n最关键的是**预签名 URL**：地址带上 `?Expires=…&Signature=…` 这类参数（S3 是 `X-Amz-Signature`），签名只对特定 key、有限时间有效，你一改路径就失配，直接 403。其次是私有桶加服务端鉴权代理，请求走 `/api/file?id=…` 带 Cookie/Token，后端每次校验身份与权限。再有 Referer 防盗链、Token 校验，直链打开就被拒。以及预览图本身就是动态鉴权接口、而非静态对象，那就没有可猜的静态原件路径。\n\n> 「学习通栽在'该用签名 URL 的地方用了公开直链'。这招能存活，等于他们这道题没做对。」\n\n<div class=\"aside-note\">我把这套流程开源并做成了一个小工具 chaoxing-pdf-dl：默认走无登录直链，也支持带 cookie 解锁只给 objectid 或整课批量，能从页面 HTML 提取、读剪贴板、还原真实文件名。同类\"把预览图地址改成原文件地址\"的思路，对其他切片式预览的网盘、文库也常常奏效。</div>",
-      "status": "published",
-      "sortIndex": 2
-    },
-    {
-      "kind": "writing",
-      "slug": "writing-agent-memory",
-      "title": "Agent 需要怎样的记忆？",
-      "tag": null,
-      "dateLabel": "5 月",
-      "dateFull": "2026 年 5 月 · 研究笔记 · 约 1,800 字",
-      "groupLabel": "2026",
-      "summary": "从一次失败的多轮任务实验出发，重新理解上下文、检索与遗忘之间的取舍。",
-      "bodyMd": "四月底，我做了一个小实验：让一个 Agent 替我完成跨越三天的任务——整理一门课的全部笔记，找出概念之间的依赖关系，再生成一份复习路径。第一天它表现得近乎完美。第二天恢复会话后，它把前一天已经否决过的方案又提了一遍，语气里甚至带着初次发现的兴奋。\n\n这次失败比任何论文都更直接地把问题摆在我面前：我们说一个 Agent「有记忆」的时候，到底在说什么？\n\n## 上下文不是记忆\n\n最直接的回答是：把所有历史都塞进上下文窗口。窗口在变大，这件事看起来迟早会被硬件解决。但实验里我很快发现，问题不在「装不装得下」，而在「找不找得到」。当三天的对话全部在场时，模型并没有变得更清醒，反而更容易被无关的细节带偏——它记得一切，等于它不知道什么重要。\n\n人类的工作记忆只有可怜的几个槽位，但我们极少因此觉得自己「没有记忆」。因为记忆的本质不是保存，而是在正确的时刻让正确的经验浮现。\n\n## 检索的代价\n\n第二种方案是外置记忆加检索：把历史写进数据库，需要时查。我的版本工作得不算坏，但它引入了一个我此前从未认真想过的问题——检索是有立场的。\n\n> 「用什么查询去检索，本身就是一次对『当下什么重要』的判断。这个判断错了，检索回来的记忆越准确，行为就偏得越远。」\n\n实验里最典型的失败是：Agent 用任务的字面描述去查记忆，捞回了三天前一段字面相似、实质无关的讨论，然后非常自信地沿着错误方向走了七步。\n\n## 遗忘是设计，不是缺陷\n\n真正让实验好转的改动，是我开始主动丢弃信息：每个阶段结束时，让 Agent 写一段不超过两百字的「交接备忘」，只有备忘进入下一阶段，原始记录全部封存。效果出乎意料——它不再重提被否决的方案，因为备忘里写着「方案 A 已否决，原因是成本」，而不是那场冗长讨论本身。\n\n这让我重新理解了遗忘。遗忘不是记忆系统的失败模式，而是它的压缩算法：决定什么值得带往未来，本身就是认知工作中最重的那部分。\n\n<div class=\"aside-note\">这篇笔记基于课程项目中的小规模实验，样本很小，结论随时可能被推翻。把它发出来，是想逼自己把含糊的直觉写成可以被反驳的句子。</div>\n\n所以，Agent 需要怎样的记忆？此刻我的答案是：需要的不是更大的仓库，而是一位诚实的史官——记录时克制，引用时谨慎，并且敢于把大部分过去留在过去。",
-      "status": "published",
-      "sortIndex": 3
-    },
-    {
-      "kind": "writing",
-      "slug": "writing-给课程项目写测试-到底在测什么",
-      "title": "给课程项目写测试，到底在测什么",
-      "tag": null,
-      "dateLabel": "3 月",
-      "dateFull": null,
-      "groupLabel": "2026",
-      "summary": "为了应付检查而写的测试和为了睡得着觉而写的测试，是两种完全不同的东西。",
-      "bodyMd": "",
-      "status": "published",
-      "sortIndex": 4
-    },
-    {
-      "kind": "writing",
-      "slug": "writing-静态站生成器里的中文排版细节",
-      "title": "静态站生成器里的中文排版细节",
-      "tag": null,
-      "dateLabel": "10 月",
-      "dateFull": null,
-      "groupLabel": "2025",
-      "summary": "标点悬挂、中西文间距、引号的选择——做了才知道，中文排版的每一个「差不多」都看得见。",
-      "bodyMd": "",
-      "status": "published",
-      "sortIndex": 5
-    },
-    {
-      "kind": "writing",
-      "slug": "writing-第一次给开源项目提-pr",
-      "title": "第一次给开源项目提 PR",
-      "tag": null,
-      "dateLabel": "4 月",
-      "dateFull": null,
-      "groupLabel": "2025",
-      "summary": "改动只有十一行，来回讨论了两周。我学到的全部在那两周的评论区里。",
-      "bodyMd": "",
-      "status": "published",
-      "sortIndex": 6
     }
   ],
   "photos": [

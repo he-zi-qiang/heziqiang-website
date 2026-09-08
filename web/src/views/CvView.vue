@@ -29,13 +29,23 @@ useHead(() => ({ title: data.value?.title, description: description.value }))
   <StateNote :loading="loading" :error="error" />
 
   <template v-if="data">
-    <h1 class="page-title">{{ data.title }}</h1>
-    <p class="page-sub">
-      {{ data.subtitle }}
-      <span class="sep" style="margin: 0 10px">·</span>
-      <a class="no-print" href="#" style="border-bottom: 1px solid var(--line)"
-         @click.prevent="print()">{{ ui.cv.printLabel }}</a>
-    </p>
+    <!-- 标题块居左、证件照居右，像纸质简历的右上角；打印时页眉隐藏，身份一行负责交代是谁 -->
+    <div class="cv-head" :class="{ 'has-portrait': !!data.portrait, 'has-intro': !!data.introHtml }">
+      <div>
+        <h1 class="page-title">{{ data.title }}</h1>
+        <p class="page-sub">
+          {{ data.subtitle }}
+          <span class="sep no-print" style="margin: 0 10px">·</span>
+          <a class="no-print" href="#" style="border-bottom: 1px solid var(--line)"
+             @click.prevent="print()">{{ ui.cv.printLabel }}</a>
+        </p>
+        <!-- eslint-disable-next-line vue/no-v-html -- 内容只来自本人后台 -->
+        <p v-if="data.introHtml" class="cv-intro" v-html="data.introHtml"></p>
+      </div>
+      <figure v-if="data.portrait" class="portrait">
+        <img :src="data.portrait" :alt="bootstrap?.site?.siteName ?? ''" />
+      </figure>
+    </div>
 
     <template v-for="section in data.sections" :key="section.label">
       <div class="smallcaps section-label">{{ section.label }}</div>

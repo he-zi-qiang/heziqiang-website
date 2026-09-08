@@ -103,6 +103,11 @@ export interface AboutDoc {
 export interface CvDoc {
   title: string
   subtitle: string
+  /** 标题下的身份一行（姓名 · 学校 · 专业），行内 Markdown 源码与渲染结果 */
+  intro: string
+  introHtml: string
+  /** 证件照 / 形象照地址，空字符串表示不显示 */
+  portrait: string
   sections: { label: string; rows: { k: string; v: string; vHtml: string }[] }[]
 }
 
@@ -129,6 +134,8 @@ export interface AboutDocSource {
 export interface CvDocSource {
   title: string
   subtitle: string
+  intro: string
+  portrait: string
   sections: { label: string; rows: { k: string; v: string }[] }[]
 }
 

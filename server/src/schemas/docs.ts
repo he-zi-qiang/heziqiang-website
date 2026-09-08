@@ -14,17 +14,15 @@ export const siteDocSchema = z.object({
   avatar: z.string(),
 })
 
+const homeSideSchema = z.object({
+  lede: z.string(),
+  nowLabel: z.string(),
+  now: z.string(),
+})
+
 export const homeDocSchema = z.object({
-  pro: z.object({
-    lede: z.string(),
-    nowLabel: z.string(),
-    now: z.string(),
-  }),
-  personal: z.object({
-    lede: z.string(),
-    nowLabel: z.string(),
-    now: z.string(),
-  }),
+  pro: homeSideSchema,
+  personal: homeSideSchema,
 })
 
 const contactRowSchema = z.object({
@@ -53,6 +51,10 @@ const cvRowSchema = z.object({
 export const cvDocSchema = z.object({
   title: z.string(),
   subtitle: z.string(),
+  /** 标题下面的身份一行（姓名 · 学校 · 专业），支持行内 Markdown；打印时页眉隐藏，全靠它交代是谁 */
+  intro: z.string().default(''),
+  /** 证件照 / 形象照地址，留空则不显示 */
+  portrait: z.string().default(''),
   sections: z.array(
     z.object({
       label: z.string(),

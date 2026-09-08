@@ -478,3 +478,53 @@ a.entry:hover .e-title { color: var(--accent); }
   letter-spacing: 0.12em;
   color: var(--faint);
 }
+
+/* ============================================================
+   简历页的证件照
+   照片按 4:5 裁切，细线描边、轻微降饱和，像贴在纸上的一张证件照。
+   ============================================================ */
+
+.portrait { margin: 0; }
+.portrait img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  background: var(--paper-deep);
+  filter: saturate(0.85);
+}
+/* 暗色下白底照片会发亮，压一压 */
+html[data-theme="dark"] .portrait img { filter: saturate(0.8) brightness(0.86); }
+
+/* 标题块居左、照片居右，像纸质简历的右上角 */
+.cv-head { display: grid; grid-template-columns: 1fr; align-items: start; }
+.cv-head.has-portrait { grid-template-columns: 1fr 112px; gap: 0 40px; }
+.cv-head .portrait { margin-top: 6px; }
+.cv-head.has-intro .page-sub { margin-bottom: 18px; }
+/* 窄屏下副标题挨着照片，「打印 / 存为 PDF」不要从中间折行 */
+.cv-head .page-sub a { white-space: nowrap; }
+
+/* 标题下的身份一行：姓名 · 学校 · 专业。打印时页眉隐藏，全靠它交代是谁 */
+.cv-intro {
+  font-size: 15.5px;
+  line-height: 1.9;
+  color: var(--body-ink);
+  margin: 0 0 72px;
+  max-width: 34em;
+  text-wrap: pretty;
+}
+.cv-intro .light { color: var(--muted); font-size: 14px; }
+.cv-intro strong { font-weight: 600; color: var(--ink); }
+
+/* 简历行里的要点列表：比正文小半档，圆点用淡色 */
+.def-row .v ul { margin: 10px 0 2px; padding-left: 1.15em; }
+.def-row .v li { font-size: 14.5px; line-height: 1.85; margin: 0 0 6px; text-wrap: pretty; }
+.def-row .v li:last-child { margin-bottom: 0; }
+.def-row .v li::marker { color: var(--faint); }
+.def-row .v strong { font-weight: 600; color: var(--ink); }
+
+@media (max-width: 560px) {
+  .cv-head.has-portrait { grid-template-columns: 1fr 88px; gap: 0 20px; }
+}
