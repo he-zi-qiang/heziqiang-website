@@ -12,11 +12,10 @@ const isDev = import.meta.env.DEV
 const navigated = ref(false)
 watch(() => route.path, () => (navigated.value = true))
 
-/** 宽屏下首页（两侧并排）和摄影页用满整个版心，其余页面正文保持阅读宽度 */
+/** 宽屏下摄影页用满整个版心放大照片，其余页面（含首页）正文保持阅读宽度 */
 const pageClass = computed(() => ({
   'is-navigated': navigated.value,
-  'is-home': route.meta.home === true,
-  'is-wide': route.meta.home === true || route.name === 'photos',
+  'is-wide': route.name === 'photos',
 }))
 </script>
 

@@ -155,7 +155,7 @@ a { color: inherit; text-decoration: none; }
 
 main { flex: 1; }
 
-/* 宽屏：页面放宽到 960，页眉页脚铺满；正文一栏仍是 600 的阅读宽度、靠左，
+/* 宽屏：页面放宽到 960，页眉页脚铺满；正文一栏（首页也是）仍是 600 的阅读宽度、靠左，
    右边留出的那条空白给文章目录。页眉、正文左缘、页脚在每一页都对齐，换页时不会左右跳 */
 @media (min-width: 1080px) {
   .page { max-width: calc(var(--wide) + 48px); }
@@ -353,45 +353,6 @@ html[data-theme="dark"] .theme-btn { transform: rotate(180deg); }
   font-size: 12.5px;
   letter-spacing: 0.08em;
   color: var(--faint);
-}
-
-/* 首页两侧：窄屏只露出当前这一侧（页眉里切换），宽屏左右并排、不用切换。
-   并排时用 subgrid 让两栏的「引言 / 目前 / 最近 / 索引」逐行对齐，哪一侧的引言长也不会错开 */
-.home-side:not(.active) { display: none; }
-.side-label { display: none; }
-.recent-block:empty { display: none; }
-
-@media (min-width: 1080px) {
-  .home {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    column-gap: 96px;
-  }
-  .home-side,
-  .home-side:not(.active) {
-    display: grid;
-    grid-row: span 6;
-    grid-template-rows: subgrid;
-    align-content: start;
-  }
-  .side-label {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin: 0 0 32px;
-    color: var(--ink);
-  }
-  .side-label::before {
-    content: '';
-    width: 20px;
-    height: 1px;
-    background: var(--accent);
-  }
-  .home .lede { font-size: 24px; margin-bottom: 56px; }
-  .home .now { margin-bottom: 56px; }
-  .recent-block:empty { display: block; }
-  /* 两侧都摆出来了，页眉里的切换就多余了 */
-  .page.is-home .mode-toggle { display: none; }
 }
 
 .index-nav { display: flex; flex-direction: column; }
