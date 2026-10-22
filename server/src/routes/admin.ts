@@ -7,11 +7,11 @@ import type { FastifyPluginAsync } from 'fastify'
 import { prisma } from '../db.js'
 import { env } from '../env.js'
 import { readDoc, writeDoc } from '../lib/docs.js'
-import { resetIndexHtml } from '../lib/index-html.js'
 import { ENTRY_KINDS } from '../lib/kinds.js'
 import { renderMarkdown } from '../lib/markdown.js'
 import { fallbackSlug, slugify } from '../lib/slug.js'
-import { toEntryAdmin, toPhoto } from '../lib/serialize.js'
+import { ENTRY_ORDER, toEntryAdmin, toPhoto } from '../lib/serialize.js'
+import { compressImage } from '../lib/images.js'
 import { isDocKey } from '../schemas/docs.js'
 import {
   entryCreateSchema,
@@ -39,7 +39,7 @@ const adminRoutes: FastifyPluginAsync = async (app) => {
     const { kind, status } = req.query as { kind?: string; status?: string }
     const rows = await prisma.entry.findMany({
       where: { ...(kind ? { kind } : {}), ...(status ? { status } : {}) },
-      orderBy: [{ kind: 'asc' }, { sortIndex: 'asc' }, { id: 'asc' }],
+      orderBy: [{ kind: 'asc' }, ...ENTRY_ORDER],
     })
     return { items: rows.map(toEntryAdmin), kinds: ENTRY_KINDS }
   })
@@ -152,10 +152,7 @@ const adminRoutes: FastifyPluginAsync = async (app) => {
     const { key } = req.params as { key: string }
     if (!isDocKey(key)) return reply.code(404).send({ error: `未知文档：${key}` })
     try {
-      const saved = await writeDoc(key, req.body)
-      // 站名和描述会被写进 index.html，缓存要作废
-      if (key === 'site') resetIndexHtml()
-      return saved
+      return await writeDoc(key, req.body)
     } catch (err) {
       const e = err as Error & { issues?: unknown }
       return reply.code(400).send({ error: e.message, issues: e.issues })
@@ -221,12 +218,14 @@ const adminRoutes: FastifyPluginAsync = async (app) => {
       return reply.code(413).send({ error: '文件超过大小上限' })
     }
 
-    const stat = await fs.stat(target)
+    // 服务器出口带宽很窄，原图直接上线一张就要加载十几秒：先缩到合适尺寸再存
+    const saved = await compressImage(target, file.mimetype)
     return reply.code(201).send({
-      url: `/uploads/${name}`,
+      url: `/uploads/${path.basename(saved.path)}`,
       filename: file.filename,
-      size: stat.size,
-      mimetype: file.mimetype,
+      size: saved.size,
+      originalSize: saved.originalSize,
+      mimetype: saved.mimetype,
       sha256: hash.digest('hex').slice(0, 16),
     })
   })

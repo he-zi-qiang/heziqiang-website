@@ -1,21 +1,62 @@
 import type { FastifyPluginAsync } from 'fastify'
 import { prisma } from '../db.js'
 import { readDoc, type DocData } from '../lib/docs.js'
-import { ENTRY_KINDS, isEntryKind } from '../lib/kinds.js'
-import { groupEntries, toEntryDetail, toEntrySummary, toPhoto } from '../lib/serialize.js'
+import { ENTRY_KINDS, ENTRY_KIND_LIST, isEntryKind, type EntryKind } from '../lib/kinds.js'
+import {
+  ENTRY_ORDER,
+  entryYear,
+  groupEntries,
+  toEntryDetail,
+  toEntrySummary,
+  toPhoto,
+} from '../lib/serialize.js'
 import { DOC_KEYS, isDocKey } from '../schemas/docs.js'
 import { renderAboutDoc, renderCvDoc, renderHomeDoc } from '../lib/render-docs.js'
+
+/** 首页「最近」每侧列几条 */
+const RECENT_LIMIT = 3
+
+/** 首页「最近」取哪些栏目：按所属一侧分，学习记录没有标题，不放进来 */
+function recentKinds(section: 'pro' | 'personal'): EntryKind[] {
+  return ENTRY_KIND_LIST.filter((k) => ENTRY_KINDS[k].section === section && k !== 'learning')
+}
+
+/** 某一侧最近发布、有内页的几篇 */
+async function recentEntries(section: 'pro' | 'personal') {
+  const rows = await prisma.entry.findMany({
+    where: { status: 'published', kind: { in: recentKinds(section) }, NOT: { bodyHtml: '' } },
+    orderBy: [{ publishedAt: 'desc' }, { id: 'desc' }],
+    take: RECENT_LIMIT,
+  })
+  return rows.map(toEntrySummary)
+}
+
+/** 各栏目已发布的条数与照片张数，首页据此把空栏目从索引里藏起来 */
+async function sectionCounts(): Promise<Record<EntryKind | 'photos', number>> {
+  const [byKind, photos] = await Promise.all([
+    prisma.entry.groupBy({ by: ['kind'], where: { status: 'published' }, _count: { _all: true } }),
+    prisma.photo.count(),
+  ])
+  const counts = Object.fromEntries(ENTRY_KIND_LIST.map((k) => [k, 0])) as Record<EntryKind, number>
+  for (const row of byKind) {
+    if (isEntryKind(row.kind)) counts[row.kind] = row._count._all
+  }
+  return { ...counts, photos }
+}
 
 /** 站点的公开只读接口——前端渲染需要的一切都从这里来 */
 const publicRoutes: FastifyPluginAsync = async (app) => {
   /** 一次性拿到页眉页脚 + 首页需要的全部文案，前端启动时只请求一次 */
   app.get('/bootstrap', async () => {
-    const [site, home, sections, nav, ui] = await Promise.all([
+    const [site, home, sections, nav, ui, recentPro, recentPersonal, counts] = await Promise.all([
       readDoc('site'),
       readDoc('home'),
       readDoc('sections'),
       readDoc('nav'),
       readDoc('ui'),
+      recentEntries('pro'),
+      recentEntries('personal'),
+      sectionCounts(),
     ])
     return {
       site,
@@ -24,6 +65,8 @@ const publicRoutes: FastifyPluginAsync = async (app) => {
       nav,
       ui,
       kinds: ENTRY_KINDS,
+      recent: { pro: recentPro, personal: recentPersonal },
+      counts,
     }
   })
 
@@ -40,7 +83,7 @@ const publicRoutes: FastifyPluginAsync = async (app) => {
     return doc
   })
 
-  /** 栏目列表，已按 groupLabel 分好组 */
+  /** 栏目列表，已按年份分好组 */
   app.get('/entries', async (req, reply) => {
     const { kind } = req.query as { kind?: string }
     if (kind && !isEntryKind(kind)) {
@@ -48,10 +91,13 @@ const publicRoutes: FastifyPluginAsync = async (app) => {
     }
     const rows = await prisma.entry.findMany({
       where: { status: 'published', ...(kind ? { kind } : {}) },
-      orderBy: [{ kind: 'asc' }, { sortIndex: 'asc' }, { id: 'asc' }],
+      orderBy: [{ kind: 'asc' }, ...ENTRY_ORDER],
     })
-    const items = rows.map(toEntrySummary)
-    return { total: items.length, groups: groupEntries(items), items }
+    const groups = groupEntries(rows, entryYear).map((g) => ({
+      label: g.label,
+      items: g.items.map(toEntrySummary),
+    }))
+    return { total: rows.length, groups, items: rows.map(toEntrySummary) }
   })
 
   app.get('/entries/:slug', async (req, reply) => {
@@ -62,7 +108,7 @@ const publicRoutes: FastifyPluginAsync = async (app) => {
     // 同栏目里的上一篇 / 下一篇，用来渲染文末导航
     const siblings = await prisma.entry.findMany({
       where: { kind: entry.kind, status: 'published', NOT: { bodyHtml: '' } },
-      orderBy: [{ sortIndex: 'asc' }, { id: 'asc' }],
+      orderBy: ENTRY_ORDER,
       select: { slug: true, title: true, kind: true, bodyHtml: false },
     })
     const idx = siblings.findIndex((s) => s.slug === entry.slug)

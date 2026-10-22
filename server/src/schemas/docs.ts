@@ -18,6 +18,8 @@ const homeSideSchema = z.object({
   lede: z.string(),
   nowLabel: z.string(),
   now: z.string(),
+  /** 「最近更新」那几行上面的小标题 */
+  recentLabel: z.string().default('最近 · Recent'),
 })
 
 export const homeDocSchema = z.object({
@@ -122,6 +124,10 @@ export const uiDocSchema = z.object({
     nextPrefix: z.string(),
     prevPrefix: z.string(),
     linkSuffix: z.string(),
+    /** 宽屏时长文右侧目录的小标题 */
+    tocLabel: z.string().default('目录 · Contents'),
+    /** 小标题旁那个「#」的提示 */
+    anchorTitle: z.string().default('复制这一节的链接'),
   }),
   cv: z.object({ printLabel: z.string() }),
   photos: z.object({ emptySlot: z.string() }),

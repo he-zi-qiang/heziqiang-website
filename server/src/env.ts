@@ -18,6 +18,8 @@ const schema = z.object({
   JWT_SECRET: z.string().min(16, 'JWT_SECRET 至少 16 位，生产环境请用随机值'),
   COOKIE_SECRET: z.string().min(16, 'COOKIE_SECRET 至少 16 位'),
   CORS_ORIGIN: z.string().default(''),
+  // 站点对外的主地址：canonical、分享卡片、sitemap 里的绝对链接都用它
+  SITE_URL: z.string().url().default('https://heziqiang.com'),
   UPLOAD_DIR: z.string().default('uploads'),
   ADMIN_USERNAME: z.string().default('admin'),
   ADMIN_PASSWORD: z.string().default('change-me'),
@@ -45,6 +47,8 @@ export const env = {
   uploadDir: path.isAbsolute(parsed.data.UPLOAD_DIR)
     ? parsed.data.UPLOAD_DIR
     : path.join(serverRoot, parsed.data.UPLOAD_DIR),
+  /** 站点主地址，不带结尾斜杠 */
+  siteUrl: parsed.data.SITE_URL.replace(/\/+$/, ''),
   /** 允许的跨域来源列表，逗号分隔 */
   corsOrigins: parsed.data.CORS_ORIGIN.split(',').map((s) => s.trim()).filter(Boolean),
 }
