@@ -56,7 +56,8 @@ const { headings, activeId, goTo } = useArticleHeadings(
   <StateNote :loading="loading" :error="error" />
 
   <template v-if="data">
-    <h1 class="page-title">{{ data.title }}</h1>
+    <!-- article-title 带着换页过渡名：从列表点进来时，那一行的标题会变形成这里的大标题 -->
+    <h1 class="page-title article-title">{{ data.title }}</h1>
     <p class="article-meta">
       <template v-for="(part, i) in metaParts" :key="i">
         <span v-if="i > 0" class="sep">·</span>{{ part }}

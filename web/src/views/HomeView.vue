@@ -2,7 +2,7 @@
 import { computed, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import type { EntryKind, NavRow } from '@/api/types'
-import { useMode } from '@/composables/useMode'
+import { useMode, type Mode } from '@/composables/useMode'
 import { useSite } from '@/composables/useSite'
 import { useUi } from '@/composables/useUi'
 import { useHead } from '@/composables/useHead'
@@ -22,11 +22,14 @@ watch(
   { immediate: true },
 )
 const { bootstrap, error } = useSite()
-const { nav, sectionOf } = useUi()
+const { ui, nav, sectionOf } = useUi()
 
 const home = computed(() => bootstrap.value?.home ?? null)
-const side = computed(() => (home.value ? home.value[mode.value] : null))
-const recent = computed(() => bootstrap.value?.recent?.[mode.value] ?? [])
+
+/** 两侧都渲染：窄屏只露出当前这一侧（靠页眉切换），宽屏左右并排、不用切换（见 style.css 的 .home） */
+const SIDES: Mode[] = ['pro', 'personal']
+const sideLabel = (s: Mode) => (s === 'pro' ? ui.value.header.proLabel : ui.value.header.personalLabel)
+const recentOf = (s: Mode) => bootstrap.value?.recent?.[s] ?? []
 
 /** 索引行指向的栏目：/essays → essay，/photos → photos；关于、简历这类单页不算 */
 const SECTION_BY_PATH = new Map<string, EntryKind | 'photos'>([
@@ -41,7 +44,7 @@ function hasContent(row: NavRow) {
   return !counts || !section || counts[section] > 0
 }
 
-const rows = computed(() => (nav.value[mode.value] ?? []).filter(hasContent))
+const rowsOf = (s: Mode) => (nav.value[s] ?? []).filter(hasContent)
 
 useHead(() => ({ title: null, description: bootstrap.value?.site?.description }))
 </script>
@@ -49,31 +52,40 @@ useHead(() => ({ title: null, description: bootstrap.value?.site?.description })
 <template>
   <StateNote :loading="!home && !error" :error="error" />
 
-  <section v-if="side" :key="mode" class="mode-enter">
-    <!-- eslint-disable-next-line vue/no-v-html -- 只有本人后台能写 -->
-    <p class="lede" v-html="side.ledeHtml"></p>
+  <div v-if="home" class="home">
+    <!-- key 带上「是否当前一侧」：窄屏切换身份时重建，入场动效重新播放 -->
+    <section v-for="s in SIDES" :key="`${s}-${s === mode}`" class="home-side mode-enter"
+             :class="{ active: s === mode }" :aria-label="sideLabel(s)">
+      <div class="smallcaps side-label">{{ sideLabel(s) }}</div>
 
-    <div class="smallcaps section-label">{{ side.nowLabel }}</div>
-    <!-- eslint-disable-next-line vue/no-v-html -->
-    <p class="now" v-html="side.nowHtml"></p>
+      <!-- eslint-disable-next-line vue/no-v-html -- 只有本人后台能写 -->
+      <p class="lede" v-html="home[s].ledeHtml"></p>
 
-    <template v-if="recent.length">
-      <div class="smallcaps section-label">{{ side.recentLabel }}</div>
-      <ul class="recent">
-        <li v-for="entry in recent" :key="entry.slug">
-          <RouterLink :to="entry.href!">
-            <span class="date">{{ entry.dateLabel }}</span>
-            <span class="r-title">{{ entry.title }}</span>
-            <span class="r-kind">{{ sectionOf(entry.kind).label }}</span>
-          </RouterLink>
-        </li>
-      </ul>
-    </template>
+      <div class="smallcaps section-label">{{ home[s].nowLabel }}</div>
+      <!-- eslint-disable-next-line vue/no-v-html -->
+      <p class="now" v-html="home[s].nowHtml"></p>
 
-    <nav class="index-nav">
-      <RouterLink v-for="row in rows" :key="row.to" class="index-row" :to="row.to">
-        <span>{{ row.zh }}</span><span class="en">{{ row.en }}</span>
-      </RouterLink>
-    </nav>
-  </section>
+      <!-- 这一块即使没有内容也占一行，宽屏两栏才能逐行对齐 -->
+      <div class="recent-block">
+        <template v-if="recentOf(s).length">
+          <div class="smallcaps section-label">{{ home[s].recentLabel }}</div>
+          <ul class="recent">
+            <li v-for="entry in recentOf(s)" :key="entry.slug">
+              <RouterLink :to="entry.href!">
+                <span class="date">{{ entry.dateLabel }}</span>
+                <span class="r-title">{{ entry.title }}</span>
+                <span class="r-kind">{{ sectionOf(entry.kind).label }}</span>
+              </RouterLink>
+            </li>
+          </ul>
+        </template>
+      </div>
+
+      <nav class="index-nav">
+        <RouterLink v-for="row in rowsOf(s)" :key="row.to" class="index-row" :to="row.to">
+          <span>{{ row.zh }}</span><span class="en">{{ row.en }}</span>
+        </RouterLink>
+      </nav>
+    </section>
+  </div>
 </template>

@@ -12,7 +12,8 @@ defineProps<{ entry: EntrySummary; showTitle?: boolean }>()
     </span>
     <span>
       <h3 v-if="showTitle !== false" class="e-title">
-        {{ entry.title }}<span v-if="entry.tag" class="tag">{{ entry.tag }}</span>
+        {{ entry.title }}<span v-if="entry.tag" class="tag">{{ entry.tag }}</span><span
+          v-if="entry.href" class="e-arrow" aria-hidden="true">→</span>
       </h3>
       <p v-if="entry.summary" class="e-note">{{ entry.summary }}</p>
     </span>

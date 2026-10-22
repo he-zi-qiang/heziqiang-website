@@ -18,6 +18,21 @@
   --accent: #9C4226;
   --quote: #6B6354;
   --serif: 'Source Serif 4', 'Noto Serif SC', 'Songti SC', 'SimSun', serif;
+
+  /* 字号表：每一级之间拉开明显差距，别再出现 15.5 / 16 / 16.5 这种看不出区别的相邻字号 */
+  --fs-label: 12px;   /* 小型大写标签 */
+  --fs-meta: 13px;    /* 日期、面包屑、页脚、目录 */
+  --fs-small: 14.5px; /* 摘要、注释 */
+  --fs-ui: 16px;      /* 索引、简历行、最近 */
+  --fs-body: 17px;    /* 正文 */
+  --fs-h3: 18px;
+  --fs-h2: 22px;
+  --fs-lede: 26px;    /* 首页引言 */
+  --fs-title: 34px;   /* 页面大标题 */
+
+  /* 版心：正文一栏的阅读宽度，和宽屏下整个页面的宽度 */
+  --measure: 600px;
+  --wide: 960px;
 }
 
 html[data-theme="dark"] {
@@ -50,6 +65,35 @@ html[data-theme="dark"] {
   .mode-enter { animation: hz-enter 0.4s cubic-bezier(0.22, 1, 0.36, 1) both; }
 }
 
+/* 换页过渡（View Transitions，见 composables/pageTransitions.ts）：整页短促地交叉淡入，
+   被点的那行标题单独变形成文章页的大标题。过渡进行时，main 自己的入场动效让位 */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.3s;
+  animation-timing-function: ease;
+}
+::view-transition-group(entry-title),
+::view-transition-group(mode-indicator) {
+  animation-duration: 0.45s;
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+}
+html.vt-nav main { animation: none !important; }
+.article-title { view-transition-name: entry-title; }
+
+/* 深浅色切换：新配色从按钮处以圆形铺开（clip-path 动画由 useTheme 发起），旧画面原地不动 */
+html.vt-theme::view-transition-old(root),
+html.vt-theme::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+/* 图片加载完再淡入，不要一块一块地蹦出来（.is-loaded 由 main.ts 统一打上）。
+   只在脚本跑起来时生效，给爬虫的静态正文里图片照常显示 */
+@media (prefers-reduced-motion: no-preference) {
+  html.js main img { transition: opacity 0.5s ease; }
+  html.js main img:not(.is-loaded) { opacity: 0; }
+}
+
 @keyframes hz-enter {
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: none; }
@@ -62,6 +106,19 @@ html[data-theme="dark"] {
 * { box-sizing: border-box; }
 
 html { background: var(--paper); }
+
+/* 极淡的纸纹：一层固定的噪点叠在纸色上、压在文字下面，近看有纸的颗粒，远看仍是纯色 */
+body { position: relative; z-index: 0; }
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.36 0 0 0 0 0.3 0 0 0 0 0.2 0 0 0 0.6 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.05;
+}
+html[data-theme="dark"] body::before { opacity: 0.035; mix-blend-mode: screen; }
 
 body {
   margin: 0;
@@ -88,7 +145,7 @@ a { color: inherit; text-decoration: none; }
 /* ---------- 版心 ---------- */
 
 .page {
-  max-width: 648px;
+  max-width: calc(var(--measure) + 48px);
   margin: 0 auto;
   padding: 56px 24px 0;
   min-height: 100vh;
@@ -97,6 +154,14 @@ a { color: inherit; text-decoration: none; }
 }
 
 main { flex: 1; }
+
+/* 宽屏：页面放宽到 960，页眉页脚铺满；正文一栏仍是 600 的阅读宽度、靠左，
+   右边留出的那条空白给文章目录。页眉、正文左缘、页脚在每一页都对齐，换页时不会左右跳 */
+@media (min-width: 1080px) {
+  .page { max-width: calc(var(--wide) + 48px); }
+  main { width: 100%; max-width: var(--measure); }
+  .page.is-wide main { max-width: none; }
+}
 
 /* ---------- 页眉 ---------- */
 
@@ -128,6 +193,7 @@ main { flex: 1; }
 }
 
 .mode-toggle {
+  position: relative;
   display: flex;
   gap: 26px;
   font-size: 12.5px;
@@ -149,9 +215,21 @@ main { flex: 1; }
 }
 .mode-toggle :is(a, button):not(.on):hover { color: var(--muted); }
 
-.mode-toggle .on {
-  color: var(--ink);
-  border-bottom-color: var(--accent);
+.mode-toggle .on { color: var(--ink); }
+
+/* 当前一侧下面那道短线，位置由 SiteHeader 按高亮项的宽度算。
+   带着自己的过渡名：切身份、换页时由 View Transitions 让它滑过去 */
+.toggle-indicator {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 1px;
+  background: var(--accent);
+  view-transition-name: mode-indicator;
+  pointer-events: none;
+}
+@supports not (view-transition-name: none) {
+  .toggle-indicator { transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), width 0.35s cubic-bezier(0.22, 1, 0.36, 1); }
 }
 
 .head-right { display: flex; align-items: center; gap: 22px; }
@@ -202,18 +280,19 @@ html[data-theme="dark"] .theme-btn { transform: rotate(180deg); }
 .crumb a:hover { color: var(--accent); }
 
 .page-title {
-  font-size: 30px;
+  font-size: var(--fs-title);
   font-weight: 600;
-  letter-spacing: 0.02em;
-  line-height: 1.6;
-  margin: 0 0 14px;
+  letter-spacing: 0.01em;
+  /* 大字配紧一点的行距才显得有力；1.6 是正文的行距，用在 30px 的标题上会散 */
+  line-height: 1.35;
+  margin: 0 0 18px;
   /* 长标题两行尽量等长，不在第二行剩一个孤字 */
   text-wrap: balance;
 }
 
 .page-sub {
-  font-size: 15.5px;
-  line-height: 1.9;
+  font-size: var(--fs-ui);
+  line-height: 1.85;
   color: var(--muted);
   margin: 0 0 72px;
   max-width: 34em;
@@ -227,8 +306,8 @@ html[data-theme="dark"] .theme-btn { transform: rotate(180deg); }
 /* ---------- 首页 ---------- */
 
 .lede {
-  font-size: 25px;
-  line-height: 1.8;
+  font-size: var(--fs-lede);
+  line-height: 1.6;
   font-weight: 400;
   margin: 0 0 68px;
   text-wrap: pretty;
@@ -236,8 +315,8 @@ html[data-theme="dark"] .theme-btn { transform: rotate(180deg); }
 .lede em { font-style: normal; color: var(--accent); }
 
 .now {
-  font-size: 16.5px;
-  line-height: 1.9;
+  font-size: var(--fs-body);
+  line-height: 1.85;
   color: var(--body-ink);
   margin: 0 0 68px;
   text-wrap: pretty;
@@ -274,6 +353,45 @@ html[data-theme="dark"] .theme-btn { transform: rotate(180deg); }
   font-size: 12.5px;
   letter-spacing: 0.08em;
   color: var(--faint);
+}
+
+/* 首页两侧：窄屏只露出当前这一侧（页眉里切换），宽屏左右并排、不用切换。
+   并排时用 subgrid 让两栏的「引言 / 目前 / 最近 / 索引」逐行对齐，哪一侧的引言长也不会错开 */
+.home-side:not(.active) { display: none; }
+.side-label { display: none; }
+.recent-block:empty { display: none; }
+
+@media (min-width: 1080px) {
+  .home {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 96px;
+  }
+  .home-side,
+  .home-side:not(.active) {
+    display: grid;
+    grid-row: span 6;
+    grid-template-rows: subgrid;
+    align-content: start;
+  }
+  .side-label {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0 0 32px;
+    color: var(--ink);
+  }
+  .side-label::before {
+    content: '';
+    width: 20px;
+    height: 1px;
+    background: var(--accent);
+  }
+  .home .lede { font-size: 24px; margin-bottom: 56px; }
+  .home .now { margin-bottom: 56px; }
+  .recent-block:empty { display: block; }
+  /* 两侧都摆出来了，页眉里的切换就多余了 */
+  .page.is-home .mode-toggle { display: none; }
 }
 
 .index-nav { display: flex; flex-direction: column; }
@@ -322,13 +440,26 @@ html[data-theme="dark"] .theme-btn { transform: rotate(180deg); }
 }
 
 .entry .e-title {
-  font-size: 18px;
+  font-size: 19px;
   font-weight: 500;
-  line-height: 1.7;
+  line-height: 1.5;
   margin: 0 0 8px;
   transition: color 0.2s ease;
 }
 a.entry:hover .e-title { color: var(--accent); }
+
+/* 能点进去的条目，悬停时标题后面滑出一个箭头 */
+.entry .e-arrow {
+  display: inline-block;
+  margin-left: 0.4em;
+  font-weight: 400;
+  color: var(--accent);
+  opacity: 0;
+  transform: translateX(-6px);
+  transition: opacity 0.2s ease, transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+a.entry:hover .e-arrow,
+a.entry:focus-visible .e-arrow { opacity: 1; transform: none; }
 
 .entry .e-title .tag {
   font-size: 11.5px;
@@ -373,9 +504,9 @@ a.entry:hover .e-title { color: var(--accent); }
 /* ---------- 文章 / 内页 ---------- */
 
 .article-meta {
-  font-size: 13.5px;
+  font-size: var(--fs-meta);
   color: var(--muted);
-  letter-spacing: 0.03em;
+  letter-spacing: 0.04em;
   margin: 0 0 64px;
 }
 .article-meta .sep { margin: 0 10px; color: var(--faint); }
@@ -391,10 +522,11 @@ a.entry:hover .e-title { color: var(--accent); }
 }
 
 .article-body h2 {
-  font-size: 20px;
+  font-size: var(--fs-h2);
   font-weight: 600;
-  letter-spacing: 0.05em;
-  margin: 3.2em 0 1.4em;
+  letter-spacing: 0.03em;
+  line-height: 1.45;
+  margin: 2.8em 0 1.1em;
   text-wrap: balance;
 }
 
@@ -411,10 +543,11 @@ a.entry:hover .e-title { color: var(--accent); }
 .article-body blockquote p:last-child { margin-bottom: 0; }
 
 .article-body h3 {
-  font-size: 17.5px;
+  font-size: var(--fs-h3);
   font-weight: 600;
   letter-spacing: 0.03em;
-  margin: 2.6em 0 1em;
+  line-height: 1.5;
+  margin: 2.4em 0 0.9em;
   text-wrap: balance;
 }
 
@@ -526,7 +659,7 @@ html[data-theme="dark"] .article-body img { filter: brightness(0.9); }
 /* 目录挂在正文右侧的空白里：正文那一栏的外沿再往右 56px，随滚动停在视口上方 */
 .article-wrap { position: relative; }
 .toc { display: none; }
-@media (min-width: 1200px) {
+@media (min-width: 1080px) {
   .toc {
     display: block;
     position: absolute;
@@ -589,11 +722,11 @@ html[data-theme="dark"] .article-body img { filter: brightness(0.9); }
   gap: 24px;
   padding: 16px 0;
   border-top: 1px solid var(--line);
-  font-size: 15.5px;
-  line-height: 1.9;
+  font-size: var(--fs-ui);
+  line-height: 1.85;
 }
 .def-row:last-child { border-bottom: 1px solid var(--line); }
-.def-row .k { color: var(--muted); font-size: 13.5px; padding-top: 2px; letter-spacing: 0.08em; }
+.def-row .k { color: var(--muted); font-size: var(--fs-meta); padding-top: 3px; letter-spacing: 0.08em; }
 .def-row .v { color: var(--body-ink); }
 .def-row .v .light { color: var(--muted); font-size: 14px; }
 .def-row .v a { border-bottom: 1px solid var(--line); transition: color 0.2s ease, border-bottom-color 0.2s ease; }
@@ -607,7 +740,7 @@ html[data-theme="dark"] .article-body img { filter: brightness(0.9); }
   border-top: 1px solid var(--line);
   display: flex;
   justify-content: space-between;
-  font-size: 12.5px;
+  font-size: var(--fs-meta);
   letter-spacing: 0.08em;
   color: var(--faint);
 }
@@ -618,6 +751,7 @@ html[data-theme="dark"] .article-body img { filter: brightness(0.9); }
 
 @media print {
   html, body { background: #fff; }
+  body::before { display: none; }
   .site-head, .site-foot, .crumb, .no-print, .heading-anchor { display: none !important; }
   .page { padding-top: 0; }
 }
@@ -636,7 +770,8 @@ html[data-theme="dark"] .article-body img { filter: brightness(0.9); }
   .site-id .name { white-space: nowrap; }
   .head-right { flex: 1 1 100%; justify-content: space-between; }
 
-  .lede { font-size: 21px; }
+  .lede { font-size: 22px; }
+  .page-title { font-size: 28px; }
   .recent a { grid-template-columns: 80px 1fr; gap: 0 14px; }
   .recent .r-kind { display: none; }
   .entry { grid-template-columns: 1fr; gap: 6px; }
@@ -713,7 +848,7 @@ html[data-theme="dark"] .portrait img { filter: saturate(0.8) brightness(0.86); 
 
 /* 标题下的身份一行：姓名 · 学校 · 专业。打印时页眉隐藏，全靠它交代是谁 */
 .cv-intro {
-  font-size: 15.5px;
+  font-size: var(--fs-ui);
   line-height: 1.9;
   color: var(--body-ink);
   margin: 0 0 72px;
