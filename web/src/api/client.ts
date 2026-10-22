@@ -40,26 +40,93 @@ async function request<T>(path: string, init: RequestInit = {}): Promise<T> {
         : null) ?? `请求失败（${res.status}）`
     throw new ApiError(res.status, message)
   }
+  // 后台改了任何东西，前台缓存的公开内容就可能过时了
+  if (init.method && init.method !== 'GET') cache.clear()
   return payload as T
+}
+
+/* ---------------- 公开内容的缓存 ----------------
+ * 访客在站里来回点，同一份数据没必要每次都干等服务器：
+ *  - 首屏：服务端把这一页要用的数据直接写进 HTML（window.__PRELOAD__），省掉一轮请求；
+ *  - 站内跳转：取过的数据先拿来渲染，旧了再在后台悄悄刷新；
+ *  - 鼠标停到链接上就预取（见 useInternalLinks），点下去时数据多半已经在了。
+ * 只缓存公开的 GET，后台接口一律直连。
+ */
+
+declare global {
+  interface Window {
+    __PRELOAD__?: Record<string, unknown>
+  }
+}
+
+/** 公开接口的路径。缓存、预取和服务端预载（server/src/lib/preload.ts）都按这串字符对齐 */
+export const publicPath = {
+  bootstrap: '/bootstrap',
+  about: '/docs/about',
+  cv: '/docs/cv',
+  photos: '/photos',
+  entries: (kind: EntryKind) => `/entries?kind=${kind}`,
+  entry: (slug: string) => `/entries/${encodeURIComponent(slug)}`,
+}
+
+/** 多久之内的缓存算新鲜：新鲜的直接用，旧的先用着、同时后台刷新 */
+const FRESH_MS = 60_000
+
+const cache = new Map<string, { at: number; data: unknown }>()
+const inflight = new Map<string, Promise<unknown>>()
+
+for (const [path, data] of Object.entries(window.__PRELOAD__ ?? {})) {
+  cache.set(path, { at: Date.now(), data })
+}
+
+/** 带缓存的请求：Promise 上挂着已有的缓存，useAsyncData 拿它同步渲染，不闪「加载中」 */
+export type CachedPromise<T> = Promise<T> & { cached?: T }
+
+function fetchFresh<T>(path: string): Promise<T> {
+  let pending = inflight.get(path) as Promise<T> | undefined
+  if (!pending) {
+    pending = request<T>(path)
+      .then((data) => {
+        cache.set(path, { at: Date.now(), data })
+        return data
+      })
+      .finally(() => inflight.delete(path))
+    inflight.set(path, pending)
+  }
+  return pending
+}
+
+function cachedGet<T>(path: string): CachedPromise<T> {
+  const hit = cache.get(path)
+  const fresh = hit && Date.now() - hit.at < FRESH_MS
+  const promise = fresh ? Promise.resolve(hit.data as T) : fetchFresh<T>(path)
+  return Object.assign(promise, { cached: hit?.data as T | undefined })
+}
+
+/** 预取：缓存里没有或已经旧了才发请求，失败也无所谓 */
+export function prefetch(path: string) {
+  const hit = cache.get(path)
+  if (hit && Date.now() - hit.at < FRESH_MS) return
+  fetchFresh(path).catch(() => {})
 }
 
 const json = (body: unknown) => JSON.stringify(body)
 
 export const api = {
-  bootstrap: () => request<Bootstrap>('/bootstrap'),
+  bootstrap: () => cachedGet<Bootstrap>(publicPath.bootstrap),
 
   doc: {
     site: () => request<SiteDoc>('/docs/site'),
     home: () => request<HomeDoc>('/docs/home'),
-    about: () => request<AboutDoc>('/docs/about'),
-    cv: () => request<CvDoc>('/docs/cv'),
+    about: () => cachedGet<AboutDoc>(publicPath.about),
+    cv: () => cachedGet<CvDoc>(publicPath.cv),
     sections: () => request<SectionsDoc>('/docs/sections'),
   },
 
   entries: (kind?: EntryKind) =>
-    request<EntryListResponse>(`/entries${kind ? `?kind=${kind}` : ''}`),
-  entry: (slug: string) => request<EntryDetail>(`/entries/${encodeURIComponent(slug)}`),
-  photos: () => request<{ items: Photo[] }>('/photos'),
+    kind ? cachedGet<EntryListResponse>(publicPath.entries(kind)) : request<EntryListResponse>('/entries'),
+  entry: (slug: string) => cachedGet<EntryDetail>(publicPath.entry(slug)),
+  photos: () => cachedGet<{ items: Photo[] }>(publicPath.photos),
 
   auth: {
     login: (username: string, password: string) =>

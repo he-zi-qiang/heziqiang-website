@@ -14,17 +14,17 @@ export const siteDocSchema = z.object({
   avatar: z.string(),
 })
 
+const homeSideSchema = z.object({
+  lede: z.string(),
+  nowLabel: z.string(),
+  now: z.string(),
+  /** 「最近更新」那几行上面的小标题 */
+  recentLabel: z.string().default('最近 · Recent'),
+})
+
 export const homeDocSchema = z.object({
-  pro: z.object({
-    lede: z.string(),
-    nowLabel: z.string(),
-    now: z.string(),
-  }),
-  personal: z.object({
-    lede: z.string(),
-    nowLabel: z.string(),
-    now: z.string(),
-  }),
+  pro: homeSideSchema,
+  personal: homeSideSchema,
 })
 
 const contactRowSchema = z.object({
@@ -53,6 +53,10 @@ const cvRowSchema = z.object({
 export const cvDocSchema = z.object({
   title: z.string(),
   subtitle: z.string(),
+  /** 标题下面的身份一行（姓名 · 学校 · 专业），支持行内 Markdown；打印时页眉隐藏，全靠它交代是谁 */
+  intro: z.string().default(''),
+  /** 证件照 / 形象照地址，留空则不显示 */
+  portrait: z.string().default(''),
   sections: z.array(
     z.object({
       label: z.string(),
@@ -120,9 +124,17 @@ export const uiDocSchema = z.object({
     nextPrefix: z.string(),
     prevPrefix: z.string(),
     linkSuffix: z.string(),
+    /** 宽屏时长文右侧目录的小标题 */
+    tocLabel: z.string().default('目录 · Contents'),
+    /** 小标题旁那个「#」的提示 */
+    anchorTitle: z.string().default('复制这一节的链接'),
   }),
   cv: z.object({ printLabel: z.string() }),
   photos: z.object({ emptySlot: z.string() }),
+  /** 宽屏下列表页右栏：年份小标题，和年份后面条数的单位 */
+  list: z
+    .object({ yearsLabel: z.string().default('年份 · Years'), countUnit: z.string().default('篇') })
+    .default({}),
   states: z.object({
     loading: z.string(),
     loadFailed: z.string(),

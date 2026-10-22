@@ -1,5 +1,11 @@
-import type { Entry, Photo } from '@prisma/client'
+import type { Entry, Photo, Prisma } from '@prisma/client'
 import { ENTRY_KINDS, type EntryKind } from './kinds.js'
+
+/**
+ * 同一栏目内条目的顺序，前台列表、文末上下篇、后台列表共用。
+ * sortIndex 越小越靠前；同号时后建的在前——后台新写一篇（sortIndex 默认 0）就直接排在最上面。
+ */
+export const ENTRY_ORDER: Prisma.EntryOrderByWithRelationInput[] = [{ sortIndex: 'asc' }, { id: 'desc' }]
 
 /** 列表里的条目：不带正文，省流量 */
 export function toEntrySummary(e: Entry) {
@@ -66,15 +72,23 @@ export function toPhoto(p: Photo) {
 }
 
 /**
- * 把一串条目按 groupLabel 分组，保持数据库给出的顺序。
- * 旧站里的「2026 / 2025」「在读」小标题就是靠这个还原的。
+ * 列表的年份小标题（year-mark）：取「列表日期」开头的四位年份，
+ * 「6 月」「重读」这类不带年份的，退回到发布时间的年份；都没有就不分组。
  */
-export function groupEntries<T extends { groupLabel: string | null }>(items: T[]) {
+export function entryYear(e: Pick<Entry, 'dateLabel' | 'publishedAt'>): string | null {
+  const m = /^\s*(\d{4})/.exec(e.dateLabel)
+  if (m) return m[1]!
+  return e.publishedAt ? String(e.publishedAt.getFullYear()) : null
+}
+
+/** 把一串条目按小标题分组，保持传入的顺序；相邻且小标题相同的归为一组 */
+export function groupEntries<T>(items: T[], labelOf: (item: T) => string | null) {
   const groups: { label: string | null; items: T[] }[] = []
   for (const item of items) {
+    const label = labelOf(item)
     const last = groups[groups.length - 1]
-    if (last && last.label === item.groupLabel) last.items.push(item)
-    else groups.push({ label: item.groupLabel, items: [item] })
+    if (last && last.label === label) last.items.push(item)
+    else groups.push({ label, items: [item] })
   }
   return groups
 }

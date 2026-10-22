@@ -1,12 +1,15 @@
 <script setup lang="ts">
-import { computed, toRef } from 'vue'
+import { computed, ref, toRef } from 'vue'
 import { api } from '@/api/client'
 import type { EntryKind } from '@/api/types'
 import { useAsyncData } from '@/composables/useAsyncData'
 import { useUi } from '@/composables/useUi'
-import { useHead } from '@/composables/useHead'
+import { textOf, useHead } from '@/composables/useHead'
 import { PATH_BY_KIND } from '@/router'
 import StateNote from '@/components/StateNote.vue'
+import ArticleToc from '@/components/ArticleToc.vue'
+import TwoCol from '@/components/TwoCol.vue'
+import { useArticleHeadings } from '@/composables/useArticleHeadings'
 
 const props = defineProps<{ kind: EntryKind; slug: string }>()
 
@@ -25,6 +28,13 @@ const metaLine = computed(() => {
 })
 const metaParts = computed(() => metaLine.value.split(/\s*·\s*/).filter(Boolean))
 
+/** 宽屏右栏的「本篇」信息：日期、栏目、主题，一行一项 */
+const sideMeta = computed(() => {
+  if (!data.value) return []
+  const section = [meta.value.label, meta.value.en].filter(Boolean).join(' · ')
+  return [data.value.dateFull || data.value.dateLabel, section, data.value.groupLabel].filter(Boolean) as string[]
+})
+
 /** 文末只显示一个方向：优先下一篇，没有就退回上一篇 */
 const sibling = computed(() => {
   if (!data.value) return null
@@ -33,7 +43,15 @@ const sibling = computed(() => {
   return null
 })
 
-useHead(() => ({ title: data.value?.title, description: data.value?.summary }))
+useHead(() => ({ title: data.value?.title, description: data.value?.summary || textOf(data.value?.bodyHtml) }))
+
+/** 正文里的小标题：补锚点、给宽屏右侧的目录用 */
+const bodyEl = ref<HTMLElement | null>(null)
+const { headings, activeId, goTo } = useArticleHeadings(
+  bodyEl,
+  computed(() => data.value?.bodyHtml),
+  computed(() => ui.value.article.anchorTitle),
+)
 </script>
 
 <template>
@@ -45,16 +63,18 @@ useHead(() => ({ title: data.value?.title, description: data.value?.summary }))
 
   <StateNote :loading="loading" :error="error" />
 
-  <template v-if="data">
-    <h1 class="page-title">{{ data.title }}</h1>
-    <p class="article-meta">
+  <TwoCol v-if="data">
+    <!-- article-title 带着换页过渡名：从列表点进来时，那一行的标题会变形成这里的大标题 -->
+    <h1 class="page-title article-title">{{ data.title }}</h1>
+    <!-- 日期这一行：宽屏挪到右栏 -->
+    <p class="article-meta only-narrow">
       <template v-for="(part, i) in metaParts" :key="i">
         <span v-if="i > 0" class="sep">·</span>{{ part }}
       </template>
     </p>
 
     <!-- eslint-disable-next-line vue/no-v-html -- 正文由后端 markdown-it 渲染，只有本人能写 -->
-    <div class="article-body" v-html="data.bodyHtml"></div>
+    <div ref="bodyEl" class="article-body" v-html="data.bodyHtml"></div>
 
     <div class="article-end">{{ ui.article.endMark }}</div>
 
@@ -64,5 +84,12 @@ useHead(() => ({ title: data.value?.title, description: data.value?.summary }))
         {{ sibling.prefix }}{{ sibling.entry.title }} {{ ui.article.linkSuffix }}
       </RouterLink>
     </nav>
-  </template>
+
+    <template #aside>
+      <ul class="side-meta">
+        <li v-for="line in sideMeta" :key="line">{{ line }}</li>
+      </ul>
+      <ArticleToc class="side-block" :headings="headings" :active-id="activeId" :label="ui.article.tocLabel" @go="goTo" />
+    </template>
+  </TwoCol>
 </template>

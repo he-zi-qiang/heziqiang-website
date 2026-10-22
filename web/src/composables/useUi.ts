@@ -22,9 +22,12 @@ const FALLBACK: UiDoc = {
     nextPrefix: '下一篇：',
     prevPrefix: '上一篇：',
     linkSuffix: '→',
+    tocLabel: '目录 · Contents',
+    anchorTitle: '复制这一节的链接',
   },
   cv: { printLabel: '打印 / 存为 PDF' },
   photos: { emptySlot: '待补图' },
+  list: { yearsLabel: '年份 · Years', countUnit: '篇' },
   states: {
     loading: '正在取内容…',
     loadFailed: '加载失败',

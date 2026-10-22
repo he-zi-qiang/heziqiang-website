@@ -114,7 +114,7 @@ useHead(() => ({ title: '内容' }))
           </RouterLink>
           <div class="t-sub">
             {{ entry.bodyMd ? '有正文' : '仅列表' }} · {{ entry.slug }}
-            <template v-if="entry.groupLabel"> · 分组 {{ entry.groupLabel }}</template>
+            <template v-if="entry.groupLabel"> · 主题 {{ entry.groupLabel }}</template>
           </div>
         </td>
         <td style="color: var(--faint); font-size: 13px">{{ entry.dateLabel }}</td>

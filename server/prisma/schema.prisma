@@ -36,7 +36,8 @@ model Entry {
   dateLabel   String
   /// 内页 meta 里的完整日期：「2026 年 5 月」。留空则回退到 dateLabel
   dateFull    String?
-  /// 列表里的分组小标题（year-mark）：「2026」「在读」。留空则不分组
+  /// 主题：显示在列表日期下面的一小行，如「vibe coding」「保研」。
+  /// （列表的年份小标题由 dateLabel 开头的年份自动生成，不再读这个字段）
   groupLabel  String?
   /// 列表摘要（e-note）
   summary     String    @default("")

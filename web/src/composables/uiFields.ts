@@ -45,6 +45,8 @@ export const UI_GROUPS: UiGroup[] = [
       { path: 'article.nextPrefix', label: '下一篇的前缀' },
       { path: 'article.prevPrefix', label: '上一篇的前缀', hint: '没有下一篇时才会用到' },
       { path: 'article.linkSuffix', label: '前后篇链接的后缀箭头' },
+      { path: 'article.tocLabel', label: '长文目录的小标题', hint: '屏幕够宽、文章有两个以上小标题时，显示在正文右侧' },
+      { path: 'article.anchorTitle', label: '小标题旁「#」的提示', hint: '鼠标停在「#」上时显示，点一下复制这一节的链接' },
     ],
   },
   {
@@ -52,6 +54,13 @@ export const UI_GROUPS: UiGroup[] = [
     fields: [
       { path: 'cv.printLabel', label: '简历页的打印链接' },
       { path: 'photos.emptySlot', label: '照片还没传时格子里的字' },
+    ],
+  },
+  {
+    title: '列表页',
+    fields: [
+      { path: 'list.yearsLabel', label: '右栏的年份小标题', hint: '只在宽屏显示，下面列出各年份和条数' },
+      { path: 'list.countUnit', label: '年份后面条数的单位', hint: '如「10 篇」里的「篇」' },
     ],
   },
   {

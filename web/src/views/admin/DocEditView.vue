@@ -6,6 +6,7 @@ import { useHead } from '@/composables/useHead'
 import { useSite } from '@/composables/useSite'
 import { UI_GROUPS, getPath, setPath } from '@/composables/uiFields'
 import NavRowsEditor from '@/components/NavRowsEditor.vue'
+import ImagePicker from '@/components/ImagePicker.vue'
 
 const props = defineProps<{ docKey: string }>()
 
@@ -142,6 +143,11 @@ useHead(() => ({ title: `单页 · ${label.value}` }))
           <label>近况正文</label>
           <textarea v-model="home[key].now" rows="3" style="font-family: var(--serif); font-size: 14.5px" />
         </div>
+        <div class="field">
+          <label>「最近」小标题</label>
+          <input v-model="home[key].recentLabel" type="text" />
+          <span class="hint">下面自动列出这一侧最近发布的 3 篇；一篇都没有时整块不显示。</span>
+        </div>
       </div>
     </template>
 
@@ -186,6 +192,13 @@ useHead(() => ({ title: `单页 · ${label.value}` }))
         <div class="field"><label>页面标题</label><input v-model="cv.title" type="text" /></div>
         <div class="field"><label>副标题</label><input v-model="cv.subtitle" type="text" /></div>
       </div>
+      <div class="field">
+        <label>标题下的身份一行</label>
+        <textarea v-model="cv.intro" rows="2" />
+        <span class="hint">姓名 · 学校 · 专业这类信息。打印时页眉会隐藏，这一行就是简历上的抬头；留空则不显示。</span>
+      </div>
+      <ImagePicker v-model="cv.portrait" label="证件照 / 形象照（可选）"
+                   hint="显示在标题右侧，打印时一并带上。留空则不显示。" />
       <div v-for="(section, si) in cv.sections" :key="si" class="section-block">
         <h3>
           <input v-model="section.label" type="text"
@@ -279,11 +292,8 @@ useHead(() => ({ title: `单页 · ${label.value}` }))
         <div class="field"><label>页脚左</label><input v-model="site.footerLeft" type="text" /></div>
         <div class="field"><label>页脚右</label><input v-model="site.footerRight" type="text" /></div>
       </div>
-      <div class="field">
-        <label>头像地址</label>
-        <input v-model="site.avatar" type="text" />
-        <span class="hint">默认 /avatar.png；也可以填后台上传得到的 /uploads/... 地址。</span>
-      </div>
+      <ImagePicker v-model="site.avatar" label="页眉头像" round
+                   hint="页眉左上角那个小圆头像。默认 /avatar.png；也可以上传一张，或填 /uploads/... 地址。" />
     </template>
 
     <div class="btn-row">

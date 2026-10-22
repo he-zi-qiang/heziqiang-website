@@ -28,6 +28,7 @@ export function renderAboutDoc(d: AboutDocData) {
 export function renderCvDoc(d: CvDocData) {
   return {
     ...d,
+    introHtml: renderInline(d.intro),
     sections: d.sections.map((s) => ({
       ...s,
       rows: s.rows.map((r) => ({ ...r, vHtml: renderInline(r.v) })),

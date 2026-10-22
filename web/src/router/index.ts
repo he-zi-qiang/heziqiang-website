@@ -19,35 +19,29 @@ export const SECTION_BY_KIND: Record<EntryKind, 'pro' | 'personal'> = {
   learning: 'personal',
 }
 
-/** 列表栏目：有内页的（文章/项目/随笔）额外注册一条 :slug 路由 */
-const LIST_ROUTES: { kind: EntryKind; detail: boolean }[] = [
-  { kind: 'writing', detail: true },
-  { kind: 'project', detail: true },
-  { kind: 'essay', detail: true },
-  { kind: 'reading', detail: false },
-  { kind: 'learning', detail: false },
-]
-
-const listRoutes: RouteRecordRaw[] = LIST_ROUTES.flatMap(({ kind, detail }) => {
+/**
+ * 每个列表栏目一条列表路由 + 一条 :slug 内页路由。
+ * 哪条能点进去由后端决定（写了正文才有 href），任何栏目都可能有内页。
+ */
+const listRoutes: RouteRecordRaw[] = (Object.keys(PATH_BY_KIND) as EntryKind[]).flatMap((kind) => {
   const path = PATH_BY_KIND[kind]
+  const meta = { section: SECTION_BY_KIND[kind], layout: 'site' }
   const routes: RouteRecordRaw[] = [
     {
       path: `/${path}`,
       name: `list-${kind}`,
       component: () => import('@/views/EntryListView.vue'),
       props: { kind },
-      meta: { section: SECTION_BY_KIND[kind], layout: 'site' },
+      meta,
     },
-  ]
-  if (detail) {
-    routes.push({
+    {
       path: `/${path}/:slug`,
       name: `detail-${kind}`,
       component: () => import('@/views/EntryDetailView.vue'),
       props: (route) => ({ kind, slug: String(route.params.slug) }),
-      meta: { section: SECTION_BY_KIND[kind], layout: 'site' },
-    })
-  }
+      meta,
+    },
+  ]
   return routes
 })
 
@@ -144,7 +138,8 @@ export const router = createRouter({
   routes,
   scrollBehavior(to, from, saved) {
     if (saved) return saved
-    if (to.hash) return { el: to.hash, behavior: 'smooth' }
+    // 小标题留一点上边距，不要贴着视口顶
+    if (to.hash) return { el: to.hash, top: 24, behavior: 'smooth' }
     return { top: 0 }
   },
 })
