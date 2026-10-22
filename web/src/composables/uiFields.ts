@@ -57,6 +57,13 @@ export const UI_GROUPS: UiGroup[] = [
     ],
   },
   {
+    title: '列表页',
+    fields: [
+      { path: 'list.yearsLabel', label: '右栏的年份小标题', hint: '只在宽屏显示，下面列出各年份和条数' },
+      { path: 'list.countUnit', label: '年份后面条数的单位', hint: '如「10 篇」里的「篇」' },
+    ],
+  },
+  {
     title: '状态提示',
     hint: '取数据、出错、没内容时给访客看的话。后端的原始报错不会显示在页面上。',
     fields: [

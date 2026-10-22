@@ -24,16 +24,32 @@
   --fs-meta: 13px;    /* 日期、面包屑、页脚、目录 */
   --fs-small: 14.5px; /* 摘要、注释 */
   --fs-ui: 16px;      /* 索引、简历行、最近 */
+  --fs-quote: 16px;   /* 引用 */
   --fs-body: 17px;    /* 正文 */
   --fs-h3: 18px;
+  --fs-entry: 19px;   /* 列表里的条目标题 */
   --fs-h2: 22px;
   --fs-lede: 26px;    /* 首页引言 */
   --fs-title: 34px;   /* 页面大标题 */
 
-  /* 版心：正文一栏的阅读宽度，和宽屏下整个页面的宽度 */
+  /* 版心：正文一栏的阅读宽度；宽屏下整个页面的宽度，和左右两栏之间的间隔 */
   --measure: 600px;
   --wide: 960px;
+  --aside-gap: 64px;
+
+  /* 左侧元信息栏：首页「最近」、列表页的日期，和简历、关于页的键，都用这一栏。
+     第二栏在每一页都从同一条竖线开始，换页时不会忽左忽右 */
+  --meta-col: 104px;
+  --meta-gap: 24px;
+
+  /* 间距只用这几档 */
+  --space-xs: 16px;
+  --space-s: 24px;
+  --space-m: 40px;
+  --space-l: 64px;
+  --space-xl: 96px;
 }
+
 
 html[data-theme="dark"] {
   --paper: #211E19 !important;
@@ -155,13 +171,85 @@ a { color: inherit; text-decoration: none; }
 
 main { flex: 1; }
 
-/* 宽屏：页面放宽到 960，页眉页脚铺满；正文一栏（首页也是）仍是 600 的阅读宽度、靠左，
-   右边留出的那条空白给文章目录。页眉、正文左缘、页脚在每一页都对齐，换页时不会左右跳 */
+/* ---------- 宽屏：左正文 + 右侧栏（TwoCol 组件） ----------
+   页面放宽到 960，左栏是 600 的阅读宽度，右栏放这一页相关的内容；页眉、两栏、页脚左右对齐。
+   窄屏右栏不显示，放进右栏的内容在正文里有一份 .only-narrow 的原位版本 */
+
+.two-col > .side-col { display: none; }
+.main-col { min-width: 0; }
+
 @media (min-width: 1080px) {
   .page { max-width: calc(var(--wide) + 48px); }
-  main { width: 100%; max-width: var(--measure); }
-  .page.is-wide main { max-width: none; }
+
+  .two-col {
+    display: grid;
+    grid-template-columns: var(--measure) minmax(0, 1fr);
+    column-gap: var(--aside-gap);
+  }
+  .two-col > .side-col { display: block; }
+  .only-narrow { display: none !important; }
+
+  /* 挪走了标题下的那一行（文章日期、栏目简介、证件照）之后，补上原来的留白 */
+  .article-title { margin-bottom: var(--space-l); }
+  .two-col .list-body { margin-top: var(--space-m); }
+  .cv-head.has-portrait { grid-template-columns: 1fr; }
 }
+
+/* 右栏：字小一档、颜色退一步，随滚动停在视口上方 */
+.side-inner {
+  position: sticky;
+  top: var(--space-l);
+  max-height: calc(100vh - 2 * var(--space-l));
+  overflow-y: auto;
+  font-size: var(--fs-small);
+  line-height: 1.8;
+  color: var(--muted);
+}
+.side-block { margin-top: var(--space-m); }
+
+.side-intro {
+  margin: 0;
+  font-size: var(--fs-ui);
+  line-height: 1.85;
+  text-wrap: pretty;
+}
+
+.side-years a {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 9px 0;
+  border-top: 1px solid var(--line);
+  color: var(--body-ink);
+  font-variant-numeric: tabular-nums;
+  transition: color 0.2s ease;
+}
+.side-years a:last-child { border-bottom: 1px solid var(--line); }
+.side-years a:hover { color: var(--accent); }
+.side-years .count { font-size: var(--fs-meta); color: var(--faint); }
+
+.side-meta {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-size: var(--fs-meta);
+  letter-spacing: 0.04em;
+  line-height: 2;
+}
+.side-meta li:first-child { color: var(--body-ink); }
+
+.side-portrait { width: 152px; margin: 0; }
+
+/* 右栏里的键值行：键在上、值在下，比正文里的紧凑 */
+.def-list.compact { margin: 0; }
+.def-list.compact .def-row {
+  grid-template-columns: 1fr;
+  gap: 2px;
+  padding: 12px 0;
+  font-size: var(--fs-small);
+  line-height: 1.75;
+}
+.def-list.compact .def-row .k { padding-top: 0; }
 
 /* ---------- 页眉 ---------- */
 
@@ -169,7 +257,7 @@ main { flex: 1; }
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 88px;
+  margin-bottom: var(--space-xl);
 }
 
 .site-id {
@@ -187,7 +275,7 @@ main { flex: 1; }
 }
 
 .site-id .name {
-  font-size: 16px;
+  font-size: var(--fs-ui);
   font-weight: 600;
   letter-spacing: 0.05em;
 }
@@ -255,7 +343,7 @@ html[data-theme="dark"] .theme-btn { transform: rotate(180deg); }
 /* ---------- 通用排印 ---------- */
 
 .smallcaps {
-  font-size: 12px;
+  font-size: var(--fs-label);
   letter-spacing: 0.15em;
   text-transform: uppercase;
   color: var(--muted);
@@ -263,10 +351,10 @@ html[data-theme="dark"] .theme-btn { transform: rotate(180deg); }
 }
 
 .crumb {
-  font-size: 13px;
+  font-size: var(--fs-meta);
   letter-spacing: 0.03em;
   color: var(--muted);
-  margin-bottom: 40px;
+  margin-bottom: var(--space-m);
 }
 .crumb a, .article-next a {
   background-image: linear-gradient(currentColor, currentColor);
@@ -294,13 +382,13 @@ html[data-theme="dark"] .theme-btn { transform: rotate(180deg); }
   font-size: var(--fs-ui);
   line-height: 1.85;
   color: var(--muted);
-  margin: 0 0 72px;
+  margin: 0 0 var(--space-l);
   max-width: 34em;
   text-wrap: pretty;
 }
 
 .section-label {
-  margin: 0 0 20px;
+  margin: 0 0 var(--space-xs);
 }
 
 /* ---------- 首页 ---------- */
@@ -309,7 +397,7 @@ html[data-theme="dark"] .theme-btn { transform: rotate(180deg); }
   font-size: var(--fs-lede);
   line-height: 1.6;
   font-weight: 400;
-  margin: 0 0 68px;
+  margin: 0 0 var(--space-l);
   text-wrap: pretty;
 }
 .lede em { font-style: normal; color: var(--accent); }
@@ -318,27 +406,27 @@ html[data-theme="dark"] .theme-btn { transform: rotate(180deg); }
   font-size: var(--fs-body);
   line-height: 1.85;
   color: var(--body-ink);
-  margin: 0 0 68px;
+  margin: 0 0 var(--space-l);
   text-wrap: pretty;
 }
 
 /* 「最近」：比下面的索引轻一档——不画分隔线，只是几行带日期的标题 */
 .recent {
   list-style: none;
-  margin: 0 0 68px;
+  margin: 0 0 var(--space-l);
   padding: 0;
 }
 .recent a {
   display: grid;
-  grid-template-columns: 88px 1fr auto;
-  gap: 0 20px;
+  grid-template-columns: var(--meta-col) 1fr auto;
+  gap: 0 var(--meta-gap);
   align-items: baseline;
   padding: 6px 0;
-  font-size: 16px;
+  font-size: var(--fs-ui);
   line-height: 1.75;
 }
 .recent .date {
-  font-size: 13px;
+  font-size: var(--fs-meta);
   color: var(--faint);
   letter-spacing: 0.06em;
   font-variant-numeric: tabular-nums;
@@ -361,9 +449,9 @@ html[data-theme="dark"] .theme-btn { transform: rotate(180deg); }
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  padding: 17px 2px;
+  padding: 17px 0;
   border-top: 1px solid var(--line);
-  font-size: 16px;
+  font-size: var(--fs-ui);
   transition: color 0.15s ease;
 }
 .index-row > span:first-child {
@@ -385,15 +473,15 @@ html[data-theme="dark"] .theme-btn { transform: rotate(180deg); }
 
 .entry {
   display: grid;
-  grid-template-columns: 104px 1fr;
-  gap: 28px;
-  padding: 26px 0;
+  grid-template-columns: var(--meta-col) 1fr;
+  gap: var(--meta-gap);
+  padding: var(--space-s) 0;
   border-top: 1px solid var(--line);
 }
 .entry:last-child { border-bottom: 1px solid var(--line); }
 
 .entry .date {
-  font-size: 13px;
+  font-size: var(--fs-meta);
   color: var(--faint);
   letter-spacing: 0.06em;
   padding-top: 5px;
@@ -401,7 +489,7 @@ html[data-theme="dark"] .theme-btn { transform: rotate(180deg); }
 }
 
 .entry .e-title {
-  font-size: 19px;
+  font-size: var(--fs-entry);
   font-weight: 500;
   line-height: 1.5;
   margin: 0 0 8px;
@@ -432,7 +520,7 @@ a.entry:focus-visible .e-arrow { opacity: 1; transform: none; }
 }
 
 .entry .e-note {
-  font-size: 14.5px;
+  font-size: var(--fs-small);
   line-height: 1.8;
   color: var(--muted);
   margin: 0;
@@ -448,9 +536,9 @@ a.entry:focus-visible .e-arrow { opacity: 1; transform: none; }
 
 /* 年份小标题：组与组之间留出呼吸，紧跟页面副标题的第一个不用再空 */
 .year-mark {
-  margin: 56px 0 6px;
+  margin: var(--space-l) 0 6px;
 }
-.page-sub + .year-mark { margin-top: 0; }
+.list-body > .year-mark:first-child { margin-top: 0; }
 
 /* 条目的主题（后台的「主题」字段），挂在日期下面 */
 .entry .topic {
@@ -468,14 +556,15 @@ a.entry:focus-visible .e-arrow { opacity: 1; transform: none; }
   font-size: var(--fs-meta);
   color: var(--muted);
   letter-spacing: 0.04em;
-  margin: 0 0 64px;
+  margin: 0 0 var(--space-l);
 }
 .article-meta .sep { margin: 0 10px; color: var(--faint); }
 
-.article-body { max-width: 38em; }
+/* 正文宽度跟着版心走：大屏版心放宽后，正文右缘也要和页眉对齐 */
+.article-body { max-width: 100%; }
 
 .article-body p {
-  font-size: 17px;
+  font-size: var(--fs-body);
   line-height: 1.95;
   color: var(--body-ink);
   margin: 0 0 1.9em;
@@ -496,7 +585,7 @@ a.entry:focus-visible .e-arrow { opacity: 1; transform: none; }
   margin: 2.2em 0;
   padding: 0.1em 0 0.1em 1.3em;
   border-left: 2px solid var(--line);
-  font-size: 16px;
+  font-size: var(--fs-quote);
   line-height: 1.95;
   color: var(--quote);
 }
@@ -617,25 +706,7 @@ html[data-theme="dark"] .article-body img { filter: brightness(0.9); }
 .article-body a.heading-anchor:focus-visible { opacity: 1; }
 .article-body a.heading-anchor:hover { color: var(--accent); }
 
-/* 目录挂在正文右侧的空白里：正文那一栏的外沿再往右 56px，随滚动停在视口上方 */
-.article-wrap { position: relative; }
-.toc { display: none; }
-@media (min-width: 1080px) {
-  .toc {
-    display: block;
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: calc(100% + 56px);
-    width: 216px;
-  }
-  .toc-inner {
-    position: sticky;
-    top: 96px;
-    max-height: calc(100vh - 140px);
-    overflow-y: auto;
-  }
-}
+/* 目录：住在宽屏右栏里（右栏自己负责吸顶） */
 .toc-label { margin: 0 0 14px; }
 .toc ol { list-style: none; margin: 0; padding: 0; border-left: 1px solid var(--line); }
 .toc li { margin: 0; }
@@ -655,7 +726,7 @@ html[data-theme="dark"] .article-body img { filter: brightness(0.9); }
 .toc li.on a { color: var(--ink); border-left-color: var(--accent); }
 
 .article-end {
-  margin: 80px 0 0;
+  margin: var(--space-l) 0 0;
   color: var(--faint);
   font-size: 14px;
   letter-spacing: 0.6em;
@@ -663,8 +734,8 @@ html[data-theme="dark"] .article-body img { filter: brightness(0.9); }
 }
 
 .article-next {
-  margin-top: 56px;
-  padding-top: 24px;
+  margin-top: var(--space-l);
+  padding-top: var(--space-s);
   border-top: 1px solid var(--line);
   display: flex;
   justify-content: space-between;
@@ -675,12 +746,12 @@ html[data-theme="dark"] .article-body img { filter: brightness(0.9); }
 
 /* ---------- 定义式行（简历 / 关于） ---------- */
 
-.def-list { margin: 0 0 64px; }
+.def-list { margin: 0 0 var(--space-l); }
 
 .def-row {
   display: grid;
-  grid-template-columns: 130px 1fr;
-  gap: 24px;
+  grid-template-columns: var(--meta-col) 1fr;
+  gap: var(--meta-gap);
   padding: 16px 0;
   border-top: 1px solid var(--line);
   font-size: var(--fs-ui);
@@ -696,8 +767,8 @@ html[data-theme="dark"] .article-body img { filter: brightness(0.9); }
 /* ---------- 页脚 ---------- */
 
 .site-foot {
-  margin-top: 120px;
-  padding: 28px 0 40px;
+  margin-top: var(--space-xl);
+  padding: var(--space-s) 0 var(--space-m);
   border-top: 1px solid var(--line);
   display: flex;
   justify-content: space-between;
@@ -723,7 +794,7 @@ html[data-theme="dark"] .article-body img { filter: brightness(0.9); }
   /* 页眉在窄屏折成两行：上行是身份，下行是切换。
      不折的话站名会被挤成三行、深浅色按钮还会被推出屏幕外。 */
   .site-head {
-    margin-bottom: 56px;
+    margin-bottom: var(--space-l);
     flex-wrap: wrap;
     gap: 18px;
   }
@@ -812,7 +883,7 @@ html[data-theme="dark"] .portrait img { filter: saturate(0.8) brightness(0.86); 
   font-size: var(--fs-ui);
   line-height: 1.9;
   color: var(--body-ink);
-  margin: 0 0 72px;
+  margin: 0 0 var(--space-l);
   max-width: 34em;
   text-wrap: pretty;
 }
@@ -821,7 +892,7 @@ html[data-theme="dark"] .portrait img { filter: saturate(0.8) brightness(0.86); 
 
 /* 简历行里的要点列表：比正文小半档，圆点用淡色 */
 .def-row .v ul { margin: 10px 0 2px; padding-left: 1.15em; }
-.def-row .v li { font-size: 14.5px; line-height: 1.85; margin: 0 0 6px; text-wrap: pretty; }
+.def-row .v li { font-size: var(--fs-small); line-height: 1.85; margin: 0 0 6px; text-wrap: pretty; }
 .def-row .v li:last-child { margin-bottom: 0; }
 .def-row .v li::marker { color: var(--faint); }
 .def-row .v strong { font-weight: 600; color: var(--ink); }
@@ -837,7 +908,7 @@ html[data-theme="dark"] .portrait img { filter: saturate(0.8) brightness(0.86); 
 .article-body ol {
   margin: 0 0 1.9em;
   padding-left: 1.4em;
-  font-size: 17px;
+  font-size: var(--fs-body);
   line-height: 1.95;
   color: var(--body-ink);
 }

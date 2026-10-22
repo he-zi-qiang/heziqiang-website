@@ -184,6 +184,7 @@ export interface UiDoc {
   }
   cv: { printLabel: string }
   photos: { emptySlot: string }
+  list: { yearsLabel: string; countUnit: string }
   states: {
     loading: string
     loadFailed: string

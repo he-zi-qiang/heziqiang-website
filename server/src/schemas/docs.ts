@@ -131,6 +131,10 @@ export const uiDocSchema = z.object({
   }),
   cv: z.object({ printLabel: z.string() }),
   photos: z.object({ emptySlot: z.string() }),
+  /** 宽屏下列表页右栏：年份小标题，和年份后面条数的单位 */
+  list: z
+    .object({ yearsLabel: z.string().default('年份 · Years'), countUnit: z.string().default('篇') })
+    .default({}),
   states: z.object({
     loading: z.string(),
     loadFailed: z.string(),

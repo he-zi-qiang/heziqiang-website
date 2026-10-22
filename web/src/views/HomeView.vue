@@ -8,6 +8,7 @@ import { useUi } from '@/composables/useUi'
 import { useHead } from '@/composables/useHead'
 import { PATH_BY_KIND } from '@/router'
 import StateNote from '@/components/StateNote.vue'
+import TwoCol from '@/components/TwoCol.vue'
 
 const route = useRoute()
 const { mode, setMode } = useMode()
@@ -49,7 +50,7 @@ useHead(() => ({ title: null, description: bootstrap.value?.site?.description })
 <template>
   <StateNote :loading="!home && !error" :error="error" />
 
-  <section v-if="side" :key="mode" class="mode-enter">
+  <TwoCol v-if="side" :key="mode" class="mode-enter">
     <!-- eslint-disable-next-line vue/no-v-html -- 只有本人后台能写 -->
     <p class="lede" v-html="side.ledeHtml"></p>
 
@@ -70,10 +71,19 @@ useHead(() => ({ title: null, description: bootstrap.value?.site?.description })
       </ul>
     </template>
 
-    <nav class="index-nav">
+    <!-- 索引：宽屏在右栏，窄屏留在正文最后 -->
+    <nav class="index-nav only-narrow">
       <RouterLink v-for="row in rows" :key="row.to" class="index-row" :to="row.to">
         <span>{{ row.zh }}</span><span class="en">{{ row.en }}</span>
       </RouterLink>
     </nav>
-  </section>
+
+    <template #aside>
+      <nav class="index-nav">
+        <RouterLink v-for="row in rows" :key="row.to" class="index-row" :to="row.to">
+          <span>{{ row.zh }}</span><span class="en">{{ row.en }}</span>
+        </RouterLink>
+      </nav>
+    </template>
+  </TwoCol>
 </template>
