@@ -143,6 +143,11 @@ useHead(() => ({ title: `单页 · ${label.value}` }))
           <label>近况正文</label>
           <textarea v-model="home[key].now" rows="3" style="font-family: var(--serif); font-size: 14.5px" />
         </div>
+        <div class="field">
+          <label>「最近」小标题</label>
+          <input v-model="home[key].recentLabel" type="text" />
+          <span class="hint">下面自动列出这一侧最近发布的 3 篇；一篇都没有时整块不显示。</span>
+        </div>
       </div>
     </template>
 

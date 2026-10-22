@@ -1,12 +1,14 @@
 <script setup lang="ts">
-import { computed, toRef } from 'vue'
+import { computed, ref, toRef } from 'vue'
 import { api } from '@/api/client'
 import type { EntryKind } from '@/api/types'
 import { useAsyncData } from '@/composables/useAsyncData'
 import { useUi } from '@/composables/useUi'
-import { useHead } from '@/composables/useHead'
+import { textOf, useHead } from '@/composables/useHead'
 import { PATH_BY_KIND } from '@/router'
 import StateNote from '@/components/StateNote.vue'
+import ArticleToc from '@/components/ArticleToc.vue'
+import { useArticleHeadings } from '@/composables/useArticleHeadings'
 
 const props = defineProps<{ kind: EntryKind; slug: string }>()
 
@@ -33,7 +35,15 @@ const sibling = computed(() => {
   return null
 })
 
-useHead(() => ({ title: data.value?.title, description: data.value?.summary }))
+useHead(() => ({ title: data.value?.title, description: data.value?.summary || textOf(data.value?.bodyHtml) }))
+
+/** 正文里的小标题：补锚点、给宽屏右侧的目录用 */
+const bodyEl = ref<HTMLElement | null>(null)
+const { headings, activeId, goTo } = useArticleHeadings(
+  bodyEl,
+  computed(() => data.value?.bodyHtml),
+  computed(() => ui.value.article.anchorTitle),
+)
 </script>
 
 <template>
@@ -53,8 +63,11 @@ useHead(() => ({ title: data.value?.title, description: data.value?.summary }))
       </template>
     </p>
 
-    <!-- eslint-disable-next-line vue/no-v-html -- 正文由后端 markdown-it 渲染，只有本人能写 -->
-    <div class="article-body" v-html="data.bodyHtml"></div>
+    <div class="article-wrap">
+      <!-- eslint-disable-next-line vue/no-v-html -- 正文由后端 markdown-it 渲染，只有本人能写 -->
+      <div ref="bodyEl" class="article-body" v-html="data.bodyHtml"></div>
+      <ArticleToc :headings="headings" :active-id="activeId" :label="ui.article.tocLabel" @go="goTo" />
+    </div>
 
     <div class="article-end">{{ ui.article.endMark }}</div>
 

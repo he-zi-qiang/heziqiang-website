@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { useMode, type Mode } from '@/composables/useMode'
 import { useTheme, runWithTransition } from '@/composables/useTheme'
 import { useSite } from '@/composables/useSite'
 import { useUi } from '@/composables/useUi'
 
 const route = useRoute()
+const router = useRouter()
 const { mode, setMode } = useMode()
 const { isDark, toggle } = useTheme()
 const { bootstrap } = useSite()
@@ -29,6 +30,8 @@ const themeTitle = computed(() => (isDark.value ? ui.value.header.toLight : ui.v
 function switchTo(next: Mode) {
   if (mode.value === next) return
   runWithTransition(() => setMode(next))
+  // 地址栏里残留的 ?mode= 会和刚切的那一侧打架（刷新又切回去），切换后去掉它，交给本地记忆
+  if (route.query.mode) void router.replace({ query: {} })
 }
 </script>
 
@@ -43,10 +46,10 @@ function switchTo(next: Mode) {
     <div class="head-right">
       <!-- 首页是就地切换的开关；其余页面是回首页的链接 -->
       <nav v-if="isHome" class="mode-toggle" :aria-label="ui.header.switchAria">
-        <span :class="{ on: active === 'pro' }" role="button" tabindex="0"
-              @click="switchTo('pro')" @keydown.enter="switchTo('pro')">{{ ui.header.proLabel }}</span>
-        <span :class="{ on: active === 'personal' }" role="button" tabindex="0"
-              @click="switchTo('personal')" @keydown.enter="switchTo('personal')">{{ ui.header.personalLabel }}</span>
+        <button type="button" :class="{ on: active === 'pro' }" :aria-pressed="active === 'pro'"
+                @click="switchTo('pro')">{{ ui.header.proLabel }}</button>
+        <button type="button" :class="{ on: active === 'personal' }" :aria-pressed="active === 'personal'"
+                @click="switchTo('personal')">{{ ui.header.personalLabel }}</button>
       </nav>
       <nav v-else class="mode-toggle" :aria-label="ui.header.switchAria">
         <RouterLink :class="{ on: active === 'pro' }" :to="{ name: 'home', query: { mode: 'pro' } }">

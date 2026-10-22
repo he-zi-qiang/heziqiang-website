@@ -10,8 +10,10 @@
   --paper-deep: #F1EBDD;
   --ink: #2C2820;
   --body-ink: #4A443A;
-  --muted: #8A8174;
-  --faint: #B5AC9C;
+  /* 两档次要文字：muted 用于正文旁的说明，对比度 4.5:1（WCAG AA）；
+     faint 用于日期、页脚这类最弱的信息，3:1。再浅就要在手机和阳光下看不清了 */
+  --muted: #7A7164;
+  --faint: #988F80;
   --line: #E8E1D2;
   --accent: #9C4226;
   --quote: #6B6354;
@@ -41,6 +43,8 @@ html[data-theme="dark"] {
   }
   main { animation-delay: 0.05s; }
   .site-foot { animation-delay: 0.1s; }
+  /* 站内跳转时数据多半已经在手上了，换页要干脆：进站那一下慢慢浮起，之后快一些 */
+  .page.is-navigated main { animation-duration: 0.3s; animation-delay: 0s; }
 
   /* 首页双身份切换：新内容淡入上浮 */
   .mode-enter { animation: hz-enter 0.4s cubic-bezier(0.22, 1, 0.36, 1) both; }
@@ -66,11 +70,20 @@ body {
   font-family: var(--serif);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+  /* 中文与英文、数字之间自动留出一点空隙（「有些nervous」→「有些 nervous」）；不支持的浏览器照旧 */
+  text-autospace: normal;
 }
 
 a { color: inherit; text-decoration: none; }
 
 ::selection { background: var(--paper-deep); color: var(--accent); }
+
+/* 键盘操作时的焦点：一圈细细的赭石色，鼠标点击不出现 */
+:focus-visible {
+  outline: 1.5px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
 
 /* ---------- 版心 ---------- */
 
@@ -122,13 +135,19 @@ main { flex: 1; }
   text-transform: uppercase;
 }
 
-.mode-toggle a, .mode-toggle span {
+.mode-toggle a, .mode-toggle button {
   color: var(--faint);
-  padding-bottom: 4px;
+  padding: 0 0 4px;
+  border: 0;
   border-bottom: 1px solid transparent;
+  background: none;
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
   cursor: pointer;
   transition: color 0.2s ease, border-bottom-color 0.25s ease;
 }
+.mode-toggle :is(a, button):not(.on):hover { color: var(--muted); }
 
 .mode-toggle .on {
   color: var(--ink);
@@ -188,6 +207,8 @@ html[data-theme="dark"] .theme-btn { transform: rotate(180deg); }
   letter-spacing: 0.02em;
   line-height: 1.6;
   margin: 0 0 14px;
+  /* 长标题两行尽量等长，不在第二行剩一个孤字 */
+  text-wrap: balance;
 }
 
 .page-sub {
@@ -220,6 +241,39 @@ html[data-theme="dark"] .theme-btn { transform: rotate(180deg); }
   color: var(--body-ink);
   margin: 0 0 68px;
   text-wrap: pretty;
+}
+
+/* 「最近」：比下面的索引轻一档——不画分隔线，只是几行带日期的标题 */
+.recent {
+  list-style: none;
+  margin: 0 0 68px;
+  padding: 0;
+}
+.recent a {
+  display: grid;
+  grid-template-columns: 88px 1fr auto;
+  gap: 0 20px;
+  align-items: baseline;
+  padding: 6px 0;
+  font-size: 16px;
+  line-height: 1.75;
+}
+.recent .date {
+  font-size: 13px;
+  color: var(--faint);
+  letter-spacing: 0.06em;
+  font-variant-numeric: tabular-nums;
+}
+.recent .r-title {
+  color: var(--body-ink);
+  text-wrap: pretty;
+  transition: color 0.2s ease;
+}
+.recent a:hover .r-title { color: var(--accent); }
+.recent .r-kind {
+  font-size: 12.5px;
+  letter-spacing: 0.08em;
+  color: var(--faint);
 }
 
 .index-nav { display: flex; flex-direction: column; }
@@ -300,10 +354,21 @@ a.entry:hover .e-title { color: var(--accent); }
   font-size: 15.5px;
 }
 
+/* 年份小标题：组与组之间留出呼吸，紧跟页面副标题的第一个不用再空 */
 .year-mark {
   margin: 56px 0 6px;
 }
-.entry-list + .year-mark, .year-mark:first-of-type { margin-top: 0; }
+.page-sub + .year-mark { margin-top: 0; }
+
+/* 条目的主题（后台的「主题」字段），挂在日期下面 */
+.entry .topic {
+  display: block;
+  margin-top: 4px;
+  font-size: 12.5px;
+  letter-spacing: 0.04em;
+  line-height: 1.6;
+  color: var(--muted);
+}
 
 /* ---------- 文章 / 内页 ---------- */
 
@@ -330,14 +395,93 @@ a.entry:hover .e-title { color: var(--accent); }
   font-weight: 600;
   letter-spacing: 0.05em;
   margin: 3.2em 0 1.4em;
+  text-wrap: balance;
 }
 
+/* 引用：左边一道细线，字小半档、颜色退一步。里面的段落沿用引用的字号和颜色 */
 .article-body blockquote {
-  margin: 2.6em 1.5em;
-  padding: 0;
+  margin: 2.2em 0;
+  padding: 0.1em 0 0.1em 1.3em;
+  border-left: 2px solid var(--line);
   font-size: 16px;
   line-height: 1.95;
   color: var(--quote);
+}
+.article-body blockquote p { font-size: inherit; line-height: inherit; color: inherit; margin: 0 0 1em; }
+.article-body blockquote p:last-child { margin-bottom: 0; }
+
+.article-body h3 {
+  font-size: 17.5px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  margin: 2.6em 0 1em;
+  text-wrap: balance;
+}
+
+/* 正文里的链接：细下划线，悬停变赭石色。全站 a 默认不带样式，正文里必须看得出来 */
+.article-body a {
+  color: var(--ink);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-decoration-color: var(--faint);
+  text-underline-offset: 0.28em;
+  transition: color 0.2s ease, text-decoration-color 0.2s ease;
+}
+.article-body a:hover { color: var(--accent); text-decoration-color: currentColor; }
+
+/* 图片：不超出版心，单独一段的图片上下多留些白 */
+.article-body img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 0 auto;
+  border-radius: 3px;
+}
+.article-body p:has(> img:only-child) { margin: 2.4em 0; }
+.article-body figure { margin: 2.4em 0; }
+.article-body figcaption {
+  margin-top: 0.9em;
+  font-size: 13.5px;
+  line-height: 1.8;
+  color: var(--muted);
+  text-align: center;
+}
+html[data-theme="dark"] .article-body img { filter: brightness(0.9); }
+
+/* 代码块：整块浅底、可横向滚动；里面的 code 不再套行内代码的底色 */
+.article-body pre {
+  margin: 0 0 1.9em;
+  padding: 16px 20px;
+  background: var(--paper-deep);
+  border-radius: 4px;
+  overflow-x: auto;
+  font-size: 13.5px;
+  line-height: 1.75;
+  tab-size: 2;
+}
+.article-body pre code {
+  font-size: 1em;
+  background: none;
+  color: var(--ink);
+  padding: 0;
+  border-radius: 0;
+  white-space: pre;
+  word-break: normal;
+}
+
+/* 分隔线：不用浏览器那条灰线，换成居中的三个点 */
+.article-body hr {
+  border: 0;
+  margin: 3em 0;
+  text-align: center;
+  color: var(--faint);
+  overflow: visible;
+}
+.article-body hr::before {
+  content: '·  ·  ·';
+  white-space: pre;
+  letter-spacing: 0.3em;
+  font-size: 15px;
 }
 
 .article-body .aside-note {
@@ -361,6 +505,60 @@ a.entry:hover .e-title { color: var(--accent); }
   border-radius: 4px;
   word-break: break-word;
 }
+
+/* ---------- 长文：小标题锚点与宽屏目录 ---------- */
+
+.article-body :is(h2, h3) { scroll-margin-top: 24px; }
+
+/* 小标题旁的「#」：平时藏着，悬停或键盘移到时出现，点一下复制这一节的链接 */
+.article-body a.heading-anchor {
+  margin-left: 0.45em;
+  font-weight: 400;
+  color: var(--faint);
+  text-decoration: none;
+  opacity: 0;
+  transition: opacity 0.15s ease, color 0.15s ease;
+}
+.article-body :is(h2, h3):hover a.heading-anchor,
+.article-body a.heading-anchor:focus-visible { opacity: 1; }
+.article-body a.heading-anchor:hover { color: var(--accent); }
+
+/* 目录挂在正文右侧的空白里：正文那一栏的外沿再往右 56px，随滚动停在视口上方 */
+.article-wrap { position: relative; }
+.toc { display: none; }
+@media (min-width: 1200px) {
+  .toc {
+    display: block;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: calc(100% + 56px);
+    width: 216px;
+  }
+  .toc-inner {
+    position: sticky;
+    top: 96px;
+    max-height: calc(100vh - 140px);
+    overflow-y: auto;
+  }
+}
+.toc-label { margin: 0 0 14px; }
+.toc ol { list-style: none; margin: 0; padding: 0; border-left: 1px solid var(--line); }
+.toc li { margin: 0; }
+.toc li a {
+  display: block;
+  margin-left: -1px;
+  padding: 5px 0 5px 14px;
+  border-left: 1px solid transparent;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--faint);
+  text-wrap: pretty;
+  transition: color 0.2s ease, border-left-color 0.2s ease;
+}
+.toc li.lv3 a { padding-left: 26px; font-size: 12.5px; }
+.toc li a:hover { color: var(--muted); }
+.toc li.on a { color: var(--ink); border-left-color: var(--accent); }
 
 .article-end {
   margin: 80px 0 0;
@@ -420,7 +618,7 @@ a.entry:hover .e-title { color: var(--accent); }
 
 @media print {
   html, body { background: #fff; }
-  .site-head, .site-foot, .crumb, .no-print { display: none !important; }
+  .site-head, .site-foot, .crumb, .no-print, .heading-anchor { display: none !important; }
   .page { padding-top: 0; }
 }
 
@@ -439,7 +637,12 @@ a.entry:hover .e-title { color: var(--accent); }
   .head-right { flex: 1 1 100%; justify-content: space-between; }
 
   .lede { font-size: 21px; }
+  .recent a { grid-template-columns: 80px 1fr; gap: 0 14px; }
+  .recent .r-kind { display: none; }
   .entry { grid-template-columns: 1fr; gap: 6px; }
+  /* 单栏时主题跟在日期后面同一行 */
+  .entry .topic { display: inline; }
+  .entry .topic::before { content: '·'; margin: 0 8px; color: var(--faint); }
   .def-row { grid-template-columns: 1fr; gap: 4px; }
 }
 
@@ -459,6 +662,8 @@ a.entry:hover .e-title { color: var(--accent); }
   margin: 0;
   min-height: 40vh;
 }
+/* 刚开始加载的那一小会儿只占位不出字，见 StateNote */
+.loading-note.quiet { visibility: hidden; }
 .error-note { color: var(--accent); }
 
 /* 照片页：真图与空占位框共用一套外框 */
@@ -528,3 +733,45 @@ html[data-theme="dark"] .portrait img { filter: saturate(0.8) brightness(0.86); 
 @media (max-width: 560px) {
   .cv-head.has-portrait { grid-template-columns: 1fr 88px; gap: 0 20px; }
 }
+
+/* ---------- 正文里的列表与表格 ----------
+   字号、行距、颜色与 .article-body p 对齐；标记沿用 .def-row 列表的淡色 marker */
+
+.article-body ul,
+.article-body ol {
+  margin: 0 0 1.9em;
+  padding-left: 1.4em;
+  font-size: 17px;
+  line-height: 1.95;
+  color: var(--body-ink);
+}
+.article-body li { margin: 0 0 0.6em; text-wrap: pretty; }
+.article-body li:last-child { margin-bottom: 0; }
+.article-body li::marker { color: var(--faint); }
+.article-body li > ul,
+.article-body li > ol { margin: 0.6em 0 0; }
+
+.article-body table {
+  display: block;
+  overflow-x: auto;
+  border-collapse: collapse;
+  margin: 0 0 1.9em;
+  font-size: 15px;
+  line-height: 1.8;
+  color: var(--body-ink);
+}
+.article-body th,
+.article-body td {
+  text-align: left;
+  vertical-align: top;
+  padding: 11px 22px 11px 0;
+  border-bottom: 1px solid var(--line);
+}
+.article-body th {
+  font-size: 12.5px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  border-bottom-color: var(--ink);
+}
+.article-body td:first-child { color: var(--ink); white-space: nowrap; }

@@ -79,6 +79,7 @@ export interface HomeSide {
   lede: string
   nowLabel: string
   now: string
+  recentLabel: string
   /** 后端渲染好的行内 HTML，公开页面直接用，前端不需要 Markdown 解析器 */
   ledeHtml: string
   nowHtml: string
@@ -117,6 +118,7 @@ export interface HomeSideSource {
   lede: string
   nowLabel: string
   now: string
+  recentLabel: string
 }
 export interface HomeDocSource {
   pro: HomeSideSource
@@ -177,6 +179,8 @@ export interface UiDoc {
     nextPrefix: string
     prevPrefix: string
     linkSuffix: string
+    tocLabel: string
+    anchorTitle: string
   }
   cv: { printLabel: string }
   photos: { emptySlot: string }
@@ -198,6 +202,10 @@ export interface Bootstrap {
   nav: NavDoc | null
   ui: UiDoc | null
   kinds: Record<EntryKind, KindConfig>
+  /** 首页「最近」：每侧最近发布、有内页的几篇 */
+  recent: { pro: EntrySummary[]; personal: EntrySummary[] }
+  /** 各栏目已发布条数与照片张数，首页据此隐藏空栏目 */
+  counts: Record<EntryKind | 'photos', number>
 }
 
 export interface SessionUser {
@@ -209,7 +217,9 @@ export interface SessionUser {
 export interface UploadResult {
   url: string
   filename: string
+  /** 存下来的大小；图片会被压缩，通常比 originalSize 小得多 */
   size: number
+  originalSize: number
   mimetype: string
   sha256: string
 }

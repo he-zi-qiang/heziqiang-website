@@ -154,11 +154,12 @@ useHead(() => ({ title: isNew.value ? '新建内容' : `编辑：${form.title}` 
     <div class="field-row">
       <div class="field">
         <label for="dateLabel">列表日期</label>
-        <input id="dateLabel" v-model="form.dateLabel" type="text" placeholder="6 月 / 2026 · 5 月 / 2026 至今" />
+        <input id="dateLabel" v-model="form.dateLabel" type="text" placeholder="2026.9.8 / 2026 · 5 月 / 2026 至今" />
+        <span class="hint">列表按年份自动分组：以四位年份开头就归到那一年，否则按发布时间。</span>
       </div>
       <div class="field">
-        <label for="groupLabel">分组小标题</label>
-        <input id="groupLabel" v-model="form.groupLabel" type="text" placeholder="2026 / 在读（留空则不分组）" />
+        <label for="groupLabel">主题</label>
+        <input id="groupLabel" v-model="form.groupLabel" type="text" placeholder="vibe coding / 保研（显示在日期下面，可留空）" />
       </div>
     </div>
 
@@ -168,7 +169,7 @@ useHead(() => ({ title: isNew.value ? '新建内容' : `编辑：${form.title}` 
         <input id="tag" v-model="form.tag" type="text" placeholder="进行中 / 已完成 / 作者名" />
       </div>
       <div class="field">
-        <label for="sortIndex">排序（越小越靠前）</label>
+        <label for="sortIndex">排序（越小越靠前，同号时新建的在前）</label>
         <input id="sortIndex" v-model.number="form.sortIndex" type="number" />
       </div>
     </div>

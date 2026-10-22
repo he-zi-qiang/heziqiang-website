@@ -4,7 +4,7 @@ import { api } from '@/api/client'
 import { useAsyncData } from '@/composables/useAsyncData'
 import { useSite } from '@/composables/useSite'
 import { useUi } from '@/composables/useUi'
-import { useHead } from '@/composables/useHead'
+import { textOf, useHead } from '@/composables/useHead'
 import DefList from '@/components/DefList.vue'
 import SiteCrumb from '@/components/SiteCrumb.vue'
 import StateNote from '@/components/StateNote.vue'
@@ -18,7 +18,7 @@ function print() {
   window.print()
 }
 
-const description = computed(() => data.value?.subtitle || bootstrap.value?.site?.description)
+const description = computed(() => textOf(data.value?.introHtml) || bootstrap.value?.site?.description)
 
 useHead(() => ({ title: data.value?.title, description: description.value }))
 </script>

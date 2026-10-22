@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import SiteHeader from './SiteHeader.vue'
 import SiteFooter from './SiteFooter.vue'
@@ -6,10 +7,14 @@ import TweaksPanel from './TweaksPanel.vue'
 
 const route = useRoute()
 const isDev = import.meta.env.DEV
+
+/** 进站后第一次换页起打上标记，换页动效改用短的那一档（见 style.css） */
+const navigated = ref(false)
+watch(() => route.path, () => (navigated.value = true))
 </script>
 
 <template>
-  <div class="page">
+  <div class="page" :class="{ 'is-navigated': navigated }">
     <SiteHeader />
     <!-- key 换页时重建 main，让 style.css 里的「纸页浮起」入场动效重新播放 -->
     <main :key="route.path">

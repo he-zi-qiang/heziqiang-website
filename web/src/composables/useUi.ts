@@ -22,6 +22,8 @@ const FALLBACK: UiDoc = {
     nextPrefix: '下一篇：',
     prevPrefix: '上一篇：',
     linkSuffix: '→',
+    tocLabel: '目录 · Contents',
+    anchorTitle: '复制这一节的链接',
   },
   cv: { printLabel: '打印 / 存为 PDF' },
   photos: { emptySlot: '待补图' },

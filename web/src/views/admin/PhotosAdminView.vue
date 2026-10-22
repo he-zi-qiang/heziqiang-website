@@ -14,6 +14,10 @@ const message = ref<string | null>(null)
 const uploading = ref(false)
 const pickerFor = ref<number | null>(null)
 
+function kb(bytes: number) {
+  return bytes >= 1024 * 1024 ? `${(bytes / 1024 / 1024).toFixed(1)} MB` : `${Math.round(bytes / 1024)} KB`
+}
+
 async function upload(event: Event, photo: Photo) {
   const input = event.target as HTMLInputElement
   const file = input.files?.[0]
@@ -24,7 +28,9 @@ async function upload(event: Event, photo: Photo) {
     const result = await api.admin.upload(file)
     await api.admin.updatePhoto(photo.id, { url: result.url })
     await Promise.all([reload(), library.reload()])
-    message.value = `已上传 ${result.filename}`
+    message.value = result.size < result.originalSize
+      ? `已上传 ${result.filename}（${kb(result.originalSize)} → ${kb(result.size)}）`
+      : `已上传 ${result.filename}`
   } catch (err) {
     message.value = (err as Error).message
   } finally {
