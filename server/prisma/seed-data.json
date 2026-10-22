@@ -9,22 +9,24 @@
   },
   "home": {
     "pro": {
-      "lede": "我是何梓强，大连交通大学软件工程专业本科在读，兴趣集中在 *AI Agent* 的执行框架与工具使用。这里是我的研究笔记与思考档案。",
+      "lede": "我是何梓强，大连交通大学软件工程专业本科在读，兴趣集中在 *AI Agent* 的执行框架与工具使用。",
       "nowLabel": "目前 · Now",
-      "now": "软件工程大四在读，正在申请 2027 届推免，意向方向是人工智能与软件工程。2026 年 7 月起独立开发 Agent Workbench——一个可审计、可恢复的 AI Agent 执行平台；也维护着 obsidian-pdf-export、chaoxing-pdf-dl 两个小工具。"
+      "now": "软件工程大四在读，正在申请 2027 届推免，意向方向是人工智能与软件工程。",
+      "recentLabel": "最近 · Recent"
     },
     "personal": {
       "lede": "try something new",
       "nowLabel": "近况 · Lately",
-      "now": "有些nervous，但是也知道会有些结果"
+      "now": "有些nervous，但是也知道会有些结果",
+      "recentLabel": "最近 · Recent"
     }
   },
   "about": {
     "title": "关于我",
     "subtitle": "About",
-    "body": "我是何梓强，大连交通大学轨道智能工程学院软件工程专业 2023 级本科生，正在申请 2027 届推免。比起「写代码的人」，我更愿意把自己描述为一个对「人如何借助机器思考」感兴趣的学生。\n\n我对 Agent 的兴趣，始于一次很普通的体验：我让一个语言模型替我完成一项多步骤的任务，它在第三步忘记了第一步的约定。那一刻我意识到，「聪明」和「可靠」是两件完全不同的事，而后者远没有被解决。2026 年夏天，我开始独立开发 Agent Workbench，把「调模型、执行工具、交回结果」做成一个可审计、可恢复的执行循环：任务进度写入检查点，程序崩溃后能从上一次提交的地方继续；工具调用先过权限检查，全程记入事件流。它是我回答「可靠」这个问题的第一次尝试。\n\n另一段让我受益的经历来自一门课。在《大数据分析方法》的学期项目里，我分析 Steam 游戏的好评率受哪些因素影响，中途发现评论情绪这类特征与标签同源，直接用会让模型指标虚高。那次消融实验教给我的比任何一个分数都多：分析结论是否可信，首先取决于问题定义和数据处理是否严谨。\n\n开发时我也借助 Claude Code、Codex 这类 AI 编程工具。我的用法是先自己梳理思路，再让它去找可能的问题；自己还判断不了对错的部分，先弄懂，再放心用。工具让想法更容易实现，也让理解原理、判断结果、对自己的工作负责这几件事变得更重要。\n\n维护这个网站，是因为我相信学习的痕迹值得被保留。这里没有成品展示，更多的是问题、过程和教训——它更像一间向访客开放的书房，而不是一个橱窗。",
+    "body": "我是何梓强，大连交通大学轨道智能工程学院软件工程专业 2023 级本科生，已经被重庆邮电大学保研拟录取。\n",
     "nowLabel": "目前 · Now",
-    "now": "软件工程大四在读，正在申请 2027 届推免，意向方向是人工智能与软件工程。2026 年 7 月起独立开发 Agent Workbench——一个可审计、可恢复的 AI Agent 执行平台；也维护着 obsidian-pdf-export、chaoxing-pdf-dl 两个小工具。",
+    "now": "9.8确定获得保研资格",
     "contactLabel": "联系 · Contact",
     "contacts": [
       {
@@ -296,14 +298,14 @@
   "entries": [
     {
       "kind": "essay",
-      "slug": "没有人比她更爱我",
-      "title": "没有人比她更爱我",
-      "tag": "he",
-      "dateLabel": "2026.8.23",
-      "dateFull": null,
-      "groupLabel": "我的老妈",
-      "summary": "",
-      "bodyMd": "暑假两个月在家，临到走了，发现我妈把我的牙具盒刷干净了，把我的洗面奶的盖子刷干净了。我反问我自己，还会有人为我这样做嘛？即使是我爸也不行。\n所以我要好好回报我的老妈。",
+      "slug": "获得保研名额",
+      "title": "获得保研名额",
+      "tag": null,
+      "dateLabel": "2026.9.8",
+      "dateFull": "2026.9.8",
+      "groupLabel": "获取资格",
+      "summary": "一个阶段结束，另一个阶段开始",
+      "bodyMd": "今天下午五点，公布保研加分表，我确定获取保研资格，而剩下的需要我全力以赴去进行预推免，希望我有好的发挥，能发挥正常展示真实的我。",
       "status": "published",
       "sortIndex": 0
     },
@@ -311,7 +313,7 @@
       "kind": "essay",
       "slug": "fighting-保研",
       "title": "fighting 保研",
-      "tag": "he",
+      "tag": null,
       "dateLabel": "2026.9.4",
       "dateFull": "2026.9.4",
       "groupLabel": "保研",
@@ -319,11 +321,154 @@
       "bodyMd": "10/17\n这是我的成绩排名，前者是上一届的保研最后一名，而后者是今天下发27届的保研名额。\n悬着的压力释放了一些。\n我没有加分，我只能等着，9.11后的公示看我是否还留在安全区，忧虑没有任何意义，这几天就打算开始联系老师，和修改简历和项目。\n\n今天北京时间凌晨两点 GPT-6发布....",
       "status": "published",
       "sortIndex": 1
+    },
+    {
+      "kind": "essay",
+      "slug": "没有人比她更爱我",
+      "title": "没有人比她更爱我",
+      "tag": null,
+      "dateLabel": "2026.8.23",
+      "dateFull": null,
+      "groupLabel": "我的老妈",
+      "summary": "",
+      "bodyMd": "暑假两个月在家，临到走了，发现我妈把我的牙具盒刷干净了，把我的洗面奶的盖子刷干净了。我反问我自己，还会有人为我这样做嘛？即使是我爸也不行。\n所以我要好好回报我的老妈。",
+      "status": "published",
+      "sortIndex": 2
+    },
+    {
+      "kind": "essay",
+      "slug": "不同类型的-ai-公司-技术栈的交集在哪",
+      "title": "不同类型的 AI 公司，技术栈的交集在哪",
+      "tag": null,
+      "dateLabel": "2026.7.25",
+      "dateFull": "2026 年 7 月 25 日",
+      "groupLabel": "找方向",
+      "summary": "五类公司各有各的核心技术。我真正想找的是它们的交集——以及在 AI 时代，怎么从初级走到高级。",
+      "bodyMd": "我应该先区分不同类型的公司。\n\n| 公司类型 | 核心技术 |\n| --- | --- |\n| 纯大模型公司 | PyTorch、Transformer、RLHF、CUDA、分布式训练 |\n| AI 原生公司 | RAG、Agent、LLM API、FastAPI、React |\n| 互联网巨头 AI 化 | Java/Go ＋ 推荐 ＋ LLM ＋ 云 |\n| 传统软件 AI 化 | 业务系统 ＋ RAG ＋ Agent |\n| AI 基础设施 | GPU、CUDA、K8s、云计算 |\n\n然后找出它们交集的技术栈、技术需求：\n\n1. 传统后端\n2. 关于 AI 的\n   1. 数据方向\n   2. 模型方向\n   3. 应用方向\n\n其中最重要的是：**在 AI 时代如何培养自己的能力，如何从初级到中级再到高级。**",
+      "status": "published",
+      "sortIndex": 3
+    },
+    {
+      "kind": "essay",
+      "slug": "ai-时代的信息获取",
+      "title": "AI 时代的信息获取",
+      "tag": null,
+      "dateLabel": "2026.6.14",
+      "dateFull": "2026 年 6 月 14 日",
+      "groupLabel": "信息获取",
+      "summary": "前 AI 时代靠一根绳子一路摸索。信息源换了，但需要自己收口的那部分没变。",
+      "bodyMd": "<div class=\"aside-note\">本文由三则短记合并：《信息闭环》（2026 年 6 月 8 日）、《前 AI 时代》（6 月 9 日）、《AI 的发展记录》（6 月 14 日）。</div>\n\n## 前 AI 时代\n\n那个时候做什么东西不会，只会网上搜索。当时我为了搜索范围更广，学会了科学上网。搜索引擎提供一个开头，我就像抓着绳子的一头，逐渐摸索，找到一个又一个所谓大佬的经验和感悟——这是前 AI 时代我觉得最珍贵的。\n\n## 信息闭环\n\n前沿信息的掌握：\n\n1. 推特的更新\n2. YouTube 的教学\n3. 个人技术博客对最新技术的介绍和思考\n4. 论坛帖子对前沿信息的交流\n5. 自己的实践和思考总结\n\n## AI 的发展记录\n\n- 提示词工程\n- 上下文工程\n- harness 工程\n\n本质是 AI 模型在不同能力下，不同需求的体现。",
+      "status": "published",
+      "sortIndex": 4
+    },
+    {
+      "kind": "essay",
+      "slug": "富达开放日-communication-与自己的自留地",
+      "title": "富达开放日：communication 与自己的自留地",
+      "tag": null,
+      "dateLabel": "2026.6.11",
+      "dateFull": "2026 年 6 月 11 日",
+      "groupLabel": "开放日",
+      "summary": "第一次真实体会到，会交流本身就是一种能力。还有：你的笔记不能被 AI 写，那是你的自留地。",
+      "bodyMd": "首先这是一个外企。我没有进行准备，本来有很多交流机会，但因为我没有想好我的问题（也可能因为我没有形成那么强烈的感觉）。我没有很功利，只是觉得新鲜——但有很多收获。\n\n金融类的公司是第一次接触，延伸出很多金融类的知识，类似基金、历史等等。\n\n还有就是外企的文化。为什么说是外企呢？因为感觉国内的企业没有这种感觉。人本的文化，以人为本——有资本的才会这样吧。福利待遇特别好，才会激发人的潜力？（也有一种可能是温床？）没有压力没有动力，双刃剑。当然本身它的招聘就很严格，能进入已经很厉害了。\n\n还有就是所有环节都包括 communication。我以前只是第一次在校园春招时了解了一下，在 YouTube 上看 Claude Code 团队说过相关的，还有一些大牛也讲过。这次我是真实体会到 communication 的重要性——这就像润滑剂，像空气无处不在。会交流本身就是一种能力，其载体的语言扩展了它的能力。讲话是一种能力，也是一种艺术。\n\n**项目积累最重要。**就像那篇文章说的，AI 取代了初级程序员、研究生的工作，但人都是从初级慢慢积累出来的。如何使自己能成长、从初级到中级，很重要。\n\n就好像你的 Obsidian 笔记不能被 AI 写一样——**你的这块自留地不能被入侵**。这是你的养分，容不得受到激素的催发。这是生长性的，思维就像植物的嫩芽，需要独立生长。",
+      "status": "published",
+      "sortIndex": 5
+    },
+    {
+      "kind": "essay",
+      "slug": "每一个新的东西",
+      "title": "每一个新的东西",
+      "tag": null,
+      "dateLabel": "2026.5.6",
+      "dateFull": "2026 年 5 月 6 日",
+      "groupLabel": "认识新事物",
+      "summary": "世界先是一片旷野，然后才有人划定范围。面对陌生的东西，先自己定框架，再用行动检验。",
+      "bodyMd": "首先这是一个旷野，无边无际，然后有人规定一些范围，进行建造。\n\n所以当你发现一个新的东西，无论是思想上的还是具体事物上的，你都可以自己先定义范围或者框架，然后通过自己的行动来检验它是否对，然后进而改变。\n\n- 首先要了解它出现的原因。如果不了解为什么，就只是单纯的记忆和背诵。\n- 然后要了解它的体系，即它的知识结构，与逻辑有关。\n- 然后了解它的应用。",
+      "status": "published",
+      "sortIndex": 6
+    },
+    {
+      "kind": "essay",
+      "slug": "闭环实施-ai-时代为什么还要建自己的知识库",
+      "title": "闭环实施：AI 时代为什么还要建自己的知识库",
+      "tag": null,
+      "dateLabel": "2026.4.9",
+      "dateFull": "2026 年 4 月 9 日",
+      "groupLabel": "知识库",
+      "summary": "AI 能替你查到一切，那知识库还有什么用？因为出了错、要调品味的时候，你得有能力把话说准。",
+      "bodyMd": "如果用四五个 AI 对同一个知识点进行提问，我觉得已经能覆盖其知识的 95%。\n\n因为 AI 能力越来越强，所以对一个知识点的学习的侧重点已经发生了变化，单纯背诵肯定是不可以了。那么，在知识学习中，人能锻炼的最重要的部分是什么？\n\n**知识就像基础设施，像水电。**\n\n我觉得首先最重要的是构建自己的知识库。因为 AI 会极大扩展你所接触到的知识量，如果所有的事情都让 AI 去帮你做，你对此一无所知，出错了、或者需要调整品味的时候，你甚至无法用专业的语言、专业的细节去描述。\n\n而因为知识库的建立，知识会进行延伸和连接，从而更专业化：\n\n- 知识的索引结构\n- 知识调用时间\n- 知识的应用判断",
+      "status": "published",
+      "sortIndex": 7
+    },
+    {
+      "kind": "essay",
+      "slug": "用-ai-学习知识-要抓住主要矛盾",
+      "title": "用 AI 学习知识，要抓住主要矛盾",
+      "tag": null,
+      "dateLabel": "2026.3.30",
+      "dateFull": "2026 年 3 月 30 日",
+      "groupLabel": "用 AI 学习",
+      "summary": "名词会无限膨胀，所以得先定范围：当前的主要矛盾是什么，当前在哪个维度上。",
+      "bodyMd": "通过 AI 学习新知识可以获得很多名词，而这些名词很多很杂。如果把名词网络化来看的话，四面八方。\n\n所以，用 AI 学习知识要抓住主要矛盾和次要矛盾。当前需要解决的主要问题是什么，当前所在的维度是什么……等等。如果不区分这些，可以无限制地进行追问和探索。——**定范围**。\n\n进而，如何定义、描述自己想要知道的问题很重要。（如何在自己不知道的情况下，定位自己不知道的点）\n\n有意思的是，所有存在的东西都会有它的价值，那么这个价值就是你学习的重点。\n\n价值的翻译：有什么用，用来干什么，解决什么问题。\n\n而这个**什么**，就显示这会有联系——与其他事物进行联系。\n\n对于联系，要区分是相关还是真正的关联，要收敛复盘（**对以上探索进行总结**）。\n\n如何对以上问题进行范围定义、价值寻找、联系扩展？如果你没有意识到，或者知道但不知道它的重要性，你行为所产生的结果就会有所偏差，与这件事客观上的最好结果有偏差。",
+      "status": "published",
+      "sortIndex": 8
+    },
+    {
+      "kind": "essay",
+      "slug": "关于-vibe-coding-的一些判断",
+      "title": "关于 vibe coding 的一些判断",
+      "tag": null,
+      "dateLabel": "2026.3.9",
+      "dateFull": "2026 年 3 月 9 日",
+      "groupLabel": "vibe coding",
+      "summary": "是产品体验升级，不是技术升级。如果不懂架构，能跑也只是一坨屎在跑。",
+      "bodyMd": "对于 openclaw 来说，它应该是一个逐渐发展的、类似里程碑的东西（技术上并不是很高深），但对于体验体感是一个很新鲜的东西，类似一种新的交互方式。\n\n特别要注意的是，这本身是一个 vibe coding 的产物，代码上已经成为屎山（虽然我没看，只是看别人说）。\n\n所以可以这么说：\n\n- 是**产品体验升级，不是技术升级**。Claude 本身就有这种能力，所以移动端还是很方便的，除非还有更方便的。\n- 如果不懂架构、不懂代码，虽然能跑，但也就是一坨屎在跑。\n- 生态也是问题。门槛低，对项目的 PR 也是 vibe coding，没有人对项目负责，大部分是一群浮躁的人在搞。\n- 实际上还是关注 Claude、Gemini、ChatGPT 这三家的产品，因为只有这三家的模型能力最强，最有能力搞出产品。code agent 就是通用 agent。谁把路趟出来，谁就是规则制定者。\n\n> LLM 模型本身是在根据 context 输出权重最高的 next token，我们本质做的是在求解一个最佳的 prompt。那对你本身的知识储备就有很高的要求——prompt 越准确，得到的答案才越准确。很多人试图用一句话就让 AI 搞定一切，那好像有点不太实际，解决一些没有难度的日常操作还行。",
+      "status": "published",
+      "sortIndex": 9
+    },
+    {
+      "kind": "reading",
+      "slug": "claude-code-产品经理分享笔记",
+      "title": "Claude Code 产品经理分享笔记",
+      "tag": "Anthropic",
+      "dateLabel": "2026.4.30",
+      "dateFull": "2026 年 4 月 30 日",
+      "groupLabel": "产品分享",
+      "summary": "产品品味是第一位的——因为有 AI，构建一切都很快，难的变成了判断「该建什么」。",
+      "bodyMd": "<div class=\"aside-note\">以下是我观看 Anthropic / Claude Code 团队产品侧公开分享后整理的笔记，记录的是<strong>分享者的观点</strong>，不是我的原创主张。整理时有删减和归纳，如有出入以原分享为准。</div>\n\n## 产品品味是第一位的\n\n产品发布速度快、反馈快。\n\n产品经理和工程师要一起掌握，产品品味非常重要——设计师也当过前端工程师。\n\n最重要的是产品品味。因为有 AI，构建一切都很快，所以问题变成了：这个功能的用户最佳体验是什么？用户体验它的最好方式是什么？GitHub 上有很多 issue，哪些值得建造？正确的建造方式是什么？\n\n这些技能可以来自任何背景。而工程背景最有用的地方在于——**你知道构建的难度**。\n\n## 素质\n\n- 用第一性原理可以解释、面对问题。\n- 以后重要的是多背景切换，自尊心低，做出事情、对团队改变现状。\n- 情商也很重要。\n- 接受挑战，接受核心运行，接受不完美。\n- 需要牺牲产品一致性。\n\n## 关于 Anthropic\n\n成功的原因之一：有坚定的、目标一致的员工和理念。\n\n产品格局：最强大的是 Claude Code，然后是 desktop——一个一站式平台，整合所有消息，手机可以远程控制电脑。cowork 则是为没有代码需求的人准备的（这个需要连接足够多的信息源，结果才可以）。",
+      "status": "published",
+      "sortIndex": 0
+    },
+    {
+      "kind": "reading",
+      "slug": "claude-code-工程师分享笔记",
+      "title": "Claude Code 工程师分享笔记",
+      "tag": "Anthropic",
+      "dateLabel": "2026.3.25",
+      "dateFull": "2026 年 3 月 25 日",
+      "groupLabel": "工程师分享",
+      "summary": "多 agent 并行、不用 RAG 用全局搜索，以及一句话：软件工程正在走向更广泛的通才模式。",
+      "bodyMd": "<div class=\"aside-note\">以下是我观看 Anthropic / Claude Code 团队工程师公开分享后整理的笔记，记录的是<strong>分享者的观点</strong>，不是我的原创主张。整理时有删减和归纳，如有出入以原分享为准。</div>\n\n## 工程实践\n\n- 参加初创公司，要看实际产品的价值与使用过程。\n- 声纳（SonarQube）做代码测试检查。\n- 从 Facebook 到 Instagram，解决的是代码债务问题，进行重构，负责质量。\n- 建议理解底层。\n- 尝试让 Claude 使用工具——因为 tool 刚出来，大家还不知道能干啥。\n- 使用多 agent 并行。\n- 代码审查：用表格记录多个待申请的 PR，让自己自动化执行。这是只有工程师才独有的。\n- Claude 自己创建代码，自己创建子进程进行审查。\n- 不使用 RAG，使用全局搜索比直接点击进入方法更好。\n\n## 趋势判断\n\n- 软件工程将来的发展是**更广泛的通才模式**。\n- 做更多的原型来接近最真实的体验——因为 Claude Code 使这个过程成本更低，更有探索性。\n- 发现有很多非工程师用 Claude Code 创建 cowork。\n- 直觉是错的，要向用户学习，找到他们想要什么。所以早一点发布 Mac 版本，听取意见，然后修改、增加别的版本。\n- 以前的想法，现在也要拿出来试试。\n- 不知道未来会发生什么——书记员在打印机出来之后变成了作家。\n\n## 最有价值的技能\n\n- 有条理的假设，保持好奇，愿意尝试超出自己范畴的东西。\n- 多场景切换的适应能力，和专注力。\n\n## 另记\n\n- 副业、支线、全才\n- 抢先时机做出东西，PR 进行优化\n- 花时间赢得信任\n- 找到机会 → 把一件事做得完美好，不只是代码\n- 培养感知\n\n> 产品设计中最主要的是**发现用户潜在需求**。",
+      "status": "published",
+      "sortIndex": 1
+    },
+    {
+      "kind": "writing",
+      "slug": "agent方向一定是未来的主流",
+      "title": "agent方向一定是未来的主流",
+      "tag": null,
+      "dateLabel": "2026.9.9",
+      "dateFull": null,
+      "groupLabel": null,
+      "summary": "OpenAI宣布证明千禧年N-S方程问题",
+      "bodyMd": "显然在当下或者以后的未来时代，掌握构建复杂agent系统的能力，是一种类似浪尖的能力。对于我所学的软件工程，虽说不像其他那些工程类的更加实际，但是的确是构建一个复杂系统的最适合的专业了。关于保研的方向，所以我想尽量往这边靠。\n\n\n\n\n\n>We used a system of coordinating agents powered by our internal model. The agents had access to tools such as the ability to read from a cached version of the internet and the ability to run code. Agents were subdivided into groups with the ability to communicate within the group. The groups varied in size, and the group that produced the Navier–Stokes resolution involved on the order of 10,000 concurrent agents. At all times we maintained the same strict safeguards that we apply to all our frontier model evaluations, including monitoring and isolation.\n我们采用了一种由内部模型驱动的协调代理系统。这些代理可以访问各种工具，比如从缓存的互联网数据中读取信息，以及运行代码的能力。代理们被划分为不同的小组，这些小组之间可以互相通信。各个小组的规模各不相同，而负责生成 Navier–Stokes 解算结果的那个小组，同时运行的代理数量达到了约 10,000 个。在任何时候，我们都遵循着同样严格的防护措施，这些措施是我们对所有前沿模型评估所采用的标准，包括监控和隔离措施。\n\n>For each problem, we prompted different groups of agents with different variants of the problem statement, covering all variants of the problem. For the Navier–Stokes problem, we suggested versions “A” and “B” (particular forms of the Navier–Stokes problem which would result in a proof) and versions “C” and “D” (which would result in a disproof) to separate groups of agents.\n对于每个问题，我们向不同的代理组展示了问题的各种变体，以涵盖所有可能的情况。对于纳维-斯托克斯问题，我们为不同的代理组分别提供了“A”和“B”两种版本的问题（这两种版本能够促成证明），以及“C”和“D”两种版本的问题（这两种版本则可能导致无法证明）。\n\n>In addition to the full Millennium Prize problems, we asked our multiagent system to try a set of “easier” problems. One of these problems was a similar blowup question for the limit of the Navier–Stokes problem with the viscosity term removed. This is known as the regularity problem for the Euler equations, and our agents surprised us by resolving this question. The specific variant of the question that they resolved was the unforced version, where no external force is applied to the fluid. Nearly 100 agents worked together for approximately 50 hours to produce our Euler regularity disproof.\n除了完整的“千年大奖问题”之外，我们还让我们的多智能体系统尝试解决一系列“较简单”的问题。其中有一个问题类似于纳维-斯托克斯问题的扩展版本，只不过这里删除了粘性项。这个问题被称为欧拉方程的正则性问题。我们的智能体在解决这个问题时表现得非常出色。他们解决的具体问题是无外力作用的情况，即流体不受任何外部力的影响。近 100 个智能体共同工作了大约 50 个小时，才解决了这个欧拉正则性验证问题。1\n\n>Once we saw the Euler solution, we thought that Navier–Stokes was the most promising problem to work on. Thus, we decided to devote our resources to Navier–Stokes. To do so, we shifted agents away from the other Millennium Problems and prompted these agents with the Euler resolution. When a further trained version of our internal model became available over the course of the effort, we updated our agents to that model.\n一旦我们掌握了欧拉方法的解决方案，我们就认为纳维-斯托克斯问题是最有前景的研究课题。因此，我们决定将资源集中在纳维-斯托克斯问题上。为此，我们让智能体不再处理其他千年难题，而是引导它们专注于欧拉方法的解决方案。当我们的内部模型经过进一步训练后变得可用时，我们就将智能体更新为使用这个新模型。\n\n>We encouraged different groups of agents to explore a diversity of approaches. After some time, we cross-pollinated the agent groups by using Codex to consolidate the most useful insights from each agent group. These follow-up prompts drew on the agents’ own intermediate results. The group that found the solution to Navier–Stokes was guided in such a way.\n我们鼓励不同的代理团队尝试各种不同的方法。经过一段时间的探索后，我们通过 Codex 将各个团队的研究成果进行整合，从而实现了知识的交叉传播。这些后续的引导过程都是基于各个团队所取得的中间成果进行的。找到 Navier–Stokes 问题的解决方案的那个团队就是通过这种方式得到指导的。\n\n>The agents arrived at their resolution on Saturday, September 5, about 88 hours after the first agents were launched. Lean formalization and verification took an additional 17 hours via GPT‑6 Astra.\n这些工程师们在 9 月 5 日星期六得出了他们的结论，这距离首次启动这些工程师大约过去了 88 个小时。而通过 GPT-6 Astra 进行精益形式化设计和验证则又花了 17 个小时才完成。\n\n>Across all attempted problems, the agents sent 4.9 million messages and used about 300 billion output tokens. In the process of resolving the Navier–Stokes problem, the agents sent 2.7 million messages and used approximately 130 billion output tokens.\n在所有尝试解决的问题中，这些智能体共发送了 490 万条消息，并使用了约 3000 亿个输出令牌。在解决 Navier-Stokes 问题过程中，这些智能体发送了 270 万条消息，并使用了大约 1300 亿个输出令牌。\n\n\n",
+      "status": "published",
+      "sortIndex": 0
     }
   ],
   "photos": [
     {
-      "url": "/uploads/mt2ritsh-22be2fc5.png",
+      "url": "/uploads/mt2ritsh-22be2fc5.webp",
       "caption": "新照片",
       "whenLabel": "2026.8.21",
       "alt": "",
