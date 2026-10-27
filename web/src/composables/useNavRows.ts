@@ -11,10 +11,10 @@ const SECTION_BY_PATH = new Map<string, EntryKind | 'photos'>([
   ['/photos', 'photos'],
 ])
 
-export type NavRowWithCount = NavRow & { count?: number }
+export type NavRowWithCount = NavRow & { count?: number; section?: EntryKind | 'photos' }
 
 /**
- * 某一侧身份的索引行（首页的栏目卡片、宽屏左栏的导航共用），栏目类的行带上条数。
+ * 某一侧身份的索引行（首页的栏目卡片、宽屏左栏的导航共用），栏目类的行带上条数和栏目（用来取栏目色）。
  * 还没有内容的栏目不出现，免得访客点进去扑个空。
  */
 export function useNavRows(mode: Ref<Mode>) {
@@ -26,7 +26,7 @@ export function useNavRows(mode: Ref<Mode>) {
     return (nav.value[mode.value] ?? []).flatMap((row) => {
       const section = SECTION_BY_PATH.get(row.to.split(/[?#]/)[0]!)
       if (!counts || !section) return [row]
-      return counts[section] > 0 ? [{ ...row, count: counts[section] }] : []
+      return counts[section] > 0 ? [{ ...row, count: counts[section], section }] : []
     })
   })
 }

@@ -81,7 +81,7 @@ function switchTo(next: Mode) {
 
     <!-- 栏目导航和文章目录只在宽屏的左栏里出现；窄屏首页的索引在正文最后，内页靠面包屑 -->
     <nav class="rail-nav">
-      <RouterLink v-for="row in navRows" :key="row.to" :to="row.to"
+      <RouterLink v-for="row in navRows" :key="row.to" :to="row.to" :data-kind="row.section"
                   :class="{ on: isCurrent(row.to) }" :aria-current="isCurrent(row.to) ? 'page' : undefined">
         <span>{{ row.zh }}</span><span v-if="row.count" class="count">{{ row.count }}</span>
       </RouterLink>

@@ -39,7 +39,7 @@ useHead(() => ({ title: null, description: bootstrap.value?.site?.description })
     <!-- eslint-disable-next-line vue/no-v-html -- 只有本人后台能写 -->
     <p class="lede" v-html="side.ledeHtml"></p>
 
-    <!-- 「目前」：左边一道赭石色的线，和正文里的引用同一个写法 -->
+    <!-- 「目前」：一块柔和的浅色块，标签前一个会呼吸的小圆点，表示这是正在发生的事 -->
     <section class="now-card">
       <div class="smallcaps section-label">{{ side.nowLabel }}</div>
       <!-- eslint-disable-next-line vue/no-v-html -->
@@ -56,7 +56,7 @@ useHead(() => ({ title: null, description: bootstrap.value?.site?.description })
               <span v-if="entry.summary" class="r-note">{{ entry.summary }}</span>
             </span>
             <span class="r-side">
-              <span class="r-kind">{{ sectionOf(entry.kind).label }}</span>
+              <span class="r-kind" :data-kind="entry.kind">{{ sectionOf(entry.kind).label }}</span>
               <span class="date">{{ entry.dateLabel }}</span>
             </span>
           </RouterLink>
@@ -66,7 +66,7 @@ useHead(() => ({ title: null, description: bootstrap.value?.site?.description })
 
     <!-- 栏目卡片：窄屏的主导航；宽屏有左栏导航，不再重复 -->
     <nav class="index-nav home-index">
-      <RouterLink v-for="row in rows" :key="row.to" class="index-card" :to="row.to">
+      <RouterLink v-for="row in rows" :key="row.to" class="index-card" :to="row.to" :data-kind="row.section">
         <span class="ic-zh">{{ row.zh }}</span>
         <span class="ic-en">{{ row.en }}</span>
         <span class="ic-foot">

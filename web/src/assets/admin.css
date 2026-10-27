@@ -36,7 +36,7 @@ html[data-theme="dark"] {
   min-height: 100vh;
   background: var(--paper);
   color: var(--ink);
-  font-family: var(--font);
+  font-family: var(--font-ui);
   font-size: 14.5px;
 }
 
@@ -480,6 +480,7 @@ html[data-theme="dark"] .btn.primary { color: #1A1716; box-shadow: none; }
   border: 1px solid var(--line);
   border-radius: 8px;
   background: var(--paper);
+  font-family: var(--font);
   overflow: auto;
 }
 /* 预览不另设字号和间距：直接用站点文章页的 .article-body 排版，所见即所得 */
@@ -528,7 +529,7 @@ html[data-theme="dark"] .btn.primary { color: #1A1716; box-shadow: none; }
   padding: 24px;
   background: var(--paper);
   color: var(--ink);
-  font-family: var(--font);
+  font-family: var(--font-ui);
   font-size: 14.5px;
 }
 .login-card {

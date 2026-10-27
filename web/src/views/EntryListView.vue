@@ -24,7 +24,7 @@ useHead(() => ({ title: meta.value.title, description: meta.value.subtitle }))
 <template>
   <SiteCrumb :mode="SECTION_BY_KIND[kind]" />
 
-  <h1 class="page-title">{{ meta.title || ' ' }}</h1>
+  <h1 class="page-title" :data-kind="kind">{{ meta.title || ' ' }}</h1>
   <p class="page-sub">{{ meta.subtitle }}</p>
 
   <div class="list-body">
