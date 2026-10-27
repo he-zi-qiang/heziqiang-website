@@ -2,16 +2,18 @@
    何梓强 · 个人网站 — 设计系统
    暖白底 / 苹方 + SF Pro / 赭石强调色
 
-   两条规矩：
+   三条规矩：
    1. 层次靠字重和字号拉开，不靠满屏字距拉宽的大写小字；
-   2. 分隔靠留白和浅色底块（悬停底、卡片、引用），细线只留给真正需要分段的地方。
+   2. 分隔靠留白和细线，浅色底只在悬停和代码这类真正需要「垫一下」的地方出现；
+   3. 卡片、按钮、标签都跟着文字走：小圆角、不加阴影、不做胶囊——
+      字是纸面排版的气质，控件就不能是手机 App 的气质，两边才搭。
    ============================================================ */
 
 :root {
   --paper: #FAF8F4;        /* 页面底色 */
-  --paper-deep: #F1EEE8;   /* 浅色底块：悬停、引用、代码、「目前」卡片 */
-  --card: #FFFFFF;         /* 浮起来的一层：栏目卡片 */
-  --thumb: #FFFFFF;        /* 分段开关里的滑块 */
+  --paper-deep: #F1EEE8;   /* 浅色底块：悬停、代码、身份切换的当前项 */
+  --card: #FFFFFF;         /* 浮起来的一层：站点上不用，后台的卡片和输入框在用 */
+  --thumb: #FFFFFF;        /* 后台侧栏、页签里的白色滑块 */
   --ink: #1F1D1A;
   --body-ink: #3B3732;
   /* 两档次要文字：muted 用于说明文字，对比度约 5:1；faint 用于日期、页脚这类最弱的信息，3:1 */
@@ -22,6 +24,7 @@
   --accent-soft: rgb(156 66 38 / 0.09);
   --selection: rgb(156 66 38 / 0.16);
   --quote: #5B564F;
+  /* 两档阴影只给后台用；站点上的控件跟着文字走，不加阴影 */
   --shadow: 0 1px 2px rgb(31 29 26 / 0.04), 0 6px 20px rgb(31 29 26 / 0.06);
   --thumb-shadow: 0 1px 3px rgb(31 29 26 / 0.1), 0 0 0 0.5px rgb(31 29 26 / 0.06);
 
@@ -44,8 +47,8 @@
   --fs-lede: 28px;    /* 首页那句话 */
   --fs-title: 32px;   /* 页面大标题 */
 
-  --radius: 14px;
-  --radius-s: 10px;
+  --radius: 6px;
+  --radius-s: 6px;
 
   /* 版心：正文一栏的阅读宽度；宽屏下左栏的宽度，和左栏到正文的间隔 */
   --measure: 640px;
@@ -120,9 +123,6 @@ html[data-theme="dark"] {
 
   /* 首页双身份切换：新内容淡入上浮 */
   .mode-enter { animation: hz-enter 0.4s cubic-bezier(0.22, 1, 0.36, 1) both; }
-
-  /* 「目前」卡片标签前的小圆点：慢慢地向外泛一圈 */
-  .now-card .section-label::before { animation: hz-pulse 2.6s ease-out infinite; }
 }
 
 /* 换页过渡（View Transitions，见 composables/pageTransitions.ts）：整页短促地交叉淡入，
@@ -157,11 +157,6 @@ html.vt-theme::view-transition-new(root) {
 @keyframes hz-enter {
   from { opacity: 0; transform: translateY(8px); }
   to { opacity: 1; transform: none; }
-}
-
-@keyframes hz-pulse {
-  0% { box-shadow: 0 0 0 0 var(--selection); }
-  70%, 100% { box-shadow: 0 0 0 7px transparent; }
 }
 
 @media print {
@@ -259,14 +254,14 @@ main { flex: 1; }
 
 .head-right { display: flex; align-items: center; gap: 12px; }
 
-/* 身份切换：分段开关。底下的滑块位置由 SiteHeader 按当前项的宽度算，
+/* 身份切换：细线框起来的两段，当前那一段垫一块浅底。浅底的位置由 SiteHeader 按当前项的宽度算，
    带着自己的过渡名：切身份、换页时由 View Transitions 让它滑过去 */
 .mode-toggle {
   position: relative;
   display: inline-flex;
   padding: 3px;
-  border-radius: 999px;
-  background: var(--paper-deep);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
   font-size: 13px;
 }
 .mode-toggle a, .mode-toggle button {
@@ -274,7 +269,7 @@ main { flex: 1; }
   z-index: 1;
   padding: 5px 14px;
   border: 0;
-  border-radius: 999px;
+  border-radius: 4px;
   background: none;
   font: inherit;
   font-weight: 500;
@@ -285,17 +280,16 @@ main { flex: 1; }
 }
 .mode-toggle :is(a, button):not(.on):hover { color: var(--ink); }
 .mode-toggle .on { color: var(--ink); }
-/* 滑块还没量出来（刚进站的那一帧、爬虫看到的静态页）时，当前项自己垫一块底 */
-.mode-toggle:not(:has(.toggle-indicator)) .on { background: var(--thumb); box-shadow: var(--thumb-shadow); }
+/* 浅底还没量出来（刚进站的那一帧、爬虫看到的静态页）时，当前项自己垫一块底 */
+.mode-toggle:not(:has(.toggle-indicator)) .on { background: var(--paper-deep); }
 
 .toggle-indicator {
   position: absolute;
   top: 3px;
   bottom: 3px;
   left: 0;
-  border-radius: 999px;
-  background: var(--thumb);
-  box-shadow: var(--thumb-shadow);
+  border-radius: 4px;
+  background: var(--paper-deep);
   view-transition-name: mode-indicator;
   pointer-events: none;
 }
@@ -312,7 +306,7 @@ main { flex: 1; }
   height: 34px;
   padding: 0;
   border: 1px solid var(--line);
-  border-radius: 50%;
+  border-radius: var(--radius);
   background: none;
   color: var(--muted);
   cursor: pointer;
@@ -420,7 +414,7 @@ main { flex: 1; }
 
 .section-label { margin: 0 0 12px; }
 
-/* 面包屑：一颗小胶囊，悬停垫底 */
+/* 面包屑：悬停垫一块小底 */
 .crumb {
   margin: 0 0 20px;
   font-size: var(--fs-meta);
@@ -430,7 +424,7 @@ main { flex: 1; }
   display: inline-flex;
   padding: 4px 10px;
   margin-left: -10px;
-  border-radius: 999px;
+  border-radius: var(--radius-s);
   transition: background-color 0.15s ease, color 0.15s ease;
 }
 .crumb a:hover { background: var(--paper-deep); color: var(--ink); }
@@ -460,7 +454,7 @@ main { flex: 1; }
 .lede {
   margin: 0 0 var(--space-m);
   font-size: var(--fs-lede);
-  font-weight: 500;
+  font-weight: 400;
   line-height: 1.5;
   letter-spacing: -0.01em;
   color: var(--ink);
@@ -468,26 +462,13 @@ main { flex: 1; }
 }
 .lede em { font-style: normal; color: var(--accent); }
 
-/* 「目前」：浅底卡片，标签前一个会呼吸的小圆点 */
+/* 「目前」：左边一道赭石色的线，和引用同一个写法，不另起一张卡片 */
 .now-card {
   margin: 0 0 var(--space-l);
-  padding: 18px 22px 20px;
-  border-radius: var(--radius);
-  background: var(--paper-deep);
+  padding: 2px 0 2px 20px;
+  border-left: 2px solid var(--accent);
 }
-.now-card .section-label {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 6px;
-}
-.now-card .section-label::before {
-  content: '';
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: var(--accent);
-}
+.now-card .section-label { margin-bottom: 6px; }
 .now {
   margin: 0;
   font-size: 16px;
@@ -553,14 +534,10 @@ main { flex: 1; }
   padding: 16px 18px 14px;
   border: 1px solid var(--line);
   border-radius: var(--radius);
-  background: var(--card);
-  transition: box-shadow 0.25s ease, border-color 0.25s ease, transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: border-color 0.2s ease, background-color 0.2s ease;
 }
-.index-card:hover {
-  border-color: transparent;
-  box-shadow: var(--shadow), 0 0 0 1px var(--line);
-  transform: translateY(-2px);
-}
+/* 悬停只是线深一点、垫一点底，不浮起来 */
+.index-card:hover { border-color: var(--faint); background: var(--paper-deep); }
 .ic-zh { font-size: 16px; font-weight: 600; color: var(--ink); }
 .ic-en { font-size: 13px; color: var(--muted); }
 .ic-foot {
@@ -631,17 +608,12 @@ a.entry:hover { background: var(--paper-deep); }
 a.entry:hover .e-arrow,
 a.entry:focus-visible .e-arrow { opacity: 1; transform: none; }
 
+/* 标题后的小标签：一行赭石色小字，不套底色 */
 .entry .e-title .tag {
-  display: inline-block;
   margin-left: 10px;
-  padding: 1px 8px;
-  border-radius: 999px;
-  background: var(--accent-soft);
-  font-size: 12px;
+  font-size: 12.5px;
   font-weight: 500;
-  line-height: 1.6;
   color: var(--accent);
-  vertical-align: 2px;
   white-space: nowrap;
 }
 
@@ -672,17 +644,13 @@ a.entry:focus-visible .e-arrow { opacity: 1; transform: none; }
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }
-/* 条目的主题（后台的「主题」字段）：一颗浅底小胶囊 */
+/* 条目的主题（后台的「主题」字段）：「# 主题」一行淡色小字，不做成胶囊 */
 .entry .topic {
-  padding: 1px 8px;
-  border-radius: 999px;
-  background: var(--paper-deep);
-  font-size: 12px;
-  line-height: 1.7;
-  color: var(--muted);
+  font-size: 12.5px;
+  color: var(--faint);
   white-space: nowrap;
 }
-a.entry:hover .topic { background: var(--card); }
+.entry .topic::before { content: '# '; }
 
 /* ---------- 文章 / 内页 ---------- */
 
@@ -728,13 +696,11 @@ a.entry:hover .topic { background: var(--card); }
 
 .article-body > :first-child { margin-top: 0; }
 
-/* 引用：浅底块，左边一道赭石色的边；里面的段落沿用引用的字号和颜色 */
+/* 引用：左边一道赭石色的线，字小半档、颜色退一步；里面的段落沿用引用的字号和颜色 */
 .article-body blockquote {
   margin: 1.6em 0;
-  padding: 14px 20px;
-  border-left: 3px solid var(--accent);
-  border-radius: 0 var(--radius-s) var(--radius-s) 0;
-  background: var(--paper-deep);
+  padding: 2px 0 2px 20px;
+  border-left: 2px solid var(--accent);
   font-size: var(--fs-quote);
   line-height: 1.85;
   color: var(--quote);
@@ -818,16 +784,18 @@ html[data-theme="dark"] .article-body img { filter: brightness(0.9); }
   font-size: 15px;
 }
 
-/* 旁注：浅底块，字小一档 */
+/* 旁注：上下各一道细线，字小一档 */
 .article-body .aside-note {
   margin: 1.8em 0;
-  padding: 14px 20px;
-  border-radius: var(--radius-s);
-  background: var(--paper-deep);
+  padding: 1.1em 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
   font-size: var(--fs-small);
   line-height: 1.85;
   color: var(--muted);
 }
+/* 文章一开头就是旁注时，日期行下面已经有一道线了，旁注不再自己加一道 */
+.article-meta + .article-body > .aside-note:first-child { margin-top: 0; padding-top: 0; border-top: 0; }
 .article-body .aside-note p { font-size: inherit; line-height: inherit; color: inherit; margin: 0 0 0.6em; }
 .article-body .aside-note p:last-child { margin-bottom: 0; }
 
@@ -1001,16 +969,16 @@ html[data-theme="dark"] .article-body img { filter: brightness(0.9); }
 .cv-intro .light { color: var(--muted); font-size: 0.9em; }
 .cv-intro strong { font-weight: 600; color: var(--ink); }
 
-/* 证件照：4:5 裁切、圆角，轻轻浮在纸面上 */
+/* 证件照：4:5 裁切、小圆角、一道细线描边，像贴在纸上的一张证件照 */
 .portrait { margin: 0; }
 .portrait img {
   display: block;
   width: 100%;
   aspect-ratio: 4 / 5;
   object-fit: cover;
+  border: 1px solid var(--line);
   border-radius: var(--radius-s);
   background: var(--paper-deep);
-  box-shadow: var(--shadow);
 }
 /* 暗色下白底照片会发亮，压一压 */
 html[data-theme="dark"] .portrait img { filter: brightness(0.88); }
@@ -1071,7 +1039,6 @@ html[data-theme="dark"] .portrait img { filter: brightness(0.88); }
   .site-head, .site-foot, .crumb, .no-print, .heading-anchor { display: none !important; }
   .page { display: block; max-width: none; padding: 0; }
   main { padding: 0; }
-  .portrait img { box-shadow: none; }
 }
 
 /* ---------- 小屏 ---------- */
@@ -1090,7 +1057,6 @@ html[data-theme="dark"] .portrait img { filter: brightness(0.88); }
 
   .lede { font-size: 24px; }
   .page-title { font-size: 28px; }
-  .now-card { padding: 16px 18px 18px; }
 
   /* 日期、主题挪到标题上面一行 */
   .recent a, .entry { grid-template-columns: minmax(0, 1fr); gap: 4px; }

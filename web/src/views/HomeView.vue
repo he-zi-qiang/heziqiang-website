@@ -39,7 +39,7 @@ useHead(() => ({ title: null, description: bootstrap.value?.site?.description })
     <!-- eslint-disable-next-line vue/no-v-html -- 只有本人后台能写 -->
     <p class="lede" v-html="side.ledeHtml"></p>
 
-    <!-- 「目前」是一张浅底的状态卡片，标签前一个小圆点，表示这是正在发生的事 -->
+    <!-- 「目前」：左边一道赭石色的线，和正文里的引用同一个写法 -->
     <section class="now-card">
       <div class="smallcaps section-label">{{ side.nowLabel }}</div>
       <!-- eslint-disable-next-line vue/no-v-html -->
