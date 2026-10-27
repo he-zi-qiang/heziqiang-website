@@ -8,7 +8,7 @@ import { onMounted, ref, watch } from 'vue'
  */
 const STYLE_KEY = 'hz-style-v2'
 const ACCENTS = ['#9C4226', '#33506B', '#43603F']
-const PAPERS = ['#FBF9F3', '#F4EDDC', '#FFFFFF']
+const PAPERS = ['#FAF8F4', '#F4EDDC', '#FFFFFF']
 
 const open = ref(false)
 const accent = ref(ACCENTS[0]!)

@@ -11,19 +11,22 @@ const SECTION_BY_PATH = new Map<string, EntryKind | 'photos'>([
   ['/photos', 'photos'],
 ])
 
+export type NavRowWithCount = NavRow & { count?: number }
+
 /**
- * 某一侧身份的索引行（首页正文里的索引、宽屏左栏的导航共用）。
+ * 某一侧身份的索引行（首页的栏目卡片、宽屏左栏的导航共用），栏目类的行带上条数。
  * 还没有内容的栏目不出现，免得访客点进去扑个空。
  */
 export function useNavRows(mode: Ref<Mode>) {
   const { bootstrap } = useSite()
   const { nav } = useUi()
 
-  function hasContent(row: NavRow) {
+  return computed<NavRowWithCount[]>(() => {
     const counts = bootstrap.value?.counts
-    const section = SECTION_BY_PATH.get(row.to.split(/[?#]/)[0]!)
-    return !counts || !section || counts[section] > 0
-  }
-
-  return computed(() => (nav.value[mode.value] ?? []).filter(hasContent))
+    return (nav.value[mode.value] ?? []).flatMap((row) => {
+      const section = SECTION_BY_PATH.get(row.to.split(/[?#]/)[0]!)
+      if (!counts || !section) return [row]
+      return counts[section] > 0 ? [{ ...row, count: counts[section] }] : []
+    })
+  })
 }

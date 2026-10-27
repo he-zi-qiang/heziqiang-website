@@ -47,9 +47,9 @@ useHead(() => ({ title: data.value?.title, description: description.value }))
       </figure>
     </div>
 
-    <div v-for="section in data.sections" :key="section.label">
+    <section v-for="section in data.sections" :key="section.label" class="cv-section">
       <div class="smallcaps section-label">{{ section.label }}</div>
       <DefList :rows="section.rows" />
-    </div>
+    </section>
   </template>
 </template>

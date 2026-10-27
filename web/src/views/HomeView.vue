@@ -21,7 +21,7 @@ watch(
   { immediate: true },
 )
 const { bootstrap, error } = useSite()
-const { sectionOf } = useUi()
+const { ui, sectionOf } = useUi()
 
 const home = computed(() => bootstrap.value?.home ?? null)
 const side = computed(() => (home.value ? home.value[mode.value] : null))
@@ -39,27 +39,40 @@ useHead(() => ({ title: null, description: bootstrap.value?.site?.description })
     <!-- eslint-disable-next-line vue/no-v-html -- 只有本人后台能写 -->
     <p class="lede" v-html="side.ledeHtml"></p>
 
-    <div class="smallcaps section-label">{{ side.nowLabel }}</div>
-    <!-- eslint-disable-next-line vue/no-v-html -->
-    <p class="now" v-html="side.nowHtml"></p>
+    <!-- 「目前」是一张浅底的状态卡片，标签前一个小圆点，表示这是正在发生的事 -->
+    <section class="now-card">
+      <div class="smallcaps section-label">{{ side.nowLabel }}</div>
+      <!-- eslint-disable-next-line vue/no-v-html -->
+      <p class="now" v-html="side.nowHtml"></p>
+    </section>
 
     <template v-if="recent.length">
       <div class="smallcaps section-label">{{ side.recentLabel }}</div>
       <ul class="recent">
         <li v-for="entry in recent" :key="entry.slug">
           <RouterLink :to="entry.href!">
-            <span class="date">{{ entry.dateLabel }}</span>
-            <span class="r-title">{{ entry.title }}</span>
-            <span class="r-kind">{{ sectionOf(entry.kind).label }}</span>
+            <span class="r-main">
+              <span class="r-title">{{ entry.title }}</span>
+              <span v-if="entry.summary" class="r-note">{{ entry.summary }}</span>
+            </span>
+            <span class="r-side">
+              <span class="r-kind">{{ sectionOf(entry.kind).label }}</span>
+              <span class="date">{{ entry.dateLabel }}</span>
+            </span>
           </RouterLink>
         </li>
       </ul>
     </template>
 
-    <!-- 索引：宽屏在左栏导航里，窄屏留在正文最后 -->
-    <nav class="index-nav only-narrow">
-      <RouterLink v-for="row in rows" :key="row.to" class="index-row" :to="row.to">
-        <span>{{ row.zh }}</span><span class="en">{{ row.en }}</span>
+    <!-- 栏目卡片：窄屏的主导航；宽屏有左栏导航，不再重复 -->
+    <nav class="index-nav home-index">
+      <RouterLink v-for="row in rows" :key="row.to" class="index-card" :to="row.to">
+        <span class="ic-zh">{{ row.zh }}</span>
+        <span class="ic-en">{{ row.en }}</span>
+        <span class="ic-foot">
+          <span>{{ row.count ? `${row.count} ${ui.list.countUnit}` : '' }}</span>
+          <span class="ic-arrow" aria-hidden="true">→</span>
+        </span>
       </RouterLink>
     </nav>
   </div>
