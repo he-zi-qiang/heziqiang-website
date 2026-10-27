@@ -5,6 +5,7 @@ import { useMode, type Mode } from '@/composables/useMode'
 import { useTheme, runWithTransition } from '@/composables/useTheme'
 import { useSite } from '@/composables/useSite'
 import { useUi } from '@/composables/useUi'
+import { useNavRows } from '@/composables/useNavRows'
 
 const route = useRoute()
 const router = useRouter()
@@ -19,6 +20,13 @@ const isHome = computed(() => route.meta.home === true)
 const active = computed<Mode>(() =>
   isHome.value ? mode.value : ((route.meta.section as Mode | undefined) ?? 'pro'),
 )
+
+/** 宽屏左栏的栏目导航：跟着当前高亮的一侧走，所在栏目（含其中的文章）标成当前项 */
+const navRows = useNavRows(active)
+function isCurrent(to: string) {
+  const path = to.split(/[?#]/)[0]!
+  return path !== '/' && (route.path === path || route.path.startsWith(`${path}/`))
+}
 
 const siteName = computed(() => {
   const s = bootstrap.value?.site
@@ -62,6 +70,15 @@ function switchTo(next: Mode) {
       <span v-if="isHome" class="name">{{ siteName }}</span>
       <RouterLink v-else class="name" to="/">{{ siteName }}</RouterLink>
     </div>
+
+    <!-- 栏目导航和文章目录只在宽屏的左栏里出现；窄屏首页的索引在正文最后，内页靠面包屑 -->
+    <nav class="rail-nav">
+      <RouterLink v-for="row in navRows" :key="row.to" :to="row.to"
+                  :class="{ on: isCurrent(row.to) }" :aria-current="isCurrent(row.to) ? 'page' : undefined">
+        <span>{{ row.zh }}</span><span class="en">{{ row.en }}</span>
+      </RouterLink>
+    </nav>
+    <div id="rail-toc" class="rail-toc"></div>
 
     <div class="head-right">
       <!-- 首页是就地切换的开关；其余页面是回首页的链接 -->

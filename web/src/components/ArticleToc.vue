@@ -2,7 +2,7 @@
 import type { Heading } from '@/composables/useArticleHeadings'
 
 /**
- * 长文的目录：放在宽屏右栏里（窄屏右栏不显示），文章有两个以上小标题时才出现，
+ * 长文的目录：放在宽屏左栏的导航下面（窄屏不显示），文章有两个以上小标题时才出现，
  * 跟着滚动标出当前读到的一节。
  */
 defineProps<{ headings: Heading[]; activeId: string | null; label: string }>()

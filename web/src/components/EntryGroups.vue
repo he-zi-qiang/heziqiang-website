@@ -7,7 +7,7 @@ defineProps<{ groups: EntryGroup[]; kind: EntryKind }>()
 
 <template>
   <template v-for="(group, i) in groups" :key="group.label ?? `g${i}`">
-    <!-- id 给宽屏右栏的年份链接用 -->
+    <!-- id 让年份可以用 #y-2026 这样的锚点直接跳到 -->
     <div v-if="group.label" :id="`y-${group.label}`" class="smallcaps year-mark">{{ group.label }}</div>
     <div class="entry-list" :data-kind="kind">
       <EntryRow

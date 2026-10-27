@@ -35,10 +35,10 @@
   --fs-lede: 26px;    /* 首页引言 */
   --fs-title: 34px;   /* 页面大标题 */
 
-  /* 版心：正文一栏的阅读宽度；宽屏下整个页面的宽度，和左右两栏之间的间隔 */
+  /* 版心：正文一栏的阅读宽度；宽屏下左栏的宽度，和左栏到正文的间隔 */
   --measure: 600px;
-  --wide: 960px;
-  --aside-gap: 64px;
+  --rail: 200px;
+  --rail-gap: 64px;
 
   /* 左侧元信息栏：首页「最近」、列表页的日期，和简历、关于页的键，都用这一栏。
      第二栏在每一页都从同一条竖线开始，换页时不会忽左忽右 */
@@ -53,12 +53,12 @@
   --space-xl: 96px;
 }
 
-/* 大屏（1280 起）：版心放宽到 1100，正文栏 700，字号整体大一档，两侧不再空出一大片 */
+/* 大屏（1280 起）：左栏和正文都放宽，字号整体大一档，两侧不再空出一大片 */
 @media (min-width: 1280px) {
   :root {
-    --measure: 700px;
-    --wide: 1100px;
-    --aside-gap: 80px;
+    --measure: 720px;
+    --rail: 232px;
+    --rail-gap: 96px;
 
     --fs-label: 12.5px;
     --fs-meta: 13.5px;
@@ -197,86 +197,6 @@ a { color: inherit; text-decoration: none; }
 
 main { flex: 1; }
 
-/* ---------- 宽屏：左正文 + 右侧栏（TwoCol 组件） ----------
-   页面放宽到 960，左栏是 600 的阅读宽度，右栏放这一页相关的内容；页眉、两栏、页脚左右对齐。
-   窄屏右栏不显示，放进右栏的内容在正文里有一份 .only-narrow 的原位版本 */
-
-.two-col > .side-col { display: none; }
-.main-col { min-width: 0; }
-
-@media (min-width: 1080px) {
-  .page { max-width: calc(var(--wide) + 48px); }
-
-  .two-col {
-    display: grid;
-    grid-template-columns: var(--measure) minmax(0, 1fr);
-    column-gap: var(--aside-gap);
-  }
-  .two-col > .side-col { display: block; }
-  .only-narrow { display: none !important; }
-
-  /* 挪走了标题下的那一行（文章日期、栏目简介、证件照）之后，补上原来的留白 */
-  .article-title { margin-bottom: var(--space-l); }
-  .two-col .list-body { margin-top: var(--space-m); }
-  .cv-head.has-portrait { grid-template-columns: 1fr; }
-}
-
-/* 右栏：字小一档、颜色退一步，随滚动停在视口上方 */
-.side-inner {
-  position: sticky;
-  top: var(--space-l);
-  max-height: calc(100vh - 2 * var(--space-l));
-  overflow-y: auto;
-  font-size: var(--fs-small);
-  line-height: 1.8;
-  color: var(--muted);
-}
-.side-block { margin-top: var(--space-m); }
-
-.side-intro {
-  margin: 0;
-  font-size: var(--fs-ui);
-  line-height: 1.85;
-  text-wrap: pretty;
-}
-
-.side-years a {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  padding: 9px 0;
-  border-top: 1px solid var(--line);
-  color: var(--body-ink);
-  font-variant-numeric: tabular-nums;
-  transition: color 0.2s ease;
-}
-.side-years a:last-child { border-bottom: 1px solid var(--line); }
-.side-years a:hover { color: var(--accent); }
-.side-years .count { font-size: var(--fs-meta); color: var(--faint); }
-
-.side-meta {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  font-size: var(--fs-meta);
-  letter-spacing: 0.04em;
-  line-height: 2;
-}
-.side-meta li:first-child { color: var(--body-ink); }
-
-.side-portrait { width: 152px; margin: 0; }
-
-/* 右栏里的键值行：键在上、值在下，比正文里的紧凑 */
-.def-list.compact { margin: 0; }
-.def-list.compact .def-row {
-  grid-template-columns: 1fr;
-  gap: 2px;
-  padding: 12px 0;
-  font-size: var(--fs-small);
-  line-height: 1.75;
-}
-.def-list.compact .def-row .k { padding-top: 0; }
-
 /* ---------- 页眉 ---------- */
 
 .site-head {
@@ -365,6 +285,76 @@ main { flex: 1; }
 }
 html[data-theme="dark"] .theme-btn { transform: rotate(180deg); }
 .theme-btn:hover { color: var(--accent); border-color: var(--accent); }
+
+/* ---------- 宽屏：左侧固定栏 + 右侧正文 ----------
+   放在页眉样式后面，好覆盖页眉的横排写法。
+   1080 起，页眉竖过来变成一条从上到底的左栏：头像、名字、身份切换、栏目导航、文章目录、深浅色；
+   正文一栏在右边，页脚跟在正文下面。左栏随页面固定，长文往下翻时导航和目录一直都在。
+   窄屏页眉照旧横在顶上，左栏专属的导航与目录不显示（首页的索引在正文最后，内页靠面包屑） */
+
+.rail-nav, .rail-toc { display: none; }
+
+@media (min-width: 1080px) {
+  .page {
+    max-width: calc(var(--rail) + var(--rail-gap) + var(--measure) + 48px);
+    display: grid;
+    grid-template-columns: var(--rail) minmax(0, 1fr);
+    grid-template-rows: 1fr auto;
+    column-gap: var(--rail-gap);
+    padding-top: 0;
+  }
+  /* 页脚的留白挪进 main 底部：margin 会把整页撑得比视口高，短页面也要滚一下才看到页脚 */
+  main { grid-column: 2; padding: 72px 0 var(--space-xl); }
+  .page > .site-foot { grid-column: 2; margin-top: 0; }
+
+  .site-head {
+    grid-column: 1;
+    grid-row: 1 / span 2;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    margin-bottom: 0;
+    padding: 72px var(--space-s) var(--space-m) 0;
+    border-right: 1px solid var(--line);
+    overflow-y: auto;
+  }
+  .site-id { flex-direction: column; align-items: flex-start; gap: 16px; }
+  .site-id img { width: 56px; height: 56px; }
+
+  /* 身份切换和深浅色按钮拆开摆：切换紧跟名字，按钮沉到左栏最底下 */
+  .head-right { display: contents; }
+  .mode-toggle { order: 1; align-self: flex-start; margin-top: var(--space-m); }
+  .rail-nav { order: 2; display: flex; flex-direction: column; margin-top: var(--space-s); }
+  .rail-toc { order: 3; display: block; }
+  .theme-btn { order: 4; flex-shrink: 0; margin-top: auto; }
+
+  .only-narrow { display: none !important; }
+}
+
+.rail-nav a {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  padding: 9px 0;
+  font-size: var(--fs-ui);
+  color: var(--body-ink);
+  transition: color 0.2s ease;
+}
+.rail-nav .en {
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--faint);
+  transition: color 0.2s ease;
+}
+.rail-nav a:hover, .rail-nav a.on { color: var(--accent); }
+.rail-nav a.on .en { color: var(--accent); }
+
+.rail-toc .toc { margin-top: var(--space-m); padding-top: var(--space-s); border-top: 1px solid var(--line); }
 
 /* ---------- 通用排印 ---------- */
 
@@ -732,7 +722,7 @@ html[data-theme="dark"] .article-body img { filter: brightness(0.9); }
 .article-body a.heading-anchor:focus-visible { opacity: 1; }
 .article-body a.heading-anchor:hover { color: var(--accent); }
 
-/* 目录：住在宽屏右栏里（右栏自己负责吸顶） */
+/* 目录：住在宽屏左栏里（左栏自己固定在视口里） */
 .toc-label { margin: 0 0 14px; }
 .toc ol { list-style: none; margin: 0; padding: 0; border-left: 1px solid var(--line); }
 .toc li { margin: 0; }

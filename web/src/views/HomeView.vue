@@ -1,14 +1,12 @@
 <script setup lang="ts">
 import { computed, watch } from 'vue'
 import { useRoute } from 'vue-router'
-import type { EntryKind, NavRow } from '@/api/types'
 import { useMode } from '@/composables/useMode'
 import { useSite } from '@/composables/useSite'
 import { useUi } from '@/composables/useUi'
 import { useHead } from '@/composables/useHead'
-import { PATH_BY_KIND } from '@/router'
 import StateNote from '@/components/StateNote.vue'
-import TwoCol from '@/components/TwoCol.vue'
+import { useNavRows } from '@/composables/useNavRows'
 
 const route = useRoute()
 const { mode, setMode } = useMode()
@@ -23,26 +21,13 @@ watch(
   { immediate: true },
 )
 const { bootstrap, error } = useSite()
-const { nav, sectionOf } = useUi()
+const { sectionOf } = useUi()
 
 const home = computed(() => bootstrap.value?.home ?? null)
 const side = computed(() => (home.value ? home.value[mode.value] : null))
 const recent = computed(() => bootstrap.value?.recent?.[mode.value] ?? [])
 
-/** 索引行指向的栏目：/essays → essay，/photos → photos；关于、简历这类单页不算 */
-const SECTION_BY_PATH = new Map<string, EntryKind | 'photos'>([
-  ...(Object.entries(PATH_BY_KIND) as [EntryKind, string][]).map(([kind, path]) => [`/${path}`, kind] as const),
-  ['/photos', 'photos'],
-])
-
-/** 还没有内容的栏目不出现在索引里，免得访客点进去扑个空 */
-function hasContent(row: NavRow) {
-  const counts = bootstrap.value?.counts
-  const section = SECTION_BY_PATH.get(row.to.split(/[?#]/)[0]!)
-  return !counts || !section || counts[section] > 0
-}
-
-const rows = computed(() => (nav.value[mode.value] ?? []).filter(hasContent))
+const rows = useNavRows(mode)
 
 useHead(() => ({ title: null, description: bootstrap.value?.site?.description }))
 </script>
@@ -50,7 +35,7 @@ useHead(() => ({ title: null, description: bootstrap.value?.site?.description })
 <template>
   <StateNote :loading="!home && !error" :error="error" />
 
-  <TwoCol v-if="side" :key="mode" class="mode-enter">
+  <div v-if="side" :key="mode" class="mode-enter">
     <!-- eslint-disable-next-line vue/no-v-html -- 只有本人后台能写 -->
     <p class="lede" v-html="side.ledeHtml"></p>
 
@@ -71,19 +56,11 @@ useHead(() => ({ title: null, description: bootstrap.value?.site?.description })
       </ul>
     </template>
 
-    <!-- 索引：宽屏在右栏，窄屏留在正文最后 -->
+    <!-- 索引：宽屏在左栏导航里，窄屏留在正文最后 -->
     <nav class="index-nav only-narrow">
       <RouterLink v-for="row in rows" :key="row.to" class="index-row" :to="row.to">
         <span>{{ row.zh }}</span><span class="en">{{ row.en }}</span>
       </RouterLink>
     </nav>
-
-    <template #aside>
-      <nav class="index-nav">
-        <RouterLink v-for="row in rows" :key="row.to" class="index-row" :to="row.to">
-          <span>{{ row.zh }}</span><span class="en">{{ row.en }}</span>
-        </RouterLink>
-      </nav>
-    </template>
-  </TwoCol>
+  </div>
 </template>
