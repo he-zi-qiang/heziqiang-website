@@ -67,12 +67,17 @@ export function installPageTransitions(router: Router) {
       const vt = doc.startViewTransition!(() => {
         clearTimeout(timer)
         // 已经因为超时放行过导航：新页面早就渲染了，这次直接结束，别把页面冻住
-        if (released) return
+        if (released) {
+          document.querySelector('main')?.classList.add('vt-entered')
+          return
+        }
         return new Promise<void>((done) => {
           finishUpdate = () => {
             // 新画面：刚离开的那篇文章在这个列表里的标题（返回列表时标题飞回原位）
             clearTitleNames()
             titleLinkedTo(router, from.path)?.style.setProperty('view-transition-name', TITLE_NAME)
+            // 这一页已经由过渡淡入了：打上标记，过渡结束摘掉 vt-nav 时 main 不再从透明重新浮起一遍（那一下就是闪）
+            document.querySelector('main')?.classList.add('vt-entered')
             done()
           }
           release()

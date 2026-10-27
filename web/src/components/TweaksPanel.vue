@@ -8,7 +8,7 @@ import { onMounted, ref, watch } from 'vue'
  */
 const STYLE_KEY = 'hz-style-v2'
 const ACCENTS = ['#9C4226', '#33506B', '#43603F']
-const PAPERS = ['#FBF9F3', '#F4EDDC', '#FFFFFF']
+const PAPERS = ['#FAF8F4', '#F4EDDC', '#FFFFFF']
 
 const open = ref(false)
 const accent = ref(ACCENTS[0]!)
@@ -59,7 +59,7 @@ function reset() {
 </template>
 
 <style scoped>
-.tweaks { position: fixed; right: 20px; bottom: 20px; z-index: 60; font-family: var(--serif); }
+.tweaks { position: fixed; right: 20px; bottom: 20px; z-index: 60; font-family: var(--font); }
 .tweaks-toggle, .tweaks-reset {
   appearance: none; cursor: pointer; font-family: inherit;
   background: var(--paper); border: 1px solid var(--line); color: var(--muted);

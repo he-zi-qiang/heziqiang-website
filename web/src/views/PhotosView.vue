@@ -38,9 +38,9 @@ useHead(() => ({ title: meta.value.title, description: meta.value.subtitle }))
 </template>
 
 <style scoped>
-.photo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px 36px; }
-.photo-item { display: flex; flex-direction: column; gap: 14px; margin: 0; }
-.photo-cap { font-size: 13.5px; line-height: 1.9; color: var(--muted); }
-.photo-cap .when { color: var(--faint); margin-right: 10px; font-size: 12.5px; }
+.photo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px 24px; }
+.photo-item { display: flex; flex-direction: column; gap: 12px; margin: 0; }
+.photo-cap { font-size: var(--fs-small); line-height: 1.75; color: var(--body-ink); }
+.photo-cap .when { margin-right: 10px; font-size: var(--fs-meta); color: var(--faint); font-variant-numeric: tabular-nums; }
 @media (max-width: 560px) { .photo-grid { grid-template-columns: 1fr; } }
 </style>

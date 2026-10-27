@@ -1,14 +1,12 @@
 <script setup lang="ts">
 import { computed, watch } from 'vue'
 import { useRoute } from 'vue-router'
-import type { EntryKind, NavRow } from '@/api/types'
 import { useMode } from '@/composables/useMode'
 import { useSite } from '@/composables/useSite'
 import { useUi } from '@/composables/useUi'
 import { useHead } from '@/composables/useHead'
-import { PATH_BY_KIND } from '@/router'
 import StateNote from '@/components/StateNote.vue'
-import TwoCol from '@/components/TwoCol.vue'
+import { useNavRows } from '@/composables/useNavRows'
 
 const route = useRoute()
 const { mode, setMode } = useMode()
@@ -23,26 +21,13 @@ watch(
   { immediate: true },
 )
 const { bootstrap, error } = useSite()
-const { nav, sectionOf } = useUi()
+const { ui, sectionOf } = useUi()
 
 const home = computed(() => bootstrap.value?.home ?? null)
 const side = computed(() => (home.value ? home.value[mode.value] : null))
 const recent = computed(() => bootstrap.value?.recent?.[mode.value] ?? [])
 
-/** 索引行指向的栏目：/essays → essay，/photos → photos；关于、简历这类单页不算 */
-const SECTION_BY_PATH = new Map<string, EntryKind | 'photos'>([
-  ...(Object.entries(PATH_BY_KIND) as [EntryKind, string][]).map(([kind, path]) => [`/${path}`, kind] as const),
-  ['/photos', 'photos'],
-])
-
-/** 还没有内容的栏目不出现在索引里，免得访客点进去扑个空 */
-function hasContent(row: NavRow) {
-  const counts = bootstrap.value?.counts
-  const section = SECTION_BY_PATH.get(row.to.split(/[?#]/)[0]!)
-  return !counts || !section || counts[section] > 0
-}
-
-const rows = computed(() => (nav.value[mode.value] ?? []).filter(hasContent))
+const rows = useNavRows(mode)
 
 useHead(() => ({ title: null, description: bootstrap.value?.site?.description }))
 </script>
@@ -50,40 +35,45 @@ useHead(() => ({ title: null, description: bootstrap.value?.site?.description })
 <template>
   <StateNote :loading="!home && !error" :error="error" />
 
-  <TwoCol v-if="side" :key="mode" class="mode-enter">
+  <div v-if="side" :key="mode" class="mode-enter">
     <!-- eslint-disable-next-line vue/no-v-html -- 只有本人后台能写 -->
     <p class="lede" v-html="side.ledeHtml"></p>
 
-    <div class="smallcaps section-label">{{ side.nowLabel }}</div>
-    <!-- eslint-disable-next-line vue/no-v-html -->
-    <p class="now" v-html="side.nowHtml"></p>
+    <!-- 「目前」：一块柔和的浅色块，标签前一个会呼吸的小圆点，表示这是正在发生的事 -->
+    <section class="now-card">
+      <div class="smallcaps section-label">{{ side.nowLabel }}</div>
+      <!-- eslint-disable-next-line vue/no-v-html -->
+      <p class="now" v-html="side.nowHtml"></p>
+    </section>
 
     <template v-if="recent.length">
       <div class="smallcaps section-label">{{ side.recentLabel }}</div>
       <ul class="recent">
         <li v-for="entry in recent" :key="entry.slug">
           <RouterLink :to="entry.href!">
-            <span class="date">{{ entry.dateLabel }}</span>
-            <span class="r-title">{{ entry.title }}</span>
-            <span class="r-kind">{{ sectionOf(entry.kind).label }}</span>
+            <span class="r-main">
+              <span class="r-title">{{ entry.title }}</span>
+              <span v-if="entry.summary" class="r-note">{{ entry.summary }}</span>
+            </span>
+            <span class="r-side">
+              <span class="r-kind" :data-kind="entry.kind">{{ sectionOf(entry.kind).label }}</span>
+              <span class="date">{{ entry.dateLabel }}</span>
+            </span>
           </RouterLink>
         </li>
       </ul>
     </template>
 
-    <!-- 索引：宽屏在右栏，窄屏留在正文最后 -->
-    <nav class="index-nav only-narrow">
-      <RouterLink v-for="row in rows" :key="row.to" class="index-row" :to="row.to">
-        <span>{{ row.zh }}</span><span class="en">{{ row.en }}</span>
+    <!-- 栏目卡片：窄屏的主导航；宽屏有左栏导航，不再重复 -->
+    <nav class="index-nav home-index">
+      <RouterLink v-for="row in rows" :key="row.to" class="index-card" :to="row.to" :data-kind="row.section">
+        <span class="ic-zh">{{ row.zh }}</span>
+        <span class="ic-en">{{ row.en }}</span>
+        <span class="ic-foot">
+          <span>{{ row.count ? `${row.count} ${ui.list.countUnit}` : '' }}</span>
+          <span class="ic-arrow" aria-hidden="true">→</span>
+        </span>
       </RouterLink>
     </nav>
-
-    <template #aside>
-      <nav class="index-nav">
-        <RouterLink v-for="row in rows" :key="row.to" class="index-row" :to="row.to">
-          <span>{{ row.zh }}</span><span class="en">{{ row.en }}</span>
-        </RouterLink>
-      </nav>
-    </template>
-  </TwoCol>
+  </div>
 </template>

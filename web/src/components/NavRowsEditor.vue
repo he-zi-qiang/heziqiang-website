@@ -38,10 +38,10 @@ function move(i: number, delta: -1 | 1) {
     <div class="nav-ops">
       <button class="btn small" type="button" @click="move(i, -1)">↑</button>
       <button class="btn small" type="button" @click="move(i, 1)">↓</button>
-      <button class="btn small danger" type="button" @click="remove(i)">删</button>
+      <button class="btn small ghost danger" type="button" @click="remove(i)">删除</button>
     </div>
   </div>
-  <p v-if="hint" class="hint" style="margin: 4px 0 14px">{{ hint }}</p>
+  <p v-if="hint" class="hint block-hint">{{ hint }}</p>
   <button class="btn small" type="button" @click="add">＋ 加一行</button>
 </template>
 

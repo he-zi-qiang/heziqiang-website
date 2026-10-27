@@ -5,6 +5,7 @@ import { useAsyncData } from '@/composables/useAsyncData'
 import { useSite } from '@/composables/useSite'
 import { useHead } from '@/composables/useHead'
 import StateNote from '@/components/StateNote.vue'
+import AdminIcon from '@/components/AdminIcon.vue'
 
 const { bootstrap } = useSite()
 const { data, error, loading } = useAsyncData(() => api.admin.stats())
@@ -21,12 +22,27 @@ const cards = computed(() => {
   return rows
 })
 
+/** 「写一篇新的」在页头右上角，这里只放改单页和管照片 */
+const QUICK = [
+  { title: '改首页文案', desc: '两侧身份的引言和近况', to: { name: 'admin-doc', params: { key: 'home' } } },
+  { title: '改关于我', desc: '自我介绍与联系方式', to: { name: 'admin-doc', params: { key: 'about' } } },
+  { title: '改简历', desc: '教育、项目与证件照', to: { name: 'admin-doc', params: { key: 'cv' } } },
+  { title: '管照片', desc: '摄影页的每一格', to: { name: 'admin-photos' } },
+]
+
 useHead(() => ({ title: '写作台' }))
 </script>
 
 <template>
-  <h1 class="admin-title">概览</h1>
-  <p class="admin-sub">站点内容的当前状态。点上面的「内容」开始写，或者直接从下面的快捷入口进。</p>
+  <header class="admin-head">
+    <div>
+      <h1 class="admin-title">概览</h1>
+      <p class="admin-sub">站点内容的当前状态。从左边的「内容」开始写，或者直接从下面的快捷入口进。</p>
+    </div>
+    <div class="admin-actions">
+      <RouterLink class="btn primary" :to="{ name: 'admin-entry-new' }"><AdminIcon name="plus" />写一篇新的</RouterLink>
+    </div>
+  </header>
 
   <StateNote :loading="loading" :error="error" />
 
@@ -37,14 +53,11 @@ useHead(() => ({ title: '写作台' }))
     </div>
   </div>
 
-  <div class="section-block">
-    <h3>快捷入口</h3>
-    <div class="btn-row" style="margin-top: 0">
-      <RouterLink class="btn primary" :to="{ name: 'admin-entry-new' }">写一篇新的</RouterLink>
-      <RouterLink class="btn" :to="{ name: 'admin-doc', params: { key: 'home' } }">改首页文案</RouterLink>
-      <RouterLink class="btn" :to="{ name: 'admin-doc', params: { key: 'about' } }">改关于我</RouterLink>
-      <RouterLink class="btn" :to="{ name: 'admin-doc', params: { key: 'cv' } }">改简历</RouterLink>
-      <RouterLink class="btn" :to="{ name: 'admin-photos' }">管照片</RouterLink>
-    </div>
+  <h2 class="admin-h2">快捷入口</h2>
+  <div class="quick-grid">
+    <RouterLink v-for="q in QUICK" :key="q.title" class="quick-card" :to="q.to">
+      <span class="q-title">{{ q.title }}</span>
+      <span class="q-desc">{{ q.desc }}</span>
+    </RouterLink>
   </div>
 </template>

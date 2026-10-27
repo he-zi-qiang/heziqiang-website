@@ -8,7 +8,6 @@ import { textOf, useHead } from '@/composables/useHead'
 import { PATH_BY_KIND } from '@/router'
 import StateNote from '@/components/StateNote.vue'
 import ArticleToc from '@/components/ArticleToc.vue'
-import TwoCol from '@/components/TwoCol.vue'
 import { useArticleHeadings } from '@/composables/useArticleHeadings'
 
 const props = defineProps<{ kind: EntryKind; slug: string }>()
@@ -27,13 +26,6 @@ const metaLine = computed(() => {
   return [data.value.dateLabel, meta.value.label].filter(Boolean).join(' · ')
 })
 const metaParts = computed(() => metaLine.value.split(/\s*·\s*/).filter(Boolean))
-
-/** 宽屏右栏的「本篇」信息：日期、栏目、主题，一行一项 */
-const sideMeta = computed(() => {
-  if (!data.value) return []
-  const section = [meta.value.label, meta.value.en].filter(Boolean).join(' · ')
-  return [data.value.dateFull || data.value.dateLabel, section, data.value.groupLabel].filter(Boolean) as string[]
-})
 
 /** 文末只显示一个方向：优先下一篇，没有就退回上一篇 */
 const sibling = computed(() => {
@@ -63,11 +55,10 @@ const { headings, activeId, goTo } = useArticleHeadings(
 
   <StateNote :loading="loading" :error="error" />
 
-  <TwoCol v-if="data">
+  <template v-if="data">
     <!-- article-title 带着换页过渡名：从列表点进来时，那一行的标题会变形成这里的大标题 -->
     <h1 class="page-title article-title">{{ data.title }}</h1>
-    <!-- 日期这一行：宽屏挪到右栏 -->
-    <p class="article-meta only-narrow">
+    <p class="article-meta" :data-kind="kind">
       <template v-for="(part, i) in metaParts" :key="i">
         <span v-if="i > 0" class="sep">·</span>{{ part }}
       </template>
@@ -85,11 +76,9 @@ const { headings, activeId, goTo } = useArticleHeadings(
       </RouterLink>
     </nav>
 
-    <template #aside>
-      <ul class="side-meta">
-        <li v-for="line in sideMeta" :key="line">{{ line }}</li>
-      </ul>
-      <ArticleToc class="side-block" :headings="headings" :active-id="activeId" :label="ui.article.tocLabel" @go="goTo" />
-    </template>
-  </TwoCol>
+    <!-- 目录：宽屏放进左栏导航下面（SiteHeader 里的 #rail-toc），窄屏不显示 -->
+    <Teleport defer to="#rail-toc">
+      <ArticleToc :headings="headings" :active-id="activeId" :label="ui.article.tocLabel" @go="goTo" />
+    </Teleport>
+  </template>
 </template>

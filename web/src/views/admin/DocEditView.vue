@@ -107,19 +107,23 @@ useHead(() => ({ title: `单页 · ${label.value}` }))
 </script>
 
 <template>
-  <h1 class="admin-title">单页内容 · {{ label }}</h1>
-  <p class="admin-sub">
-    站点上所有不属于某一篇内容的文字都在这里——首页文案、关于与简历、栏目名称、
-    首页导航，以及页眉按钮、面包屑、加载提示这类界面零碎。
-    值里可以写行内 Markdown 与少量 HTML（<code>&lt;br&gt;</code>、
-    <code>&lt;span class="light"&gt;</code> 会按站点样式渲染）。
-  </p>
+  <header class="admin-head">
+    <div>
+      <h1 class="admin-title">单页 · {{ label }}</h1>
+      <p class="admin-sub">
+        站点上所有不属于某一篇内容的文字都在这里——首页文案、关于与简历、栏目名称、
+        首页导航，以及页眉按钮、面包屑、加载提示这类界面零碎。
+        值里可以写行内 Markdown 与少量 HTML（<code>&lt;br&gt;</code>、
+        <code>&lt;span class="light"&gt;</code> 会按站点样式渲染）。
+      </p>
+    </div>
+  </header>
 
-  <div class="btn-row" style="margin-top: 0; margin-bottom: 28px">
-    <RouterLink v-for="tab in TABS" :key="tab.key" class="btn small"
-                :class="{ primary: tab.key === docKey }"
+  <nav class="tabs" aria-label="单页">
+    <RouterLink v-for="tab in TABS" :key="tab.key" class="tab" :class="{ on: tab.key === docKey }"
+                :aria-current="tab.key === docKey ? 'page' : undefined"
                 :to="{ name: 'admin-doc', params: { key: tab.key } }">{{ tab.label }}</RouterLink>
-  </div>
+  </nav>
 
   <p v-if="error" class="notice bad">{{ error }}</p>
   <p v-else-if="message" class="notice ok">{{ message }}</p>
@@ -132,7 +136,7 @@ useHead(() => ({ title: `单页 · ${label.value}` }))
         <h3>{{ key === 'pro' ? 'Professional · 专业一侧' : 'Personal · 个人一侧' }}</h3>
         <div class="field">
           <label>引言（大字）</label>
-          <textarea v-model="home[key].lede" rows="3" style="font-family: var(--serif); font-size: 14.5px" />
+          <textarea v-model="home[key].lede" rows="3" />
           <span class="hint">用 *星号* 包住的词会显示成赭石色，和旧站的 &lt;em&gt; 一样。</span>
         </div>
         <div class="field">
@@ -141,7 +145,7 @@ useHead(() => ({ title: `单页 · ${label.value}` }))
         </div>
         <div class="field">
           <label>近况正文</label>
-          <textarea v-model="home[key].now" rows="3" style="font-family: var(--serif); font-size: 14.5px" />
+          <textarea v-model="home[key].now" rows="3" />
         </div>
         <div class="field">
           <label>「最近」小标题</label>
@@ -159,7 +163,7 @@ useHead(() => ({ title: `单页 · ${label.value}` }))
       </div>
       <div class="field">
         <label>正文（Markdown，一段一行）</label>
-        <textarea v-model="about.body" rows="8" />
+        <textarea v-model="about.body" class="code" rows="8" />
       </div>
       <div class="field-row">
         <div class="field"><label>近况小标题</label><input v-model="about.nowLabel" type="text" /></div>
@@ -175,10 +179,10 @@ useHead(() => ({ title: `单页 · ${label.value}` }))
         <div v-for="(row, i) in about.contacts" :key="i" class="field-row">
           <div class="field"><label>名称</label><input v-model="row.k" type="text" /></div>
           <div class="field">
-            <label>内容
-              <button class="btn small danger" type="button" style="margin-left: 10px"
-                      @click="removeContact(i)">删除</button>
-            </label>
+            <div class="field-head">
+              <label>内容</label>
+              <button class="btn small ghost danger" type="button" @click="removeContact(i)">删除</button>
+            </div>
             <textarea v-model="row.v" rows="2" />
           </div>
         </div>
@@ -201,20 +205,16 @@ useHead(() => ({ title: `单页 · ${label.value}` }))
                    hint="显示在标题右侧，打印时一并带上。留空则不显示。" />
       <div v-for="(section, si) in cv.sections" :key="si" class="section-block">
         <h3>
-          <input v-model="section.label" type="text"
-                 style="font-family: inherit; font-size: 14px; font-weight: 600; letter-spacing: 0.08em;
-                        border: none; border-bottom: 1px solid var(--line); background: none;
-                        color: var(--ink); padding: 2px 0; width: 240px" />
-          <button class="btn small danger" type="button" style="margin-left: 12px"
-                  @click="removeCvSection(si)">删除板块</button>
+          <input v-model="section.label" class="title-input" type="text" aria-label="板块名称" />
+          <button class="btn small ghost danger" type="button" @click="removeCvSection(si)">删除板块</button>
         </h3>
         <div v-for="(row, ri) in section.rows" :key="ri" class="field-row">
           <div class="field"><label>左栏</label><input v-model="row.k" type="text" /></div>
           <div class="field">
-            <label>右栏
-              <button class="btn small danger" type="button" style="margin-left: 10px"
-                      @click="removeCvRow(si, ri)">删除</button>
-            </label>
+            <div class="field-head">
+              <label>右栏</label>
+              <button class="btn small ghost danger" type="button" @click="removeCvRow(si, ri)">删除</button>
+            </div>
             <textarea v-model="row.v" rows="2" />
           </div>
         </div>
@@ -230,7 +230,7 @@ useHead(() => ({ title: `单页 · ${label.value}` }))
         <div class="field"><label>栏目页大标题</label><input v-model="meta.title" type="text" /></div>
         <div class="field">
           <label>栏目页副标题</label>
-          <textarea v-model="meta.subtitle" rows="2" style="font-family: var(--serif); font-size: 14.5px" />
+          <textarea v-model="meta.subtitle" rows="2" />
         </div>
         <div class="field-row">
           <div class="field">
@@ -260,11 +260,11 @@ useHead(() => ({ title: `单页 · ${label.value}` }))
     <template v-else-if="docKey === 'ui'">
       <div v-for="group in UI_GROUPS" :key="group.title" class="section-block">
         <h3>{{ group.title }}</h3>
-        <p v-if="group.hint" class="hint" style="margin: -8px 0 16px">{{ group.hint }}</p>
+        <p v-if="group.hint" class="hint block-hint">{{ group.hint }}</p>
         <div v-for="field in group.fields" :key="field.path" class="field">
           <label>{{ field.label }}</label>
           <textarea v-if="field.long" :value="uiValue(field.path)" rows="2"
-                    style="font-family: var(--serif); font-size: 14.5px"
+                   
                     @input="setUiValue(field.path, $event)" />
           <input v-else :value="uiValue(field.path)" type="text"
                  @input="setUiValue(field.path, $event)" />
@@ -286,7 +286,7 @@ useHead(() => ({ title: `单页 · ${label.value}` }))
       </div>
       <div class="field">
         <label>默认描述（用于 SEO）</label>
-        <textarea v-model="site.description" rows="3" style="font-family: var(--serif); font-size: 14.5px" />
+        <textarea v-model="site.description" rows="3" />
       </div>
       <div class="field-row">
         <div class="field"><label>页脚左</label><input v-model="site.footerLeft" type="text" /></div>
@@ -296,7 +296,7 @@ useHead(() => ({ title: `单页 · ${label.value}` }))
                    hint="页眉左上角那个小圆头像。默认 /avatar.png；也可以上传一张，或填 /uploads/... 地址。" />
     </template>
 
-    <div class="btn-row">
+    <div class="save-bar">
       <button class="btn primary" type="submit" :disabled="saving">{{ saving ? '保存中…' : '保存' }}</button>
     </div>
   </form>
