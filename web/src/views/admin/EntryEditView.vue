@@ -176,7 +176,7 @@ useHead(() => ({ title: isNew.value ? '新建内容' : `编辑：${form.title}` 
 
     <div class="field">
       <label for="summary">列表摘要</label>
-      <textarea id="summary" v-model="form.summary" rows="3" style="font-family: var(--serif); font-size: 14.5px" />
+      <textarea id="summary" v-model="form.summary" rows="3" style="font-family: var(--font); font-size: 14.5px" />
     </div>
 
     <div class="field-row">

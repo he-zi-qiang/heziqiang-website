@@ -59,7 +59,7 @@ function reset() {
 </template>
 
 <style scoped>
-.tweaks { position: fixed; right: 20px; bottom: 20px; z-index: 60; font-family: var(--serif); }
+.tweaks { position: fixed; right: 20px; bottom: 20px; z-index: 60; font-family: var(--font); }
 .tweaks-toggle, .tweaks-reset {
   appearance: none; cursor: pointer; font-family: inherit;
   background: var(--paper); border: 1px solid var(--line); color: var(--muted);

@@ -1,6 +1,6 @@
 /* ============================================================
    何梓强 · 个人网站 — 纸面设计系统
-   暖白纸张 / 宋体 + Source Serif 4 / 赭石强调色
+   暖白纸张 / 苹方 + SF Pro / 赭石强调色
    与重构前逐像素一致：类名、数值、动效全部沿用。
    页眉页脚现在由 Vue 组件渲染，不再需要占位元素。
    ============================================================ */
@@ -17,7 +17,10 @@
   --line: #E8E1D2;
   --accent: #9C4226;
   --quote: #6B6354;
-  --serif: 'Source Serif 4', 'Noto Serif SC', 'Songti SC', 'SimSun', serif;
+  /* 苹果系统字体：英文 SF Pro，中文苹方；Windows / 安卓各自退到雅黑、思源黑体。
+     全是系统自带字体，不用再从网上拉字体文件 */
+  --font: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue',
+          'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Noto Sans SC', sans-serif;
 
   /* 字号表：每一级之间拉开明显差距，别再出现 15.5 / 16 / 16.5 这种看不出区别的相邻字号 */
   --fs-label: 12px;   /* 小型大写标签 */
@@ -48,6 +51,29 @@
   --space-m: 40px;
   --space-l: 64px;
   --space-xl: 96px;
+}
+
+/* 大屏（1280 起）：版心放宽到 1100，正文栏 700，字号整体大一档，两侧不再空出一大片 */
+@media (min-width: 1280px) {
+  :root {
+    --measure: 700px;
+    --wide: 1100px;
+    --aside-gap: 80px;
+
+    --fs-label: 12.5px;
+    --fs-meta: 13.5px;
+    --fs-small: 15.5px;
+    --fs-ui: 17px;
+    --fs-quote: 17px;
+    --fs-body: 18px;
+    --fs-h3: 19px;
+    --fs-entry: 20px;
+    --fs-h2: 24px;
+    --fs-lede: 29px;
+    --fs-title: 38px;
+
+    --meta-col: 112px;
+  }
 }
 
 
@@ -140,7 +166,7 @@ body {
   margin: 0;
   background: var(--paper);
   color: var(--ink);
-  font-family: var(--serif);
+  font-family: var(--font);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   /* 中文与英文、数字之间自动留出一点空隙（「有些nervous」→「有些 nervous」）；不支持的浏览器照旧 */

@@ -132,7 +132,7 @@ useHead(() => ({ title: `单页 · ${label.value}` }))
         <h3>{{ key === 'pro' ? 'Professional · 专业一侧' : 'Personal · 个人一侧' }}</h3>
         <div class="field">
           <label>引言（大字）</label>
-          <textarea v-model="home[key].lede" rows="3" style="font-family: var(--serif); font-size: 14.5px" />
+          <textarea v-model="home[key].lede" rows="3" style="font-family: var(--font); font-size: 14.5px" />
           <span class="hint">用 *星号* 包住的词会显示成赭石色，和旧站的 &lt;em&gt; 一样。</span>
         </div>
         <div class="field">
@@ -141,7 +141,7 @@ useHead(() => ({ title: `单页 · ${label.value}` }))
         </div>
         <div class="field">
           <label>近况正文</label>
-          <textarea v-model="home[key].now" rows="3" style="font-family: var(--serif); font-size: 14.5px" />
+          <textarea v-model="home[key].now" rows="3" style="font-family: var(--font); font-size: 14.5px" />
         </div>
         <div class="field">
           <label>「最近」小标题</label>
@@ -230,7 +230,7 @@ useHead(() => ({ title: `单页 · ${label.value}` }))
         <div class="field"><label>栏目页大标题</label><input v-model="meta.title" type="text" /></div>
         <div class="field">
           <label>栏目页副标题</label>
-          <textarea v-model="meta.subtitle" rows="2" style="font-family: var(--serif); font-size: 14.5px" />
+          <textarea v-model="meta.subtitle" rows="2" style="font-family: var(--font); font-size: 14.5px" />
         </div>
         <div class="field-row">
           <div class="field">
@@ -264,7 +264,7 @@ useHead(() => ({ title: `单页 · ${label.value}` }))
         <div v-for="field in group.fields" :key="field.path" class="field">
           <label>{{ field.label }}</label>
           <textarea v-if="field.long" :value="uiValue(field.path)" rows="2"
-                    style="font-family: var(--serif); font-size: 14.5px"
+                    style="font-family: var(--font); font-size: 14.5px"
                     @input="setUiValue(field.path, $event)" />
           <input v-else :value="uiValue(field.path)" type="text"
                  @input="setUiValue(field.path, $event)" />
@@ -286,7 +286,7 @@ useHead(() => ({ title: `单页 · ${label.value}` }))
       </div>
       <div class="field">
         <label>默认描述（用于 SEO）</label>
-        <textarea v-model="site.description" rows="3" style="font-family: var(--serif); font-size: 14.5px" />
+        <textarea v-model="site.description" rows="3" style="font-family: var(--font); font-size: 14.5px" />
       </div>
       <div class="field-row">
         <div class="field"><label>页脚左</label><input v-model="site.footerLeft" type="text" /></div>

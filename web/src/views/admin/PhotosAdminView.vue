@@ -118,7 +118,7 @@ useHead(() => ({ title: '照片' }))
         </div>
         <div class="field">
           <label>说明</label>
-          <textarea :value="photo.caption" rows="2" style="font-family: var(--serif); font-size: 14px"
+          <textarea :value="photo.caption" rows="2" style="font-family: var(--font); font-size: 14px"
                     @change="patch(photo, { caption: ($event.target as HTMLTextAreaElement).value })" />
         </div>
 
