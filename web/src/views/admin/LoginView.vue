@@ -3,10 +3,12 @@ import { ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useAuth } from '@/composables/useAuth'
 import { useHead } from '@/composables/useHead'
+import { useSite } from '@/composables/useSite'
 
 const route = useRoute()
 const router = useRouter()
 const { login } = useAuth()
+const { bootstrap } = useSite()
 
 const username = ref('')
 const password = ref('')
@@ -33,6 +35,7 @@ async function submit() {
 <template>
   <div class="login-wrap">
     <form class="login-card" @submit.prevent="submit">
+      <img class="login-avatar" :src="bootstrap?.site?.avatar || '/avatar.png'" alt="" />
       <h1>写作台</h1>
       <p class="sub">这是站点的后台。内容、单页文案与照片都在这里改。</p>
 
@@ -47,10 +50,8 @@ async function submit() {
         <input id="p" v-model="password" type="password" autocomplete="current-password" required />
       </div>
 
-      <div class="btn-row">
-        <button class="btn primary" type="submit" :disabled="busy">{{ busy ? '登录中…' : '登录' }}</button>
-        <RouterLink class="btn" to="/">返回站点</RouterLink>
-      </div>
+      <button class="btn primary block" type="submit" :disabled="busy">{{ busy ? '登录中…' : '登录' }}</button>
+      <RouterLink class="login-back" to="/">← 返回站点</RouterLink>
     </form>
   </div>
 </template>

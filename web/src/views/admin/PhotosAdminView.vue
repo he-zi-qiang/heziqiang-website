@@ -5,6 +5,7 @@ import type { Photo } from '@/api/types'
 import { useAsyncData } from '@/composables/useAsyncData'
 import { useHead } from '@/composables/useHead'
 import StateNote from '@/components/StateNote.vue'
+import AdminIcon from '@/components/AdminIcon.vue'
 
 const { data, error, loading, reload } = useAsyncData(() => api.admin.photos())
 const library = useAsyncData(() => api.admin.uploads())
@@ -88,18 +89,21 @@ useHead(() => ({ title: '照片' }))
 </script>
 
 <template>
-  <h1 class="admin-title">照片</h1>
-  <p class="admin-sub">
-    摄影页的每一格。上传会存到服务器的 uploads 目录，站点通过 /uploads/… 访问；
-    也可以从下面已上传过的图里直接挑一张。
-  </p>
+  <header class="admin-head">
+    <div>
+      <h1 class="admin-title">照片</h1>
+      <p class="admin-sub">
+        摄影页的每一格。上传会存到服务器的 uploads 目录，站点通过 /uploads/… 访问；
+        也可以从已上传过的图里直接挑一张。
+      </p>
+    </div>
+    <div class="admin-actions">
+      <span v-if="uploading" class="hint">上传中…</span>
+      <button class="btn primary" type="button" @click="add"><AdminIcon name="plus" />新增一格</button>
+    </div>
+  </header>
 
   <p v-if="message" class="notice ok">{{ message }}</p>
-
-  <div class="btn-row" style="margin-top: 0; margin-bottom: 24px">
-    <button class="btn primary" type="button" @click="add">＋ 新增一格</button>
-    <span v-if="uploading" style="font-size: 13px; color: var(--muted)">上传中…</span>
-  </div>
 
   <StateNote :loading="loading" :error="error" :empty="!loading && data?.items.length === 0"
              empty-text="还没有照片。" />
@@ -118,7 +122,7 @@ useHead(() => ({ title: '照片' }))
         </div>
         <div class="field">
           <label>说明</label>
-          <textarea :value="photo.caption" rows="2" style="font-family: var(--font); font-size: 14px"
+          <textarea :value="photo.caption" rows="2"
                     @change="patch(photo, { caption: ($event.target as HTMLTextAreaElement).value })" />
         </div>
 
@@ -127,13 +131,13 @@ useHead(() => ({ title: '照片' }))
                   :title="item.name" @click="pick(photo, item.url)">
             <img :src="item.url" :alt="item.name" />
           </button>
-          <span v-if="!library.data.value?.items.length" style="font-size: 12.5px; color: var(--faint)">
+          <span v-if="!library.data.value?.items.length" class="hint">
             还没有上传过图片
           </span>
         </div>
 
-        <div class="btn-row" style="margin-top: 0">
-          <label class="btn small" style="cursor: pointer">
+        <div class="card-ops">
+          <label class="btn small">
             上传
             <input type="file" accept="image/*" hidden @change="upload($event, photo)" />
           </label>
@@ -141,8 +145,8 @@ useHead(() => ({ title: '照片' }))
                   @click="pickerFor = pickerFor === photo.id ? null : photo.id">选已有</button>
           <button v-if="photo.url" class="btn small" type="button" :disabled="busy === photo.id"
                   @click="patch(photo, { url: '' })">清空</button>
-          <button class="btn small danger" type="button" :disabled="busy === photo.id"
-                  @click="remove(photo)">删</button>
+          <button class="btn small ghost danger" type="button" :disabled="busy === photo.id"
+                  @click="remove(photo)">删除</button>
         </div>
       </div>
     </div>

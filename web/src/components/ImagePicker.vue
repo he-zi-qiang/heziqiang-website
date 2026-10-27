@@ -65,14 +65,14 @@ function pick(url: string) {
       <div class="ops">
         <input v-model="model" type="text" placeholder="/uploads/… 或 /avatar.png" />
         <div class="btn-row">
-          <label class="btn small" style="cursor: pointer">
+          <label class="btn small">
             上传
             <input type="file" accept="image/*" hidden @change="upload" />
           </label>
           <button class="btn small" type="button" @click="toggleLibrary">选已有</button>
           <button v-if="model" class="btn small" type="button" @click="model = ''">清空</button>
           <span v-if="uploading" class="hint">上传中…</span>
-          <span v-if="error" class="hint" style="color: #b3261e">{{ error }}</span>
+          <span v-if="error" class="hint bad">{{ error }}</span>
         </div>
         <div v-if="showLibrary" class="upload-strip">
           <button v-for="item in library ?? []" :key="item.url" type="button" :title="item.name"

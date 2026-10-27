@@ -38,16 +38,21 @@ useHead(() => ({ title: '账号' }))
 </script>
 
 <template>
-  <h1 class="admin-title">账号</h1>
-  <p class="admin-sub">
-    当前登录：<strong>{{ user?.displayName }}</strong>（{{ user?.username }}）。
-    首次部署后请立刻把 seed 时的初始密码改掉。
-  </p>
+  <header class="admin-head">
+    <div>
+      <h1 class="admin-title">账号</h1>
+      <p class="admin-sub">
+        当前登录：<strong>{{ user?.displayName }}</strong>（{{ user?.username }}）。
+        首次部署后请立刻把 seed 时的初始密码改掉。
+      </p>
+    </div>
+  </header>
 
   <p v-if="error" class="notice bad">{{ error }}</p>
   <p v-else-if="message" class="notice ok">{{ message }}</p>
 
-  <form style="max-width: 420px" @submit.prevent="submit">
+  <form class="section-block narrow-form" @submit.prevent="submit">
+    <h3>修改密码</h3>
     <div class="field">
       <label for="cur">当前密码</label>
       <input id="cur" v-model="currentPassword" type="password" autocomplete="current-password" required />

@@ -112,17 +112,22 @@ useHead(() => ({ title: isNew.value ? '新建内容' : `编辑：${form.title}` 
 </script>
 
 <template>
-  <h1 class="admin-title">{{ isNew ? '新建内容' : '编辑内容' }}</h1>
-  <p class="admin-sub">
-    正文写 Markdown，保存时后端渲染成 HTML 存下来，读者访问时不再二次渲染。
-    需要旧站里那种上下加线的旁注，直接写 <code>&lt;div class="aside-note"&gt;…&lt;/div&gt;</code>。
-  </p>
+  <header class="admin-head">
+    <div>
+      <RouterLink class="admin-back" :to="{ name: 'admin-entries' }">← 内容</RouterLink>
+      <h1 class="admin-title">{{ isNew ? '新建内容' : '编辑内容' }}</h1>
+      <p class="admin-sub">
+        正文写 Markdown，保存时后端渲染成 HTML 存下来，读者访问时不再二次渲染。
+        需要浅底块的旁注，直接写 <code>&lt;div class="aside-note"&gt;…&lt;/div&gt;</code>。
+      </p>
+    </div>
+  </header>
 
   <p v-if="error" class="notice bad">{{ error }}</p>
   <p v-else-if="message" class="notice ok">
     {{ message }}
     <template v-if="loaded?.href && loaded.status === 'published'">
-      · <a :href="loaded.href" target="_blank" rel="noopener" style="border-bottom: 1px solid var(--line)">看看效果 ↗</a>
+      · <a :href="loaded.href" target="_blank" rel="noopener">看看效果 ↗</a>
     </template>
   </p>
 
@@ -176,7 +181,7 @@ useHead(() => ({ title: isNew.value ? '新建内容' : `编辑：${form.title}` 
 
     <div class="field">
       <label for="summary">列表摘要</label>
-      <textarea id="summary" v-model="form.summary" rows="3" style="font-family: var(--font); font-size: 14.5px" />
+      <textarea id="summary" v-model="form.summary" class="prose" rows="3" />
     </div>
 
     <div class="field-row">
@@ -193,13 +198,14 @@ useHead(() => ({ title: isNew.value ? '新建内容' : `编辑：${form.title}` 
     </div>
 
     <div class="field">
-      <label>
-        正文（Markdown）
-        <button class="btn small" type="button" style="margin-left: 12px"
+      <div class="field-head">
+        <label for="bodyMd">正文（Markdown）</label>
+        <button class="btn small" type="button"
                 @click="showPreview = !showPreview">{{ showPreview ? '隐藏预览' : '显示预览' }}</button>
-      </label>
+      </div>
       <div :class="showPreview ? 'editor-split' : ''">
-        <textarea v-model="form.bodyMd" spellcheck="false" placeholder="留空 = 这条只出现在列表里，没有内页" />
+        <textarea id="bodyMd" v-model="form.bodyMd" class="code tall" spellcheck="false"
+                  placeholder="留空 = 这条只出现在列表里，没有内页" />
         <!-- eslint-disable-next-line vue/no-v-html -->
         <div v-if="showPreview" class="preview-pane">
           <div class="article-body" v-html="previewHtml"></div>
@@ -207,7 +213,7 @@ useHead(() => ({ title: isNew.value ? '新建内容' : `编辑：${form.title}` 
       </div>
     </div>
 
-    <div class="btn-row">
+    <div class="save-bar">
       <button class="btn primary" type="submit" :disabled="saving">{{ saving ? '保存中…' : '保存' }}</button>
       <button v-if="form.status === 'draft'" class="btn" type="button" :disabled="saving" @click="save(true)">
         保存并发布
